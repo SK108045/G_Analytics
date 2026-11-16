@@ -262,7 +262,7 @@ const PortalNav={
 PortalNav.mount({"active":"acquisition","top":68,"width":260,"maskWidth":322,"height":796});
 
 
-addEventListener('resize',()=>UI.hit(1110,74,300,54,()=>UI.range(1110,130),'Change date range');
+UI.hit(1110,74,300,54,()=>UI.range(1110,130),'Change date range');
 UI.hit(1380,86,120,42,()=>UI.simpleMenu(1280,132),'Report actions');
 UI.hit(1060,86,44,42,()=>UI.toast('Comparison added'),'Add comparison');
 UI.input(395,448,300,42,'Search...',v=>UI.filterRows(v,[["Organic Search",653],["Direct",686],["Organic Social",719],["Referral",751],["Paid Search",784],["Unassigned",817]]),'#fff','14.5px');
