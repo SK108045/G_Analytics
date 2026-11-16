@@ -298,6 +298,14 @@ const PortalNav={
     S.querySelector('.portal-nav')?.remove();
     S.querySelector('.portal-nav-mask')?.remove();
 
+    [...S.children].forEach(el=>{
+      if(el.classList.contains('portal-nav')||el.classList.contains('portal-nav-mask'))return;
+      const x=parseFloat(el.style.left),y=parseFloat(el.style.top);
+      if(!Number.isFinite(x)||!Number.isFinite(y)||y<opts.top-4)return;
+      const w=el.offsetWidth||parseFloat(el.style.width)||0;
+      if(x+w<=opts.legacyWidth+8)el.style.visibility='hidden';
+    });
+
     const mask=document.createElement('div');
     mask.className='portal-nav-mask';
     mask.style.cssText='top:'+opts.top+'px;width:'+opts.maskWidth+'px;height:'+opts.height+'px';
@@ -324,7 +332,28 @@ const PortalNav={
   }
 };
 
-PortalNav.mount({"active":"tech","top":60,"width":260,"maskWidth":360,"height":834});
+const PortalLayout={
+  align(startX,targetX,minY){
+    const dx=targetX-startX;
+    if(!dx)return;
+    [...S.children].forEach(el=>{
+      if(el.classList.contains('portal-nav')||el.classList.contains('portal-nav-mask'))return;
+      const x=parseFloat(el.style.left),y=parseFloat(el.style.top);
+      if(Number.isFinite(x)&&Number.isFinite(y)&&y>=minY&&x>=startX-4){
+        el.style.left=(x+dx)+'px';
+        return;
+      }
+      if(el.tagName==='svg'&&Number.isFinite(x)&&x===0){
+        try{
+          const b=el.getBBox();
+          if(b.x>=startX-24&&b.y>=minY-8)el.style.left=dx+'px';
+        }catch{}
+      }
+    });
+  }
+};
+
+PortalNav.mount({"active":"tech","top":60,"width":260,"maskWidth":262,"height":834,"legacyWidth":309});
 
 
 UI.setExport(['Device category','Users','New users','Engaged sessions','Engagement rate','Engaged sessions per user','Average engagement time'],D.map(r=>r.slice(0,7)),'tech-details-device-category');
@@ -344,6 +373,7 @@ UI.hit(1470,5,54,48,()=>UI.profile(1230,52),'Account');
 UI.chartHover(395,234,583,232,4000,['mobile','tablet','desktop']);
 UI.restoreDate();
 
+PortalLayout.align(361,262,70);
 setTimeout(()=>UI.animate(),120);
 
 </script></body></html>
