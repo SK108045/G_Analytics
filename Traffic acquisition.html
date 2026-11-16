@@ -1,210 +1,421 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Traffic acquisition: Session default channel group</title>
-<meta name="color-scheme" content="light">
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Traffic acquisition: Session default channel group</title><meta name="color-scheme" content="light">
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-html,body{margin:0;background:#f1f3f4}
-body{overflow-x:hidden;font-family:'Google Sans',Roboto,Arial,sans-serif;color:#202124}
-#w{width:100%;overflow:hidden}
-#s{position:relative;width:1536px;height:864px;transform-origin:0 0;background:#f1f3f4;overflow:hidden}
-.t{position:absolute;transform:translateY(-50%);white-space:nowrap}
-.b{position:absolute}
-.ce{transform:translate(-50%,-50%)}
-.dt{text-decoration:underline dotted #5f6368;text-underline-offset:3px}
+:root{
+  --bg:#f6f8fb;--surface:#fff;--surface-2:#f8fafd;--text:#202124;--muted:#5f6368;
+  --line:#e3e7ee;--blue:#1a73e8;--blue-2:#d3e3fd;--blue-3:#e8f0fe;--green:#188038;
+  --red:#d93025;--amber:#e37400;--purple:#9334e6;--shadow:0 1px 2px rgba(60,64,67,.08),0 2px 8px rgba(60,64,67,.05);
+  --radius:14px
+}
+*{box-sizing:border-box}
+html{background:var(--bg);scroll-behavior:smooth}
+body{margin:0;min-width:320px;min-height:100vh;background:var(--bg);color:var(--text);font-family:"Google Sans",Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit}
+button{color:inherit}
+a{color:inherit}
+[hidden]{display:none!important}
 
-/* interactive app polish */
-*,*::before,*::after{box-sizing:border-box}
-html,body{width:100%;min-height:100%;margin:0}
-body{min-height:100vh;overflow-x:hidden;overflow-y:auto;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
-#w{width:100%;min-height:100vh;overflow:hidden;background:inherit}
-#s{will-change:transform}
-#s svg{shape-rendering:geometricPrecision}
-#s svg path,#s svg line{vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round}
-.app-nav{position:absolute;left:0;z-index:9999;background:#f8fafd;border-right:1px solid #e3e5e8;padding:16px 10px 18px;overflow:hidden;font-family:'Google Sans',Roboto,Arial,sans-serif}
-.app-nav *{box-sizing:border-box}
-.app-nav__title{padding:3px 14px 10px;font-size:12px;font-weight:500;letter-spacing:.45px;text-transform:uppercase;color:#80868b}
-.app-nav__group{margin:0 0 8px}
-.app-nav__group-label{padding:13px 14px 6px;font-size:12px;color:#80868b}
-.app-nav__link{display:flex;align-items:center;gap:12px;width:100%;min-height:40px;padding:9px 14px;border-radius:20px;color:#3c4043;text-decoration:none;font-size:14.5px;font-weight:500;line-height:20px;transition:background .14s ease,color .14s ease,transform .14s ease}
-.app-nav__link:hover{background:#e8f0fe;color:#174ea6}
-.app-nav__link:active{transform:scale(.985)}
-.app-nav__link.active{background:#d3e3fd;color:#0b57d0}
-.app-nav__icon{width:22px;height:22px;display:grid;place-items:center;flex:0 0 22px;border-radius:50%;font-size:14px;color:#5f6368}
-.app-nav__link.active .app-nav__icon{color:#0b57d0}
-.app-nav__divider{height:1px;margin:10px 12px;background:#e3e5e8}
-.app-nav__hint{padding:10px 14px 0;color:#9aa0a6;font-size:11.5px;line-height:16px}
+.topbar{position:fixed;z-index:50;inset:0 0 auto 0;height:72px;display:grid;grid-template-columns:248px minmax(220px,1fr) auto;align-items:center;gap:18px;padding:0 18px;background:rgba(255,255,255,.96);border-bottom:1px solid var(--line);backdrop-filter:blur(14px)}
+.brand{display:flex;align-items:center;gap:12px;font-size:22px;color:#4a4d52;font-weight:500}
+.ga-mark{width:34px;height:34px;position:relative;flex:none}
+.ga-mark i{position:absolute;bottom:1px;border-radius:5px}
+.ga-mark i:nth-child(1){left:2px;width:9px;height:17px;background:#e37400}
+.ga-mark i:nth-child(2){left:13px;width:9px;height:27px;background:#f9ab00}
+.ga-mark i:nth-child(3){left:24px;width:8px;height:33px;background:#f9ab00}
+.top-search{position:relative;max-width:690px;width:100%;justify-self:center}
+.top-search input{width:100%;height:46px;border:1px solid transparent;background:#eef1f4;border-radius:10px;padding:0 48px 0 46px;color:var(--text);outline:none;transition:.18s ease}
+.top-search input:focus{background:#fff;border-color:#c7d5ea;box-shadow:0 1px 6px rgba(60,64,67,.17)}
+.top-search .search-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--muted)}
+.kbd{position:absolute;right:12px;top:50%;transform:translateY(-50%);padding:3px 7px;border:1px solid #d5d9df;border-radius:6px;background:#fff;color:#80868b;font-size:11px}
+.top-actions{display:flex;align-items:center;gap:6px}
+.icon-btn,.pill-btn,.primary-btn{border:0;cursor:pointer;transition:background .15s ease,transform .12s ease,box-shadow .15s ease}
+.icon-btn:active,.pill-btn:active,.primary-btn:active{transform:scale(.96)}
+.icon-btn{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:transparent;color:#4f545b;font-size:18px}
+.icon-btn:hover{background:#f0f3f7}
+.avatar{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:var(--blue);color:#fff;font-weight:700;margin-left:4px;cursor:pointer}
 
-</style></head>
-<body><div id="w"><div id="s"></div></div>
+.sidebar{position:fixed;z-index:40;left:0;top:72px;bottom:0;width:248px;padding:14px 10px 22px;background:var(--surface-2);border-right:1px solid var(--line);overflow:auto}
+.nav-section-label{padding:16px 14px 7px;font-size:11px;color:#8a9098;text-transform:uppercase;letter-spacing:.55px;font-weight:600}
+.nav-link{display:flex;align-items:center;gap:12px;min-height:42px;padding:10px 14px;margin:2px 0;border-radius:22px;text-decoration:none;color:#3c4043;font-size:14px;font-weight:500;transition:.14s ease}
+.nav-link:hover{background:var(--blue-3);color:#174ea6;transform:translateX(2px)}
+.nav-link.active{background:var(--blue-2);color:#0b57d0}
+.nav-icon{width:22px;text-align:center;font-size:15px}
+.sidebar-foot{margin-top:18px;padding:14px;border-top:1px solid var(--line);font-size:11.5px;color:#9aa0a6;line-height:1.45}
+
+main{margin-left:248px;padding:98px 24px 38px;min-height:100vh}
+.page-wrap{max-width:1500px;margin:0 auto}
+.page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:18px}
+.page-title-wrap{display:flex;align-items:center;gap:10px;min-width:0;flex-wrap:wrap}
+.page-title{margin:0;font-size:25px;line-height:1.25;font-weight:500;letter-spacing:-.2px}
+.status-pill{height:30px;display:inline-flex;align-items:center;gap:7px;padding:0 10px;border:1px solid #d9dee5;border-radius:16px;background:#fff;font-size:12px;color:#4a4f55;cursor:pointer}
+.status-dot{width:18px;height:18px;border:2px solid var(--green);border-radius:50%;display:grid;place-items:center;color:var(--green);font-size:10px;font-weight:800}
+.compare-chips{display:flex;gap:8px;flex-wrap:wrap;width:100%;margin-top:4px}
+.compare-chip{display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border-radius:15px;background:#eef3fb;color:#315b8d;font-size:12px}
+.compare-chip button{border:0;background:transparent;cursor:pointer;color:#5f6368}
+.head-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+.pill-btn{min-height:38px;padding:0 13px;border:1px solid #d9dee5;border-radius:8px;background:#fff;display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:500}
+.pill-btn:hover{background:#f8fafd;box-shadow:0 1px 3px rgba(60,64,67,.12)}
+.primary-btn{min-height:38px;padding:0 15px;border-radius:8px;background:var(--blue);color:#fff;font-weight:600}
+.primary-btn:hover{box-shadow:0 2px 7px rgba(26,115,232,.28)}
+.date-btn{min-width:230px;justify-content:space-between}
+
+.grid{display:grid;gap:14px}
+.grid-2{grid-template-columns:minmax(0,1.6fr) minmax(330px,.9fr)}
+.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+.card:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(60,64,67,.10);border-color:#d7dce4}
+.card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 18px 8px}
+.card-title{margin:0;font-size:15px;font-weight:600;color:#2d3136}
+.card-body{padding:12px 18px 18px}
+.card-link{border:0;background:transparent;color:var(--blue);font-weight:600;cursor:pointer;padding:6px 0;text-decoration:none}
+.card-link:hover{text-decoration:underline}
+.card-foot{padding:8px 18px 14px;border-top:1px solid #f0f2f5;text-align:right}
+.muted{color:var(--muted)}
+
+.metric-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:6px 18px 8px}
+.metric{padding:10px;border-radius:10px;transition:background .15s ease;cursor:default}
+.metric:hover{background:#f8fafd}
+.metric-label{display:flex;align-items:center;gap:5px;color:var(--muted);font-size:12.5px}
+.metric-value{font-size:27px;font-weight:600;letter-spacing:-.35px;margin-top:8px}
+.metric-change{margin-top:4px;color:var(--green);font-size:12px;font-weight:600}
+.metric-change.down{color:var(--red)}
+
+.chart-wrap{height:235px;padding:0 12px 8px}
+.chart{width:100%;height:100%;overflow:visible}
+.chart .gridline{stroke:#edf0f4;stroke-width:1}
+.chart .axis{fill:#80868b;font-size:10px}
+.chart .series{fill:none;stroke:var(--blue);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;stroke-dasharray:1200;stroke-dashoffset:1200;animation:drawLine .95s cubic-bezier(.4,0,.2,1) forwards}
+.chart .series.alt{stroke:#8ab4f8;stroke-width:1.8;stroke-dasharray:7 6;animation-delay:.12s}
+.chart .series.purple{stroke:var(--purple)}
+.chart .point{fill:#fff;stroke:var(--blue);stroke-width:2;opacity:0;animation:showPoint .25s ease .7s forwards;cursor:crosshair}
+@keyframes drawLine{to{stroke-dashoffset:0}}
+@keyframes showPoint{to{opacity:1}}
+
+.bar-list{display:flex;flex-direction:column;gap:12px}
+.bar-row{display:grid;grid-template-columns:minmax(120px,1fr) minmax(95px,1.4fr) 66px;gap:12px;align-items:center;min-height:28px}
+.bar-row.wide-label{grid-template-columns:minmax(185px,1.6fr) minmax(90px,1fr) 64px}
+.bar-label{min-width:0;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar-track{height:7px;background:#edf1f5;border-radius:999px;overflow:hidden;position:relative}
+.bar-fill{height:100%;width:var(--p);max-width:100%;border-radius:999px;background:var(--blue);transform-origin:left;animation:growBar .7s cubic-bezier(.2,.8,.2,1) both}
+.bar-row:nth-child(2) .bar-fill{animation-delay:.05s}.bar-row:nth-child(3) .bar-fill{animation-delay:.1s}.bar-row:nth-child(4) .bar-fill{animation-delay:.15s}.bar-row:nth-child(5) .bar-fill{animation-delay:.2s}.bar-row:nth-child(6) .bar-fill{animation-delay:.25s}.bar-row:nth-child(7) .bar-fill{animation-delay:.3s}
+@keyframes growBar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.bar-value{text-align:right;font-size:13px;font-weight:500}
+
+.table-card{padding:0}
+.table-toolbar{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.table-search{height:38px;min-width:240px;flex:1;border:1px solid #d9dee5;border-radius:8px;padding:0 12px;outline:none}
+.table-search:focus{border-color:#9fc0ed;box-shadow:0 0 0 3px #e8f0fe}
+.rows-select{height:36px;border:1px solid #d9dee5;border-radius:7px;background:#fff;padding:0 8px}
+.table-meta{margin-left:auto;color:var(--muted);font-size:12px}
+.table-scroll{overflow:auto}
+table{width:100%;border-collapse:collapse;min-width:820px}
+th,td{padding:13px 14px;border-bottom:1px solid #edf0f4;text-align:right;font-size:13px;white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+th{position:relative;background:#fff;color:#5f6368;font-weight:600;font-size:12px;cursor:pointer;user-select:none}
+th:hover{background:#f8fafd}
+tbody tr{transition:background .13s ease}
+tbody tr:hover{background:#f7faff}
+tbody tr:nth-child(even){background:#fbfcfe}
+tbody tr:nth-child(even):hover{background:#f4f8fe}
+.sort-indicator{margin-left:5px;color:#9aa0a6}
+.pagination{display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:12px 16px}
+.page-btn{height:34px;min-width:34px;border:1px solid #d9dee5;background:#fff;border-radius:7px;cursor:pointer}
+.page-btn:disabled{opacity:.4;cursor:default}
+.page-status{font-size:12px;color:var(--muted)}
+
+.kpi-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.kpi-box{padding:16px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow)}
+.kpi-box strong{display:block;font-size:24px;margin-top:6px}
+.kpi-box span{font-size:12px;color:var(--muted)}
+
+.heatmap{display:grid;grid-template-columns:130px repeat(6,minmax(48px,1fr));gap:5px;align-items:center}
+.heat-h{font-size:11px;color:var(--muted);text-align:center}
+.heat-label{font-size:12px;color:#3c4043}
+.heat-cell{height:34px;border-radius:5px;background:color-mix(in srgb,var(--blue) calc(var(--i)*1%),#fff);display:grid;place-items:center;color:var(--text);font-size:10px;transition:transform .12s ease}
+.heat-cell:hover{transform:scale(1.06);outline:2px solid #d3e3fd}
+
+.popover{position:fixed;z-index:100;min-width:220px;padding:8px;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 30px rgba(60,64,67,.18);opacity:0;transform:translateY(-5px) scale(.98);pointer-events:none;transition:.14s ease}
+.popover.open{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+.menu-item{display:flex;align-items:center;gap:10px;width:100%;min-height:38px;padding:8px 10px;border:0;border-radius:7px;background:transparent;text-align:left;cursor:pointer;font-size:13px}
+.menu-item:hover{background:#f2f5f9}
+.menu-item small{display:block;color:#80868b}
+.menu-sep{height:1px;background:var(--line);margin:6px 2px}
+
+.modal-backdrop{position:fixed;z-index:110;inset:0;background:rgba(32,33,36,.32);display:grid;place-items:center;padding:18px;opacity:0;pointer-events:none;transition:.16s ease}
+.modal-backdrop.open{opacity:1;pointer-events:auto}
+.modal{width:min(560px,100%);max-height:min(760px,90vh);overflow:auto;background:#fff;border-radius:14px;box-shadow:0 18px 50px rgba(32,33,36,.22);transform:translateY(10px) scale(.98);transition:.16s ease}
+.modal-backdrop.open .modal{transform:translateY(0) scale(1)}
+.modal-head,.modal-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;border-bottom:1px solid var(--line)}
+.modal-foot{border-top:1px solid var(--line);border-bottom:0;justify-content:flex-end}
+.modal-body{padding:18px}
+.modal h2{margin:0;font-size:18px}
+.field{display:grid;gap:7px;margin-bottom:14px}
+.field label{font-size:12px;color:var(--muted);font-weight:600}
+.field select,.field input{height:40px;border:1px solid #d9dee5;border-radius:8px;padding:0 10px;background:#fff;outline:none}
+.field select:focus,.field input:focus{border-color:#9fc0ed;box-shadow:0 0 0 3px #e8f0fe}
+
+.toast{position:fixed;z-index:150;left:50%;bottom:24px;transform:translate(-50%,20px);padding:11px 16px;border-radius:8px;background:#303134;color:#fff;font-size:13px;box-shadow:0 5px 18px rgba(32,33,36,.25);opacity:0;pointer-events:none;transition:.2s ease}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.chart-tooltip{position:fixed;z-index:160;padding:7px 9px;border-radius:7px;background:#2f3337;color:#fff;font-size:11px;pointer-events:none;opacity:0;transform:translate(-50%,-115%);transition:opacity .08s ease;white-space:nowrap}
+.chart-tooltip.show{opacity:1}
+
+.empty-state{padding:34px;text-align:center;color:var(--muted)}
+.fade-in{animation:fadeUp .35s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.reanimate .series{animation:none!important}.reanimate .bar-fill{animation:none!important}
+
+@media(max-width:1180px){
+  .topbar{grid-template-columns:220px minmax(180px,1fr) auto}
+  .sidebar{width:220px}
+  main{margin-left:220px}
+  .grid-3{grid-template-columns:1fr 1fr}
+  .grid-3>.card:last-child{grid-column:1/-1}
+  .metric-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:900px){
+  .topbar{grid-template-columns:60px minmax(160px,1fr) auto;padding:0 10px}
+  .brand span{display:none}.kbd{display:none}.top-actions .hide-sm{display:none}
+  .sidebar{width:72px;padding:14px 8px}.nav-link{justify-content:center;padding:10px}.nav-link span:not(.nav-icon),.nav-section-label,.sidebar-foot{display:none}
+  main{margin-left:72px;padding:92px 14px 30px}
+  .grid-2,.grid-3{grid-template-columns:1fr}.grid-3>.card:last-child{grid-column:auto}
+  .page-head{flex-direction:column}.head-actions{justify-content:flex-start}
+}
+@media(max-width:620px){
+  .top-actions .icon-btn{display:none}.avatar{display:grid}
+  main{margin-left:0;padding:88px 10px 24px}.sidebar{display:none}
+  .page-title{font-size:21px}.metric-grid{grid-template-columns:1fr 1fr;padding:6px 12px}.metric-value{font-size:22px}
+  .head-actions{width:100%}.date-btn{min-width:0;flex:1}
+  .bar-row,.bar-row.wide-label{grid-template-columns:minmax(120px,1fr) 90px 56px;gap:8px}
+}
+</style></head><body>
+
+<header class="topbar">
+  <div class="brand"><span class="ga-mark" aria-hidden="true"><i></i><i></i><i></i></span><span>Analytics</span></div>
+  <div class="top-search"><span class="search-icon">⌕</span><input id="globalSearch" type="search" placeholder="Try searching reports, countries, channels…" aria-label="Search this report"><span class="kbd">Ctrl /</span></div>
+  <div class="top-actions">
+    <button class="icon-btn hide-sm" data-menu="appsMenu" aria-label="Apps">▦</button>
+    <button class="icon-btn hide-sm" data-action="help" aria-label="Help">?</button>
+    <button class="icon-btn" data-menu="notificationsMenu" aria-label="Notifications">♢</button>
+    <div class="avatar" data-menu="profileMenu" role="button" tabindex="0" aria-label="Profile">R</div>
+  </div>
+</header>
+<aside class="sidebar" aria-label="Analytics navigation">
+  <div class="nav-section-label">Reports</div>
+  <a class="nav-link " href="Analytics _ Reports snapshot.html"><span class="nav-icon">▦</span><span>Reports snapshot</span></a><a class="nav-link " href="Reports snapshot with campaigns and cohorts.html"><span class="nav-icon">◫</span><span>Campaigns & cohorts</span></a><a class="nav-link active" href="Traffic acquisition.html"><span class="nav-icon">↗</span><span>Traffic acquisition</span></a>
+  <div class="nav-section-label">User</div>
+  <a class="nav-link " href="Demographic details_ Country.html"><span class="nav-icon">◉</span><span>Demographic details</span></a>
+  <a class="nav-link " href="Tech details_ Device category.html"><span class="nav-icon">▣</span><span>Tech details</span></a>
+  <div class="nav-section-label">Workspace</div>
+  <a class="nav-link" href="#" onclick="event.preventDefault();toast('Library opened')"><span class="nav-icon">□</span><span>Library</span></a>
+  <a class="nav-link" href="#" onclick="event.preventDefault();toast('Admin settings opened')"><span class="nav-icon">⚙</span><span>Admin</span></a>
+  <div class="sidebar-foot">Interactive Rieng254 analytics workspace<br>Static report data · live UI controls</div>
+</aside>
+<main><div class="page-wrap">
+
+<div class="page-head">
+  <div class="page-title-wrap">
+    <h1 class="page-title">Traffic acquisition: Session default channel group</h1>
+    <button class="status-pill" data-menu="statusMenu"><span class="status-dot">✓</span><span>Data quality</span><span>⌄</span></button>
+    <button class="icon-btn" data-modal-open="comparisonModal" aria-label="Add comparison">＋</button>
+    <div id="compareChips" class="compare-chips"></div>
+  </div>
+  <div class="head-actions">
+    <button class="pill-btn" data-modal-open="filterModal">☷ Filter</button>
+    <button class="pill-btn" data-action="refresh">↻ Refresh</button>
+    <button class="pill-btn" data-action="share">↗ Share</button>
+    <button class="pill-btn" data-action="export">⇩ Export</button>
+    <button class="pill-btn date-btn" data-menu="dateMenu"><span><b class="date-label">Last 30 days · Oct 11 – Nov 9, 2026</b><small class="date-sub" style="display:block;color:#80868b;font-weight:400;margin-top:2px">Compared with Sep 11 – Oct 10, 2026</small></span><span>⌄</span></button>
+  </div>
+</div>
+<div id="statusMenu" class="popover"><div style="padding:10px 12px"><b>Data quality is good</b><p class="muted" style="margin:5px 0 0;font-size:12px;line-height:1.4">No sampling or threshold warning in this reconstructed report.</p></div></div>
+<div class="grid grid-2">
+  <section class="card"><div class="card-head"><h2 class="card-title">Users over time by channel</h2></div><div class="card-body"><div class="chart-wrap"><svg class="chart" viewBox="0 0 760 220" preserveAspectRatio="none">
+    <line class="gridline" x1="28" y1="40" x2="732" y2="40"></line><line class="gridline" x1="28" y1="80" x2="732" y2="80"></line><line class="gridline" x1="28" y1="120" x2="732" y2="120"></line><line class="gridline" x1="28" y1="160" x2="732" y2="160"></line>
+    <path class="series alt" d="M28.0 192.0 L61.5 192.0 L95.0 192.0 L128.6 192.0 L162.1 178.1 L195.6 179.5 L229.1 162.0 L262.7 145.7 L296.2 160.4 L329.7 146.2 L363.2 131.8 L396.8 141.6 L430.3 111.0 L463.8 112.7 L497.3 89.6 L530.9 105.3 L564.4 85.5 L597.9 96.2 L631.4 81.1 L665.0 65.2 L698.5 66.1 L732.0 39.8"></path><path class="series " d="M28.0 192.0 L61.5 179.4 L95.0 185.7 L128.6 173.1 L162.1 160.5 L195.6 166.8 L229.1 151.0 L262.7 132.1 L296.2 141.5 L329.7 122.6 L363.2 106.8 L396.8 119.5 L430.3 94.2 L463.8 100.5 L497.3 78.5 L530.9 91.1 L564.4 65.8 L597.9 72.2 L631.4 56.4 L665.0 43.8 L698.5 50.1 L732.0 28.0"></path><circle class="point" cx="28" cy="192" r="3.5" data-tip="Channel users · 39"></circle><circle class="point" cx="128.57142857142856" cy="173.07692307692307" r="3.5" data-tip="Channel users · 45"></circle><circle class="point" cx="229.14285714285714" cy="151" r="3.5" data-tip="Channel users · 52"></circle><circle class="point" cx="329.7142857142857" cy="122.61538461538461" r="3.5" data-tip="Channel users · 61"></circle><circle class="point" cx="430.2857142857143" cy="94.23076923076923" r="3.5" data-tip="Channel users · 70"></circle><circle class="point" cx="530.8571428571429" cy="91.07692307692307" r="3.5" data-tip="Channel users · 71"></circle><circle class="point" cx="631.4285714285714" cy="56.38461538461539" r="3.5" data-tip="Channel users · 82"></circle><circle class="point" cx="732" cy="28" r="3.5" data-tip="Channel users · 91"></circle>
+  </svg></div></div></section>
+  <section class="card"><div class="card-head"><h2 class="card-title">Users by Session channel</h2></div><div class="card-body"><div class="bar-list">
+    <div class="bar-row" data-searchable><div class="bar-label">Organic Search</div><div class="bar-track"><div class="bar-fill" style="--p:100%"></div></div><div class="bar-value">49.5K</div></div><div class="bar-row" data-searchable><div class="bar-label">Direct</div><div class="bar-track"><div class="bar-fill" style="--p:80.6%"></div></div><div class="bar-value">39.9K</div></div><div class="bar-row" data-searchable><div class="bar-label">Organic Social</div><div class="bar-track"><div class="bar-fill" style="--p:38.4%"></div></div><div class="bar-value">19K</div></div><div class="bar-row" data-searchable><div class="bar-label">Referral</div><div class="bar-track"><div class="bar-fill" style="--p:23.8%"></div></div><div class="bar-value">11.8K</div></div><div class="bar-row" data-searchable><div class="bar-label">Unassigned</div><div class="bar-track"><div class="bar-fill" style="--p:13.5%"></div></div><div class="bar-value">6.7K</div></div><div class="bar-row" data-searchable><div class="bar-label">Paid Search</div><div class="bar-track"><div class="bar-fill" style="--p:12.5%"></div></div><div class="bar-value">6.2K</div></div>
+  </div></div></section>
+</div>
+<section class="card table-card" style="margin-top:14px">
+  <div class="table-toolbar" data-for="trafficTable"><input class="table-search" placeholder="Search channels…"><label class="muted">Rows per page <select class="rows-select"><option>5</option><option selected>10</option></select></label><span class="table-meta"></span></div>
+  <div class="table-scroll"><table data-table="trafficTable"><thead><tr><th>Session channel group<span class="sort-indicator">↕</span></th><th>Users<span class="sort-indicator">↕</span></th><th>Sessions<span class="sort-indicator">↕</span></th><th>Engaged sessions<span class="sort-indicator">↕</span></th><th>Avg engagement / session<span class="sort-indicator">↕</span></th><th>Engaged sessions / user<span class="sort-indicator">↕</span></th><th>Events / session<span class="sort-indicator">↕</span></th></tr></thead><tbody>
+  <tr><td data-searchable>Organic Search</td><td >49,500</td><td >80,100</td><td >66,000</td><td >1m 21s</td><td >1.33</td><td >19.4</td></tr><tr><td data-searchable>Direct</td><td >39,900</td><td >64,400</td><td >51,400</td><td >1m 15s</td><td >1.29</td><td >17.9</td></tr><tr><td data-searchable>Organic Social</td><td >19,000</td><td >30,000</td><td >23,700</td><td >1m 03s</td><td >1.24</td><td >16.2</td></tr><tr><td data-searchable>Referral</td><td >11,800</td><td >18,800</td><td >15,100</td><td >1m 27s</td><td >1.28</td><td >20.1</td></tr><tr><td data-searchable>Paid Search</td><td >6,200</td><td >10,900</td><td >8,800</td><td >0m 59s</td><td >1.42</td><td >14.8</td></tr><tr><td data-searchable>Unassigned</td><td >6,700</td><td >11,800</td><td >9,500</td><td >0m 41s</td><td >1.01</td><td >11.2</td></tr></tbody></table></div>
+  <div class="pagination" data-pager="trafficTable"><button class="page-btn" data-prev>‹</button><span class="page-status"></span><button class="page-btn" data-next>›</button></div>
+</section></div></main>
+
+<div id="appsMenu" class="popover">
+  <button class="menu-item" data-toast="Reports workspace selected">▦ <span>Reports</span></button>
+  <button class="menu-item" data-toast="Explore workspace selected">◫ <span>Explore</span></button>
+  <button class="menu-item" data-toast="Advertising workspace selected">◎ <span>Advertising</span></button>
+  <div class="menu-sep"></div>
+  <button class="menu-item" data-toast="Admin workspace selected">⚙ <span>Admin</span></button>
+</div>
+<div id="notificationsMenu" class="popover">
+  <button class="menu-item" data-toast="Notification marked as read"><span>●</span><span><b>Reporting snapshot updated</b><small>Latest static dataset loaded</small></span></button>
+  <button class="menu-item" data-toast="Notification marked as read"><span>●</span><span><b>Traffic report ready</b><small>Channel breakdown available</small></span></button>
+  <button class="menu-item" data-toast="All notifications marked as read"><span>✓</span><span>Mark all as read</span></button>
+</div>
+<div id="profileMenu" class="popover">
+  <div style="padding:10px 12px"><b>rieng254.com</b><div class="muted" style="font-size:12px;margin-top:4px">Analytics workspace</div></div>
+  <div class="menu-sep"></div>
+  <button class="menu-item" data-toast="Account switcher opened">⇄ <span>Switch account</span></button>
+  <button class="menu-item" data-toast="Preferences opened">⚙ <span>Preferences</span></button>
+</div>
+<div id="dateMenu" class="popover">
+  <button class="menu-item" data-range="7" data-label="Last 7 days · Nov 3 – Nov 9, 2026" data-sub="Compared with Oct 27 – Nov 2, 2026"><span>Last 7 days</span></button>
+  <button class="menu-item" data-range="30" data-label="Last 30 days · Oct 11 – Nov 9, 2026" data-sub="Compared with Sep 11 – Oct 10, 2026"><span>Last 30 days</span></button>
+  <button class="menu-item" data-range="90" data-label="Last 90 days · Aug 12 – Nov 9, 2026" data-sub="Compared with May 14 – Aug 11, 2026"><span>Last 90 days</span></button>
+</div>
+<div id="comparisonModal" class="modal-backdrop"><div class="modal">
+  <div class="modal-head"><h2>Add comparison</h2><button class="icon-btn" data-modal-close aria-label="Close">×</button></div>
+  <div class="modal-body"><div class="field"><label>Dimension</label><select id="comparisonSelect"><option>Country</option><option>Device category</option><option>Session channel group</option><option>First user campaign</option></select></div><p class="muted" style="font-size:13px">Adds a visible comparison chip to the report so the control behaves like a real analytics workspace.</p></div>
+  <div class="modal-foot"><button class="pill-btn" data-modal-close>Cancel</button><button class="primary-btn" id="applyComparison">Apply</button></div>
+</div></div>
+<div id="filterModal" class="modal-backdrop"><div class="modal">
+  <div class="modal-head"><h2>Add filter</h2><button class="icon-btn" data-modal-close>×</button></div>
+  <div class="modal-body"><div class="field"><label>Filter</label><select id="filterSelect"><option>Country = Kenya</option><option>Device = mobile</option><option>Channel = Organic Search</option><option>Engagement rate &gt; 50%</option></select></div></div>
+  <div class="modal-foot"><button class="pill-btn" data-modal-close>Cancel</button><button class="primary-btn" id="applyFilter">Apply filter</button></div>
+</div></div>
+<div id="helpModal" class="modal-backdrop"><div class="modal">
+  <div class="modal-head"><h2>Analytics help</h2><button class="icon-btn" data-modal-close>×</button></div>
+  <div class="modal-body"><p>This reconstructed dashboard is interactive: use the left navigation, date selector, search, table sorting, filters, comparisons, refresh, share and CSV export controls.</p><p class="muted" style="font-size:13px">The figures are the static Rieng254 report data stored in this repository; UI interactions do not contact Google Analytics.</p></div>
+  <div class="modal-foot"><button class="primary-btn" data-modal-close>Got it</button></div>
+</div></div>
+<div id="pageModal" class="modal-backdrop"><div class="modal">
+  <div class="modal-head"><h2>Pages and screens</h2><button class="icon-btn" data-modal-close>×</button></div>
+  <div class="modal-body">
+    <div class="bar-list">
+      <div class="bar-row wide-label"><div class="bar-label">Rieng254 – Home</div><div class="bar-track"><div class="bar-fill" style="--p:100%"></div></div><div class="bar-value">249K</div></div><div class="bar-row wide-label"><div class="bar-label">Rieng254 – Trending</div><div class="bar-track"><div class="bar-fill" style="--p:64.7%"></div></div><div class="bar-value">161K</div></div><div class="bar-row wide-label"><div class="bar-label">Rieng254 – Videos</div><div class="bar-track"><div class="bar-fill" style="--p:52.6%"></div></div><div class="bar-value">131K</div></div><div class="bar-row wide-label"><div class="bar-label">Rieng254 – Shows</div><div class="bar-track"><div class="bar-fill" style="--p:29.3%"></div></div><div class="bar-value">73K</div></div><div class="bar-row wide-label"><div class="bar-label">Rieng254 – Albums & Songs</div><div class="bar-track"><div class="bar-fill" style="--p:22.9%"></div></div><div class="bar-value">57K</div></div><div class="bar-row wide-label"><div class="bar-label">Rieng254 – DJ Mix Sales</div><div class="bar-track"><div class="bar-fill" style="--p:16.9%"></div></div><div class="bar-value">42K</div></div><div class="bar-row wide-label"><div class="bar-label">Rieng254 – BoB Pre-order</div><div class="bar-track"><div class="bar-fill" style="--p:11.6%"></div></div><div class="bar-value">29K</div></div>
+    </div>
+  </div>
+</div></div>
+<div id="toast" class="toast"></div><div id="chartTooltip" class="chart-tooltip"></div>
 <script>
-const S=document.getElementById('s');
-const T=(x,y,h,css='',m='')=>{const e=document.createElement('div');e.className='t'+(m=='c'?' ce':'');e.innerHTML=h;e.style.top=y+'px';if(m=='r')e.style.right=(1536-x)+'px';else e.style.left=x+'px';e.style.cssText+=css;S.appendChild(e);return e};
-const B=(x,y,w,h,bg,css='')=>{const e=document.createElement('div');e.className='b';e.style.cssText=`left:${x}px;top:${y}px;width:${w}px;height:${h}px;background:${bg};${css}`;S.appendChild(e);return e};
-const I=(x,y,s,d,f='#5f6368')=>{const e=document.createElement('div');e.className='b';e.style.cssText=`left:${x-s/2}px;top:${y-s/2}px;width:${s}px;height:${s}px`;e.innerHTML=`<svg viewBox="0 0 24 24" width="${s}" height="${s}"><path d="${d}" fill="${f}"/></svg>`;S.appendChild(e)};
-const CI=(x,y,g,col='#5f6368',s=22)=>{const e=B(x-s/2,y-s/2,s-4,s-4,'transparent',`border:2px solid ${col};border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;color:${col};font-weight:700`);e.innerHTML=g};
-const BLUE='#1a73e8',G='#5f6368',DK='#202124';
-
-/* backgrounds first */
-B(0,0,1536,68,'#fff','box-shadow:0 1px 2px rgba(60,64,67,.25)');
-B(0,68,60,796,'#f8fafd','border-right:1px solid #e3e5e8');
-B(372,139,1115,725,'#fff','box-shadow:0 0 3px rgba(60,64,67,.3)');
-
-
-/* header */
-B(16,32,8,16,'#e37400','border-radius:3px');B(27,25,8,23,'#f9ab00','border-radius:3px');B(38,17,8,31,'#f9ab00','border-radius:3px');
-T(66,34,'Analytics','font-size:23px;color:#5f6368');
-T(196,18,'All accounts &nbsp;&#8250;&nbsp; rieng254.com','font-size:14px;color:#5f6368');
-T(196,44,'rieng254.com &#9662;','font-size:23px');
-B(554,8,612,50,'#eceff1','border-radius:6px');
-I(592,34,24,'M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z');
-T(621,35,'Try searching &ldquo;how to set up Analytics&rdquo;','font-size:17px;color:#5f6368');
-[[1342,28],[1353,28],[1342,39],[1353,39]].forEach(([x,y])=>B(x,y,9,9,'#3c4043','border-radius:2px'));
-B(1388,22,24,24,'#3c4043','border-radius:50%');T(1400,34,'?','color:#fff;font-size:17px;font-weight:700','c');
-B(1443,26,4,4,'#3c4043','border-radius:50%');B(1443,33,4,4,'#3c4043','border-radius:50%');B(1443,40,4,4,'#3c4043','border-radius:50%');
-B(1474,14,38,38,'#e8eaed','border-radius:50%');
-
-/* rail */
-I(30,103,24,'M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z');
-B(10,133,40,40,'#1a73e8','border-radius:50%;box-shadow:0 0 0 2px #d3e3fd');
-B(22,146,3,12,'#fff');B(28,141,3,17,'#fff');B(34,150,3,8,'#fff');
-CI(30,205,'&#8767;');CI(30,257,'&#9678;');
-I(30,813,26,'M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58a.5.5 0 0 0 .12-.61l-1.92-3.32a.5.5 0 0 0-.59-.22l-2.39.96a7 7 0 0 0-1.62-.94l-.36-2.54A.48.48 0 0 0 13.9 2h-3.84a.48.48 0 0 0-.48.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.48.48 0 0 0-.59.22L2.7 8.47a.48.48 0 0 0 .12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.5.5 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.5.5 0 0 0-.12-.61l-2.01-1.58zM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2z');
-
-/* second nav */
-T(82,96,'Reports snapshot','font-size:15px;font-weight:500');T(82,134,'Realtime','font-size:15px;font-weight:500');
-B(70,164,252,39,'#e8eaed','border-radius:20px');T(82,184,'CMO - Acquisition Report','font-size:15px;color:#5f6368');T(298,184,'&#8963;','font-size:15px;color:#5f6368','c');
-B(62,205,260,38,'#e3e6ea','border-radius:0 19px 19px 0');T(72,223,'&#9662;','font-size:9px;color:#202124');T(99,223,'Acquisition','font-size:15px;font-weight:500');
-T(116,262,'Overview','font-size:15px;font-weight:500');T(116,300,'User acquisition','font-size:15px;font-weight:500');
-B(62,319,260,39,'#d3e3fd','border-radius:0 19px 19px 0');T(116,338,'Traffic acquisition','font-size:15px;font-weight:500;color:#0b57d0');
-B(75,365,243,1,'#dadce0');
-T(81,389,'Life cycle','font-size:15px;color:#5f6368');T(298,389,'&#8963;','font-size:15px;color:#5f6368','c');
-[['Acquisition',427],['Engagement',466],['Monetization',504]].forEach(([n,y])=>{T(73,y,'&#9656;','font-size:10px;color:#202124');T(98,y,n,'font-size:15px;font-weight:500')});
-T(98,543,'Retention','font-size:15px;font-weight:500');
-B(75,568,243,1,'#dadce0');
-T(81,594,'User','font-size:15px;color:#5f6368');T(298,594,'&#8963;','font-size:15px;color:#5f6368','c');
-[['Demographics',632],['Tech',670]].forEach(([n,y])=>{T(73,y,'&#9656;','font-size:10px;color:#202124');T(98,y,n,'font-size:15px;font-weight:500')});
-B(75,795,243,1,'#dadce0');T(293,824,'&#8249;','font-size:28px;color:#3c4043','c');
-
-/* title row */
-B(374,89,26,26,BLUE,'border-radius:50%');T(387,102,'A','color:#fff;font-size:15px','c');
-B(409,91,25,25,'transparent','border:1.6px solid #c4c7c5;border-radius:50%');T(421,103,'+','color:#3c4043;font-size:20px','c');
-B(459,90,1,25,'#dadce0');
-T(482,106,'Traffic acquisition: Session default channel group','font-size:24px');
-B(1003,90,59,31,'#f8f9fa','border:1px solid #dadce0;border-radius:16px;box-sizing:border-box');
-T(1016,105,'&#9888;','font-size:20px;color:#e37400','c');T(1044,105,'&#9662;','font-size:11px;color:#5f6368','c');
-B(1068,92,25,25,'transparent','border:1.6px solid #c4c7c5;border-radius:50%');T(1080,104,'+','color:#3c4043;font-size:20px','c');
-B(1112,76,293,49,'#fff','box-shadow:0 1px 3px rgba(60,64,67,.15)');
-T(1120,93,'Last 30 days &nbsp;&nbsp;Oct 11 - Nov 9, 2026','font-size:15.5px;font-weight:700');
-T(1128,116,'Compare: Sep 11 &ndash; Oct 10, 2026','font-size:12.5px;color:#3c4043');
-B(1390,95,15,16,'transparent','border:2px solid #3c4043;border-radius:3px');T(1437,103,'&#10150;','font-size:0');
-T(1437,103,'&#9919;','font-size:0');
-CI(1437,103,'&lt;','#3c4043',24);T(1477,103,'&#8767;','font-size:26px;color:#3c4043','c');
-
-/* chart */
-const L=[['Organic Search','#1a73e8',205,30,402],['Direct','#4f9cf9',228,28,525],['Organic Social','#9334e6',278,9,602],['Referral','#c06ce8',294,8,729],['Paid Search','#8e63f5',311,8,819],['Unassigned','#4a148c',330,3,932]];
-const bs=[.3,-.6,0,-.8,-.2,-.9,-.4,.3,0,.9,-.5,.2,-.7,0,-.6,.3,-.4,.4,0,.6,.7,.55];
-let sv='<svg class="b" style="left:0;top:0" width="1536" height="864" viewBox="0 0 1536 864">';
-sv+='<path d="M398 348H1000" stroke="#c4c7c5"/>';
-L.forEach(([n,c,y0,a],i)=>{const sh=i==1?1:0;let d='';bs.forEach((v,k)=>{const x=398+k*(602/21),y=y0-(sh?bs[(k+21)%22]*.9:v)*a;d+=(k?'L':'M')+x.toFixed(1)+' '+y.toFixed(1)});sv+=`<path d="${d}" fill="none" stroke="${c}" stroke-width="2" stroke-linejoin="round"/>`});
-sv+='</svg>';S.insertAdjacentHTML('beforeend',sv);
-[['8K',155],['6K',202],['4K',249],['2K',297],['0',348]].forEach(([l,y])=>T(1016,y,l,'font-size:12px;color:#5f6368'));
-[['22',410],['29',542],['06',689],['13',834],['20',976]].forEach(([l,x])=>T(x,363,l,'font-size:12px;color:#5f6368','c'));
-T(404,376,'Sep','font-size:12px;color:#5f6368','c');T(689,377,'Oct','font-size:12px;color:#5f6368','c');
-L.forEach(([n,c,,,x])=>{B(x-6,406,12,12,c,'border-radius:50%');T(x+11,412,n,'font-size:12.5px;color:#3c4043')});
-[['Organic Search',233,149],['Direct',189,182],['Organic Social',88,217],['Referral',60,251],['Paid Search',42,285],['Unassigned',22,319]].forEach(([n,w,y],i)=>{
- B(1199,y,w,28,'#1a73e8');T(1178,y+15,n,'font-size:13px;color:#202124','r');
-});
-[['0',1199],['20K',1262],['40K',1326],['60K',1389],['80K',1452]].forEach(([l,x])=>T(x,374,l,'font-size:12px;color:#5f6368','c'));
-B(396,446,1064,1,'#e8eaed');
-
-/* table controls */
-I(407,468,19,'M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z');
-T(424,468,'Search...','font-size:14.5px;color:#5f6368');
-T(1013,469,'Rows per page:','font-size:14.5px;color:#5f6368');T(1125,466,'10','font-size:14.5px');T(1160,466,'&#9662;','font-size:11px;color:#3c4043','c');B(1120,477,60,1,'#80868b');
-T(1215,469,'Go to:','font-size:14.5px;color:#5f6368');T(1289,466,'1','font-size:14.5px');B(1268,477,44,1,'#80868b');
-T(1350,469,'&#8249;','font-size:26px;color:#5f6368','c');T(1373,469,'1-6 of 6','font-size:14.5px;color:#3c4043');T(1446,469,'&#8250;','font-size:26px;color:#3c4043','c');
-B(396,490,1064,1,'#e0e0e0');
-
-/* table head */
-B(437,494,289,44,'#fff','border:2px solid #1a73e8;box-sizing:border-box');
-T(459,517,'Session default channel group','font-size:14.5px;color:#5f6368');T(678,517,'&#9662;','font-size:11px;color:#3c4043','c');T(709,517,'+','font-size:24px;color:#1a73e8','c');
-B(736,492,1,350,'#e0e0e0');
-const H=(x,ls)=>ls.forEach((s,i)=>T(x,513+i*(ls.length==4?19:20),s,'font-size:14px;color:#3c4043','c').classList.add('dt'));
-T(814,513,'&#8595; Users','font-size:14px;color:#3c4043;text-decoration:underline dotted #5f6368;text-underline-offset:3px','c');
-H(922,['Sessions']);H(1036,['Engaged','sessions']);H(1170,['Average','engagement','time per','session']);H(1293,['Engaged','sessions','per user']);H(1418,['Events','per','session']);
-
-/* totals */
-[[806,'130,700'],[910,'211,700'],[1030,'169,600'],[1174,'1m 18s'],[1306,'1.30'],[1428,'18.7']].forEach(([x,v],i)=>{
- T(x,601,v,'font-size:17px;font-weight:700;color:#202124','c');
- T(x,622,i<3?'100% of total':'Avg 0%','font-size:12px;color:#5f6368'+(i<3?';height:9px;overflow:hidden;opacity:.7':''),'c');
-});
-
-/* rows */
-[637,703,768].forEach(y=>B(396,y,1064,33,'#f1f3f4'));
-[669,702,735,768,801,834].forEach(y=>B(396,y,1064,1,'#e0e0e0'));
-const R=['Organic Search','Direct','Organic Social','Referral','Paid Search','Unassigned'];
-const RY=[653,686,719,751,784,817];
-R.forEach((n,i)=>{T(427,RY[i],i+1,'font-size:14px;color:#3c4043','c');T(464,RY[i],n,'font-size:14.5px;font-weight:500')});
-const N=[[[806,910,1030],[[49500,80100,66000],[39900,64400,51400],[19000,30000,23700],[11800,18800,15100],[6200,10900,8800],[6700,11800,9500],[3900,6600,3900]]]];
-const ny=[648,688,726,765,784,804,842];
-N[0][1].forEach((row,k)=>row.forEach((v,j)=>{
- const x=N[0][0][j];B(x-54,ny[k]-12,108,24,'#fff');
- T(x,ny[k],v.toLocaleString('en-US'),'font-size:14.5px;color:#202124','c');
+const q=(s,r=document)=>r.querySelector(s), qa=(s,r=document)=>[...r.querySelectorAll(s)];
+const toast=(msg)=>{const t=q('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(window.__toastTimer);window.__toastTimer=setTimeout(()=>t.classList.remove('show'),1800)};
+const closePopovers=()=>qa('.popover.open').forEach(x=>x.classList.remove('open'));
+function placePopover(pop,btn){
+  const r=btn.getBoundingClientRect(), w=Math.max(pop.offsetWidth||220,220);
+  let left=Math.min(innerWidth-w-12,Math.max(12,r.right-w));
+  let top=Math.min(innerHeight-(pop.offsetHeight||260)-12,r.bottom+8);
+  pop.style.left=left+'px';pop.style.top=top+'px';
+}
+qa('[data-menu]').forEach(btn=>btn.addEventListener('click',e=>{
+  e.stopPropagation();const pop=q('#'+btn.dataset.menu), was=pop.classList.contains('open');closePopovers();
+  if(!was){pop.classList.add('open');requestAnimationFrame(()=>placePopover(pop,btn))}
 }));
-const E=[['1m 21s','1m 15s','1m 03s','1m 27s','0m 59s','0m 41s'],['1.33','1.29','1.24','1.28','1.42','1.01'],['19.4','17.9','16.2','20.1','14.8','11.2']];
-E.forEach((col,j)=>col.forEach((v,i)=>T([1174,1306,1428][j],RY[i],v,'font-size:14.5px;color:#202124','c')));
+document.addEventListener('click',e=>{if(!e.target.closest('.popover')&&!e.target.closest('[data-menu]'))closePopovers()});
+addEventListener('resize',closePopovers);
 
-/* feedback button */
-B(1480,766,42,42,'#fff','border-radius:50%;box-shadow:0 1px 4px rgba(60,64,67,.4)');
-B(1492,778,18,16,'transparent','border:2px solid #3c4043;border-radius:3px;box-sizing:border-box');
-T(1501,786,'!','font-size:11px;font-weight:700;color:#3c4043','c');
+qa('[data-range]').forEach(b=>b.addEventListener('click',()=>{
+  q('.date-label').textContent=b.dataset.label;
+  q('.date-sub').textContent=b.dataset.sub||'';
+  closePopovers();reanimate();toast('Date range updated');
+}));
 
-const fit=()=>{const k=Math.min(1,innerWidth/1536)||1;S.style.transform='scale('+k+')';document.getElementById('w').style.height=864*k+'px'};
-addEventListener('resize',fit);fit();
+function openModal(id){const m=q('#'+id);if(m){m.classList.add('open');document.body.style.overflow='hidden'}}
+function closeModal(m){m.classList.remove('open');document.body.style.overflow=''}
+qa('[data-modal-open]').forEach(b=>b.addEventListener('click',()=>openModal(b.dataset.modalOpen)));
+qa('[data-modal-close]').forEach(b=>b.addEventListener('click',()=>closeModal(b.closest('.modal-backdrop'))));
+qa('.modal-backdrop').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)closeModal(m)}));
+addEventListener('keydown',e=>{
+  if(e.key==='Escape'){closePopovers();qa('.modal-backdrop.open').forEach(closeModal)}
+  if((e.ctrlKey||e.metaKey)&&e.key==='/'){e.preventDefault();q('#globalSearch')?.focus()}
+});
 
-/* real clickable navigation */
-(()=>{
-  const pages=[
-    ['Reports','Analytics _ Reports snapshot.html','▦'],
-    ['Campaigns & cohorts','Reports snapshot with campaigns and cohorts.html','◫'],
-    ['Traffic acquisition','Traffic acquisition.html','↗'],
-    ['Demographic details','Demographic details_ Country.html','◉'],
-    ['Tech details','Tech details_ Device category.html','▣']
-  ];
-  const current=decodeURIComponent((location.pathname.split('/').pop()||'').replace(/\\+/g,' '));
-  const nav=document.createElement('nav');
-  nav.className='app-nav';
-  nav.setAttribute('aria-label','Analytics pages');
-  nav.style.width='323px';
-  nav.style.top='68px';
-  nav.style.height='796px';
-  nav.innerHTML='<div class="app-nav__title">Analytics reports</div><div class="app-nav__group-label">Reports</div>';
-  pages.forEach((p,i)=>{
-    if(i===2) nav.insertAdjacentHTML('beforeend','<div class="app-nav__divider"></div><div class="app-nav__group-label">Acquisition</div>');
-    if(i===3) nav.insertAdjacentHTML('beforeend','<div class="app-nav__divider"></div><div class="app-nav__group-label">User</div>');
-    const a=document.createElement('a');
-    a.className='app-nav__link'+(current===p[1]?' active':'');
-    a.href=p[1];
-    a.title='Open '+p[0];
-    a.innerHTML='<span class="app-nav__icon">'+p[2]+'</span><span>'+p[0]+'</span>';
-    nav.appendChild(a);
-  });
-  nav.insertAdjacentHTML('beforeend','<div class="app-nav__hint">Use this menu to move between report pages.</div>');
-  S.appendChild(nav);
-})();
+q('#applyComparison')?.addEventListener('click',()=>{
+  const v=q('#comparisonSelect').value;
+  const box=q('#compareChips');
+  if(v&&!qa('.compare-chip',box).some(c=>c.dataset.value===v)){
+    const c=document.createElement('span');c.className='compare-chip fade-in';c.dataset.value=v;
+    c.innerHTML='Compare: '+v+' <button aria-label="Remove comparison">×</button>';
+    c.querySelector('button').onclick=()=>c.remove();box.appendChild(c);
+  }
+  closeModal(q('#comparisonModal'));toast('Comparison added');
+});
 
-/* full-width responsive scaling */
-const appFit=()=>{
-  const k=(window.innerWidth/1536)||1;
-  S.style.transform='scale('+k+')';
-  const scaledHeight=864*k;
-  const w=document.getElementById('w');
-  w.style.height=Math.max(window.innerHeight,scaledHeight)+'px';
-  w.style.minHeight='100vh';
-};
-addEventListener('resize',appFit);
-appFit();
+q('#applyFilter')?.addEventListener('click',()=>{
+  const v=q('#filterSelect').value;
+  const box=q('#compareChips');
+  const c=document.createElement('span');c.className='compare-chip fade-in';c.dataset.filter=v;
+  c.innerHTML='Filter: '+v+' <button aria-label="Remove filter">×</button>';
+  c.querySelector('button').onclick=()=>c.remove();box.appendChild(c);
+  closeModal(q('#filterModal'));toast('Filter applied');
+});
 
-</script></body></html>
+function reanimate(){
+  const root=q('.page-wrap');root.classList.add('reanimate');
+  void root.offsetWidth;root.classList.remove('reanimate');
+}
+q('[data-action="refresh"]')?.addEventListener('click',()=>{reanimate();toast('Report refreshed')});
+q('[data-action="share"]')?.addEventListener('click',async()=>{
+  try{await navigator.clipboard.writeText(location.href);toast('Link copied to clipboard')}catch{toast('Share link ready: '+location.href)}
+});
+q('[data-action="export"]')?.addEventListener('click',()=>{
+  const table=q('table[data-table]'); if(!table){toast('Nothing to export on this view');return}
+  const rows=qa('tr',table).filter(r=>!r.hidden).map(r=>qa('th,td',r).map(c=>'"'+c.innerText.replaceAll('"','""')+'"').join(','));
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([rows.join('\n')],{type:'text/csv'}));
+  a.download=(document.title.replace(/[^a-z0-9]+/gi,'-').replace(/^-|-$/g,'')||'analytics')+'.csv';a.click();URL.revokeObjectURL(a.href);toast('CSV exported');
+});
+qa('[data-action="help"]').forEach(b=>b.addEventListener('click',()=>openModal('helpModal')));
+
+function setupTable(table){
+  const id=table.dataset.table, body=table.tBodies[0], all=[...body.rows], tools=q('[data-for="'+id+'"]');
+  if(!tools)return;
+  const input=q('.table-search',tools), select=q('.rows-select',tools), meta=q('.table-meta',tools), pager=q('[data-pager="'+id+'"]');
+  let page=0, per=Number(select?.value||10), sortIndex=-1, sortDir=1, term='';
+  const value=(row,i)=>row.cells[i]?.dataset.value??row.cells[i]?.innerText.trim()??'';
+  const num=s=>{const v=Number(String(s).replace(/[,K%m\s]/gi,m=>m.toLowerCase()==='k'?'000':''));return Number.isFinite(v)?v:null};
+  function filtered(){
+    let rows=all.filter(r=>r.innerText.toLowerCase().includes(term));
+    if(sortIndex>=0)rows.sort((a,b)=>{const av=value(a,sortIndex),bv=value(b,sortIndex),an=num(av),bn=num(bv);return ((an!==null&&bn!==null)?an-bn:av.localeCompare(bv))*sortDir});
+    return rows;
+  }
+  function render(){
+    const rows=filtered(), pages=Math.max(1,Math.ceil(rows.length/per));page=Math.min(page,pages-1);
+    all.forEach(r=>r.hidden=true);rows.slice(page*per,page*per+per).forEach(r=>{r.hidden=false;body.appendChild(r)});
+    const from=rows.length?page*per+1:0,to=Math.min(rows.length,(page+1)*per);
+    meta.textContent=from+'–'+to+' of '+rows.length;
+    if(pager){q('.page-status',pager).textContent=(page+1)+' / '+pages;q('[data-prev]',pager).disabled=page===0;q('[data-next]',pager).disabled=page>=pages-1}
+  }
+  input?.addEventListener('input',()=>{term=input.value.trim().toLowerCase();page=0;render()});
+  select?.addEventListener('change',()=>{per=Number(select.value);page=0;render()});
+  qa('th',table).forEach((th,i)=>th.addEventListener('click',()=>{
+    if(sortIndex===i)sortDir*=-1;else{sortIndex=i;sortDir=1}
+    qa('.sort-indicator',table).forEach(x=>x.textContent='↕');q('.sort-indicator',th).textContent=sortDir>0?'↑':'↓';render()
+  }));
+  q('[data-prev]',pager)?.addEventListener('click',()=>{page--;render()});
+  q('[data-next]',pager)?.addEventListener('click',()=>{page++;render()});
+  table.__applySearch=v=>{input.value=v;input.dispatchEvent(new Event('input'))};
+  render();
+}
+qa('table[data-table]').forEach(setupTable);
+
+q('#globalSearch')?.addEventListener('input',e=>{
+  const term=e.target.value.trim().toLowerCase();
+  const table=q('table[data-table]');
+  if(table?.__applySearch)table.__applySearch(term);
+  qa('[data-searchable]').forEach(el=>el.hidden=!!term&&!el.innerText.toLowerCase().includes(term));
+});
+
+const tip=q('#chartTooltip');
+qa('[data-tip]').forEach(el=>{
+  el.addEventListener('pointerenter',()=>{tip.textContent=el.dataset.tip;tip.classList.add('show')});
+  el.addEventListener('pointermove',e=>{tip.style.left=e.clientX+'px';tip.style.top=e.clientY+'px'});
+  el.addEventListener('pointerleave',()=>tip.classList.remove('show'));
+});
+
+qa('[data-drill]').forEach(b=>b.addEventListener('click',()=>{
+  const id=b.dataset.drill;
+  if(id==='countries')location.href='Demographic details_ Country.html';
+  else if(id==='traffic')location.href='Traffic acquisition.html';
+  else if(id==='tech')location.href='Tech details_ Device category.html';
+  else openModal(id);
+}));
+
+qa('.menu-item[data-toast]').forEach(b=>b.addEventListener('click',()=>{toast(b.dataset.toast);closePopovers()}));
+</script>
+</body></html>
