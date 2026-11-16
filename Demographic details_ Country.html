@@ -1,175 +1,416 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Demographic details: Country</title>
-<meta name="color-scheme" content="light">
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Demographic details: Country</title><meta name="color-scheme" content="light">
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-html,body{margin:0;background:#f8fafd}
-body{overflow-x:hidden;font-family:'Google Sans',Roboto,Arial,sans-serif;color:#202124}
-#w{width:100%;overflow:hidden}
-#s{position:relative;width:1536px;height:864px;transform-origin:0 0;background:#f8fafd;overflow:hidden}
-.t{position:absolute;transform:translateY(-50%);white-space:nowrap}
-.b{position:absolute}
-.ce{transform:translate(-50%,-50%)}
-.dt{text-decoration:underline dotted #5f6368;text-underline-offset:4px}
+:root{
+  --bg:#f6f8fb;--surface:#fff;--surface-2:#f8fafd;--text:#202124;--muted:#5f6368;
+  --line:#e3e7ee;--blue:#1a73e8;--blue-2:#d3e3fd;--blue-3:#e8f0fe;--green:#188038;
+  --red:#d93025;--amber:#e37400;--purple:#9334e6;--shadow:0 1px 2px rgba(60,64,67,.08),0 2px 8px rgba(60,64,67,.05);
+  --radius:14px
+}
+*{box-sizing:border-box}
+html{background:var(--bg);scroll-behavior:smooth}
+body{margin:0;min-width:320px;min-height:100vh;background:var(--bg);color:var(--text);font-family:"Google Sans",Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit}
+button{color:inherit}
+a{color:inherit}
+[hidden]{display:none!important}
 
-/* interactive app polish */
-*,*::before,*::after{box-sizing:border-box}
-html,body{width:100%;min-height:100%;margin:0}
-body{min-height:100vh;overflow-x:hidden;overflow-y:auto;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
-#w{width:100%;min-height:100vh;overflow:hidden;background:inherit}
-#s{will-change:transform}
-#s svg{shape-rendering:geometricPrecision}
-#s svg path,#s svg line{vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round}
-.app-nav{position:absolute;left:0;z-index:9999;background:#f8fafd;border-right:1px solid #e3e5e8;padding:16px 10px 18px;overflow:hidden;font-family:'Google Sans',Roboto,Arial,sans-serif}
-.app-nav *{box-sizing:border-box}
-.app-nav__title{padding:3px 14px 10px;font-size:12px;font-weight:500;letter-spacing:.45px;text-transform:uppercase;color:#80868b}
-.app-nav__group{margin:0 0 8px}
-.app-nav__group-label{padding:13px 14px 6px;font-size:12px;color:#80868b}
-.app-nav__link{display:flex;align-items:center;gap:12px;width:100%;min-height:40px;padding:9px 14px;border-radius:20px;color:#3c4043;text-decoration:none;font-size:14.5px;font-weight:500;line-height:20px;transition:background .14s ease,color .14s ease,transform .14s ease}
-.app-nav__link:hover{background:#e8f0fe;color:#174ea6}
-.app-nav__link:active{transform:scale(.985)}
-.app-nav__link.active{background:#d3e3fd;color:#0b57d0}
-.app-nav__icon{width:22px;height:22px;display:grid;place-items:center;flex:0 0 22px;border-radius:50%;font-size:14px;color:#5f6368}
-.app-nav__link.active .app-nav__icon{color:#0b57d0}
-.app-nav__divider{height:1px;margin:10px 12px;background:#e3e5e8}
-.app-nav__hint{padding:10px 14px 0;color:#9aa0a6;font-size:11.5px;line-height:16px}
+.topbar{position:fixed;z-index:50;inset:0 0 auto 0;height:72px;display:grid;grid-template-columns:248px minmax(220px,1fr) auto;align-items:center;gap:18px;padding:0 18px;background:rgba(255,255,255,.96);border-bottom:1px solid var(--line);backdrop-filter:blur(14px)}
+.brand{display:flex;align-items:center;gap:12px;font-size:22px;color:#4a4d52;font-weight:500}
+.ga-mark{width:34px;height:34px;position:relative;flex:none}
+.ga-mark i{position:absolute;bottom:1px;border-radius:5px}
+.ga-mark i:nth-child(1){left:2px;width:9px;height:17px;background:#e37400}
+.ga-mark i:nth-child(2){left:13px;width:9px;height:27px;background:#f9ab00}
+.ga-mark i:nth-child(3){left:24px;width:8px;height:33px;background:#f9ab00}
+.top-search{position:relative;max-width:690px;width:100%;justify-self:center}
+.top-search input{width:100%;height:46px;border:1px solid transparent;background:#eef1f4;border-radius:10px;padding:0 48px 0 46px;color:var(--text);outline:none;transition:.18s ease}
+.top-search input:focus{background:#fff;border-color:#c7d5ea;box-shadow:0 1px 6px rgba(60,64,67,.17)}
+.top-search .search-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--muted)}
+.kbd{position:absolute;right:12px;top:50%;transform:translateY(-50%);padding:3px 7px;border:1px solid #d5d9df;border-radius:6px;background:#fff;color:#80868b;font-size:11px}
+.top-actions{display:flex;align-items:center;gap:6px}
+.icon-btn,.pill-btn,.primary-btn{border:0;cursor:pointer;transition:background .15s ease,transform .12s ease,box-shadow .15s ease}
+.icon-btn:active,.pill-btn:active,.primary-btn:active{transform:scale(.96)}
+.icon-btn{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:transparent;color:#4f545b;font-size:18px}
+.icon-btn:hover{background:#f0f3f7}
+.avatar{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:var(--blue);color:#fff;font-weight:700;margin-left:4px;cursor:pointer}
 
-</style></head>
-<body><div id="w"><div id="s"></div></div>
+.sidebar{position:fixed;z-index:40;left:0;top:72px;bottom:0;width:248px;padding:14px 10px 22px;background:var(--surface-2);border-right:1px solid var(--line);overflow:auto}
+.nav-section-label{padding:16px 14px 7px;font-size:11px;color:#8a9098;text-transform:uppercase;letter-spacing:.55px;font-weight:600}
+.nav-link{display:flex;align-items:center;gap:12px;min-height:42px;padding:10px 14px;margin:2px 0;border-radius:22px;text-decoration:none;color:#3c4043;font-size:14px;font-weight:500;transition:.14s ease}
+.nav-link:hover{background:var(--blue-3);color:#174ea6;transform:translateX(2px)}
+.nav-link.active{background:var(--blue-2);color:#0b57d0}
+.nav-icon{width:22px;text-align:center;font-size:15px}
+.sidebar-foot{margin-top:18px;padding:14px;border-top:1px solid var(--line);font-size:11.5px;color:#9aa0a6;line-height:1.45}
+
+main{margin-left:248px;padding:98px 24px 38px;min-height:100vh}
+.page-wrap{max-width:1500px;margin:0 auto}
+.page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:18px}
+.page-title-wrap{display:flex;align-items:center;gap:10px;min-width:0;flex-wrap:wrap}
+.page-title{margin:0;font-size:25px;line-height:1.25;font-weight:500;letter-spacing:-.2px}
+.status-pill{height:30px;display:inline-flex;align-items:center;gap:7px;padding:0 10px;border:1px solid #d9dee5;border-radius:16px;background:#fff;font-size:12px;color:#4a4f55;cursor:pointer}
+.status-dot{width:18px;height:18px;border:2px solid var(--green);border-radius:50%;display:grid;place-items:center;color:var(--green);font-size:10px;font-weight:800}
+.compare-chips{display:flex;gap:8px;flex-wrap:wrap;width:100%;margin-top:4px}
+.compare-chip{display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border-radius:15px;background:#eef3fb;color:#315b8d;font-size:12px}
+.compare-chip button{border:0;background:transparent;cursor:pointer;color:#5f6368}
+.head-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+.pill-btn{min-height:38px;padding:0 13px;border:1px solid #d9dee5;border-radius:8px;background:#fff;display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:500}
+.pill-btn:hover{background:#f8fafd;box-shadow:0 1px 3px rgba(60,64,67,.12)}
+.primary-btn{min-height:38px;padding:0 15px;border-radius:8px;background:var(--blue);color:#fff;font-weight:600}
+.primary-btn:hover{box-shadow:0 2px 7px rgba(26,115,232,.28)}
+.date-btn{min-width:230px;justify-content:space-between}
+
+.grid{display:grid;gap:14px}
+.grid-2{grid-template-columns:minmax(0,1.6fr) minmax(330px,.9fr)}
+.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+.card:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(60,64,67,.10);border-color:#d7dce4}
+.card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 18px 8px}
+.card-title{margin:0;font-size:15px;font-weight:600;color:#2d3136}
+.card-body{padding:12px 18px 18px}
+.card-link{border:0;background:transparent;color:var(--blue);font-weight:600;cursor:pointer;padding:6px 0;text-decoration:none}
+.card-link:hover{text-decoration:underline}
+.card-foot{padding:8px 18px 14px;border-top:1px solid #f0f2f5;text-align:right}
+.muted{color:var(--muted)}
+
+.metric-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:6px 18px 8px}
+.metric{padding:10px;border-radius:10px;transition:background .15s ease;cursor:default}
+.metric:hover{background:#f8fafd}
+.metric-label{display:flex;align-items:center;gap:5px;color:var(--muted);font-size:12.5px}
+.metric-value{font-size:27px;font-weight:600;letter-spacing:-.35px;margin-top:8px}
+.metric-change{margin-top:4px;color:var(--green);font-size:12px;font-weight:600}
+.metric-change.down{color:var(--red)}
+
+.chart-wrap{height:235px;padding:0 12px 8px}
+.chart{width:100%;height:100%;overflow:visible}
+.chart .gridline{stroke:#edf0f4;stroke-width:1}
+.chart .axis{fill:#80868b;font-size:10px}
+.chart .series{fill:none;stroke:var(--blue);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;stroke-dasharray:1200;stroke-dashoffset:1200;animation:drawLine .95s cubic-bezier(.4,0,.2,1) forwards}
+.chart .series.alt{stroke:#8ab4f8;stroke-width:1.8;stroke-dasharray:7 6;animation-delay:.12s}
+.chart .series.purple{stroke:var(--purple)}
+.chart .point{fill:#fff;stroke:var(--blue);stroke-width:2;opacity:0;animation:showPoint .25s ease .7s forwards;cursor:crosshair}
+@keyframes drawLine{to{stroke-dashoffset:0}}
+@keyframes showPoint{to{opacity:1}}
+
+.bar-list{display:flex;flex-direction:column;gap:12px}
+.bar-row{display:grid;grid-template-columns:minmax(120px,1fr) minmax(95px,1.4fr) 66px;gap:12px;align-items:center;min-height:28px}
+.bar-row.wide-label{grid-template-columns:minmax(185px,1.6fr) minmax(90px,1fr) 64px}
+.bar-label{min-width:0;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar-track{height:7px;background:#edf1f5;border-radius:999px;overflow:hidden;position:relative}
+.bar-fill{height:100%;width:var(--p);max-width:100%;border-radius:999px;background:var(--blue);transform-origin:left;animation:growBar .7s cubic-bezier(.2,.8,.2,1) both}
+.bar-row:nth-child(2) .bar-fill{animation-delay:.05s}.bar-row:nth-child(3) .bar-fill{animation-delay:.1s}.bar-row:nth-child(4) .bar-fill{animation-delay:.15s}.bar-row:nth-child(5) .bar-fill{animation-delay:.2s}.bar-row:nth-child(6) .bar-fill{animation-delay:.25s}.bar-row:nth-child(7) .bar-fill{animation-delay:.3s}
+@keyframes growBar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.bar-value{text-align:right;font-size:13px;font-weight:500}
+
+.table-card{padding:0}
+.table-toolbar{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.table-search{height:38px;min-width:240px;flex:1;border:1px solid #d9dee5;border-radius:8px;padding:0 12px;outline:none}
+.table-search:focus{border-color:#9fc0ed;box-shadow:0 0 0 3px #e8f0fe}
+.rows-select{height:36px;border:1px solid #d9dee5;border-radius:7px;background:#fff;padding:0 8px}
+.table-meta{margin-left:auto;color:var(--muted);font-size:12px}
+.table-scroll{overflow:auto}
+table{width:100%;border-collapse:collapse;min-width:820px}
+th,td{padding:13px 14px;border-bottom:1px solid #edf0f4;text-align:right;font-size:13px;white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+th{position:relative;background:#fff;color:#5f6368;font-weight:600;font-size:12px;cursor:pointer;user-select:none}
+th:hover{background:#f8fafd}
+tbody tr{transition:background .13s ease}
+tbody tr:hover{background:#f7faff}
+tbody tr:nth-child(even){background:#fbfcfe}
+tbody tr:nth-child(even):hover{background:#f4f8fe}
+.sort-indicator{margin-left:5px;color:#9aa0a6}
+.pagination{display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:12px 16px}
+.page-btn{height:34px;min-width:34px;border:1px solid #d9dee5;background:#fff;border-radius:7px;cursor:pointer}
+.page-btn:disabled{opacity:.4;cursor:default}
+.page-status{font-size:12px;color:var(--muted)}
+
+.kpi-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.kpi-box{padding:16px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow)}
+.kpi-box strong{display:block;font-size:24px;margin-top:6px}
+.kpi-box span{font-size:12px;color:var(--muted)}
+
+.heatmap{display:grid;grid-template-columns:130px repeat(6,minmax(48px,1fr));gap:5px;align-items:center}
+.heat-h{font-size:11px;color:var(--muted);text-align:center}
+.heat-label{font-size:12px;color:#3c4043}
+.heat-cell{height:34px;border-radius:5px;background:color-mix(in srgb,var(--blue) calc(var(--i)*1%),#fff);display:grid;place-items:center;color:var(--text);font-size:10px;transition:transform .12s ease}
+.heat-cell:hover{transform:scale(1.06);outline:2px solid #d3e3fd}
+
+.popover{position:fixed;z-index:100;min-width:220px;padding:8px;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 30px rgba(60,64,67,.18);opacity:0;transform:translateY(-5px) scale(.98);pointer-events:none;transition:.14s ease}
+.popover.open{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+.menu-item{display:flex;align-items:center;gap:10px;width:100%;min-height:38px;padding:8px 10px;border:0;border-radius:7px;background:transparent;text-align:left;cursor:pointer;font-size:13px}
+.menu-item:hover{background:#f2f5f9}
+.menu-item small{display:block;color:#80868b}
+.menu-sep{height:1px;background:var(--line);margin:6px 2px}
+
+.modal-backdrop{position:fixed;z-index:110;inset:0;background:rgba(32,33,36,.32);display:grid;place-items:center;padding:18px;opacity:0;pointer-events:none;transition:.16s ease}
+.modal-backdrop.open{opacity:1;pointer-events:auto}
+.modal{width:min(560px,100%);max-height:min(760px,90vh);overflow:auto;background:#fff;border-radius:14px;box-shadow:0 18px 50px rgba(32,33,36,.22);transform:translateY(10px) scale(.98);transition:.16s ease}
+.modal-backdrop.open .modal{transform:translateY(0) scale(1)}
+.modal-head,.modal-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;border-bottom:1px solid var(--line)}
+.modal-foot{border-top:1px solid var(--line);border-bottom:0;justify-content:flex-end}
+.modal-body{padding:18px}
+.modal h2{margin:0;font-size:18px}
+.field{display:grid;gap:7px;margin-bottom:14px}
+.field label{font-size:12px;color:var(--muted);font-weight:600}
+.field select,.field input{height:40px;border:1px solid #d9dee5;border-radius:8px;padding:0 10px;background:#fff;outline:none}
+.field select:focus,.field input:focus{border-color:#9fc0ed;box-shadow:0 0 0 3px #e8f0fe}
+
+.toast{position:fixed;z-index:150;left:50%;bottom:24px;transform:translate(-50%,20px);padding:11px 16px;border-radius:8px;background:#303134;color:#fff;font-size:13px;box-shadow:0 5px 18px rgba(32,33,36,.25);opacity:0;pointer-events:none;transition:.2s ease}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.chart-tooltip{position:fixed;z-index:160;padding:7px 9px;border-radius:7px;background:#2f3337;color:#fff;font-size:11px;pointer-events:none;opacity:0;transform:translate(-50%,-115%);transition:opacity .08s ease;white-space:nowrap}
+.chart-tooltip.show{opacity:1}
+
+.empty-state{padding:34px;text-align:center;color:var(--muted)}
+.fade-in{animation:fadeUp .35s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.reanimate .series{animation:none!important}.reanimate .bar-fill{animation:none!important}
+
+@media(max-width:1180px){
+  .topbar{grid-template-columns:220px minmax(180px,1fr) auto}
+  .sidebar{width:220px}
+  main{margin-left:220px}
+  .grid-3{grid-template-columns:1fr 1fr}
+  .grid-3>.card:last-child{grid-column:1/-1}
+  .metric-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:900px){
+  .topbar{grid-template-columns:60px minmax(160px,1fr) auto;padding:0 10px}
+  .brand span{display:none}.kbd{display:none}.top-actions .hide-sm{display:none}
+  .sidebar{width:72px;padding:14px 8px}.nav-link{justify-content:center;padding:10px}.nav-link span:not(.nav-icon),.nav-section-label,.sidebar-foot{display:none}
+  main{margin-left:72px;padding:92px 14px 30px}
+  .grid-2,.grid-3{grid-template-columns:1fr}.grid-3>.card:last-child{grid-column:auto}
+  .page-head{flex-direction:column}.head-actions{justify-content:flex-start}
+}
+@media(max-width:620px){
+  .top-actions .icon-btn{display:none}.avatar{display:grid}
+  main{margin-left:0;padding:88px 10px 24px}.sidebar{display:none}
+  .page-title{font-size:21px}.metric-grid{grid-template-columns:1fr 1fr;padding:6px 12px}.metric-value{font-size:22px}
+  .head-actions{width:100%}.date-btn{min-width:0;flex:1}
+  .bar-row,.bar-row.wide-label{grid-template-columns:minmax(120px,1fr) 90px 56px;gap:8px}
+}
+</style></head><body>
+
+<header class="topbar">
+  <div class="brand"><span class="ga-mark" aria-hidden="true"><i></i><i></i><i></i></span><span>Analytics</span></div>
+  <div class="top-search"><span class="search-icon">⌕</span><input id="globalSearch" type="search" placeholder="Try searching reports, countries, channels…" aria-label="Search this report"><span class="kbd">Ctrl /</span></div>
+  <div class="top-actions">
+    <button class="icon-btn hide-sm" data-menu="appsMenu" aria-label="Apps">▦</button>
+    <button class="icon-btn hide-sm" data-action="help" aria-label="Help">?</button>
+    <button class="icon-btn" data-menu="notificationsMenu" aria-label="Notifications">♢</button>
+    <div class="avatar" data-menu="profileMenu" role="button" tabindex="0" aria-label="Profile">R</div>
+  </div>
+</header>
+<aside class="sidebar" aria-label="Analytics navigation">
+  <div class="nav-section-label">Reports</div>
+  <a class="nav-link " href="Analytics _ Reports snapshot.html"><span class="nav-icon">▦</span><span>Reports snapshot</span></a><a class="nav-link " href="Reports snapshot with campaigns and cohorts.html"><span class="nav-icon">◫</span><span>Campaigns & cohorts</span></a><a class="nav-link " href="Traffic acquisition.html"><span class="nav-icon">↗</span><span>Traffic acquisition</span></a>
+  <div class="nav-section-label">User</div>
+  <a class="nav-link active" href="Demographic details_ Country.html"><span class="nav-icon">◉</span><span>Demographic details</span></a>
+  <a class="nav-link " href="Tech details_ Device category.html"><span class="nav-icon">▣</span><span>Tech details</span></a>
+  <div class="nav-section-label">Workspace</div>
+  <a class="nav-link" href="#" onclick="event.preventDefault();toast('Library opened')"><span class="nav-icon">□</span><span>Library</span></a>
+  <a class="nav-link" href="#" onclick="event.preventDefault();toast('Admin settings opened')"><span class="nav-icon">⚙</span><span>Admin</span></a>
+  <div class="sidebar-foot">Interactive Rieng254 analytics workspace<br>Static report data · live UI controls</div>
+</aside>
+<main><div class="page-wrap">
+
+<div class="page-head">
+  <div class="page-title-wrap">
+    <h1 class="page-title">Demographic details: Country</h1>
+    <button class="status-pill" data-menu="statusMenu"><span class="status-dot">✓</span><span>Data quality</span><span>⌄</span></button>
+    <button class="icon-btn" data-modal-open="comparisonModal" aria-label="Add comparison">＋</button>
+    <div id="compareChips" class="compare-chips"></div>
+  </div>
+  <div class="head-actions">
+    <button class="pill-btn" data-modal-open="filterModal">☷ Filter</button>
+    <button class="pill-btn" data-action="refresh">↻ Refresh</button>
+    <button class="pill-btn" data-action="share">↗ Share</button>
+    <button class="pill-btn" data-action="export">⇩ Export</button>
+    <button class="pill-btn date-btn" data-menu="dateMenu"><span><b class="date-label">Last 90 days · Aug 12 – Nov 9, 2026</b><small class="date-sub" style="display:block;color:#80868b;font-weight:400;margin-top:2px">Compared with May 14 – Aug 11, 2026</small></span><span>⌄</span></button>
+  </div>
+</div>
+<div id="statusMenu" class="popover"><div style="padding:10px 12px"><b>Data quality is good</b><p class="muted" style="margin:5px 0 0;font-size:12px;line-height:1.4">No sampling or threshold warning in this reconstructed report.</p></div></div>
+<div class="kpi-strip" style="margin-bottom:14px">
+  <div class="kpi-box"><span>Users</span><strong>19,900</strong></div><div class="kpi-box"><span>New users</span><strong>18,579</strong></div><div class="kpi-box"><span>Engaged sessions</span><strong>12,943</strong></div>
+</div>
+<section class="card table-card">
+  <div class="table-toolbar" data-for="demographicTable"><input class="table-search" placeholder="Search countries…" aria-label="Search countries"><label class="muted">Rows per page <select class="rows-select"><option>5</option><option selected>10</option><option>25</option></select></label><span class="table-meta"></span></div>
+  <div class="table-scroll"><table data-table="demographicTable"><thead><tr>
+    <th>Country<span class="sort-indicator">↕</span></th><th>Users<span class="sort-indicator">↕</span></th><th>New users<span class="sort-indicator">↕</span></th><th>Engaged sessions<span class="sort-indicator">↕</span></th><th>Engagement rate<span class="sort-indicator">↕</span></th><th>Engaged sessions / user<span class="sort-indicator">↕</span></th><th>Average engagement time<span class="sort-indicator">↕</span></th>
+  </tr></thead><tbody><tr><td data-searchable>Kenya</td><td >9,441</td><td >8,738</td><td >6,618</td><td >61.22%</td><td >0.70</td><td >1m 46s</td></tr><tr><td data-searchable>Uganda</td><td >3,223</td><td >2,982</td><td >1,957</td><td >60.15%</td><td >0.61</td><td >1m 32s</td></tr><tr><td data-searchable>Tanzania</td><td >2,609</td><td >2,377</td><td >1,569</td><td >57.91%</td><td >0.60</td><td >1m 21s</td></tr><tr><td data-searchable>Rwanda</td><td >1,179</td><td >1,081</td><td >693</td><td >58.17%</td><td >0.59</td><td >1m 18s</td></tr><tr><td data-searchable>Ethiopia</td><td >930</td><td >855</td><td >523</td><td >56.32%</td><td >0.56</td><td >1m 15s</td></tr><tr><td data-searchable>South Sudan</td><td >510</td><td >473</td><td >301</td><td >59.24%</td><td >0.59</td><td >1m 20s</td></tr><tr><td data-searchable>Burundi</td><td >473</td><td >433</td><td >282</td><td >59.59%</td><td >0.60</td><td >1m 19s</td></tr><tr><td data-searchable>Somalia</td><td >426</td><td >391</td><td >247</td><td >58.12%</td><td >0.58</td><td >1m 12s</td></tr><tr><td data-searchable>Nigeria</td><td >309</td><td >274</td><td >180</td><td >55.81%</td><td >0.58</td><td >1m 10s</td></tr><tr><td data-searchable>South Africa</td><td >295</td><td >260</td><td >165</td><td >56.62%</td><td >0.56</td><td >1m 08s</td></tr></tbody></table></div>
+  <div class="pagination" data-pager="demographicTable"><button class="page-btn" data-prev>‹</button><span class="page-status"></span><button class="page-btn" data-next>›</button></div>
+</section></div></main>
+
+<div id="appsMenu" class="popover">
+  <button class="menu-item" data-toast="Reports workspace selected">▦ <span>Reports</span></button>
+  <button class="menu-item" data-toast="Explore workspace selected">◫ <span>Explore</span></button>
+  <button class="menu-item" data-toast="Advertising workspace selected">◎ <span>Advertising</span></button>
+  <div class="menu-sep"></div>
+  <button class="menu-item" data-toast="Admin workspace selected">⚙ <span>Admin</span></button>
+</div>
+<div id="notificationsMenu" class="popover">
+  <button class="menu-item" data-toast="Notification marked as read"><span>●</span><span><b>Reporting snapshot updated</b><small>Latest static dataset loaded</small></span></button>
+  <button class="menu-item" data-toast="Notification marked as read"><span>●</span><span><b>Traffic report ready</b><small>Channel breakdown available</small></span></button>
+  <button class="menu-item" data-toast="All notifications marked as read"><span>✓</span><span>Mark all as read</span></button>
+</div>
+<div id="profileMenu" class="popover">
+  <div style="padding:10px 12px"><b>rieng254.com</b><div class="muted" style="font-size:12px;margin-top:4px">Analytics workspace</div></div>
+  <div class="menu-sep"></div>
+  <button class="menu-item" data-toast="Account switcher opened">⇄ <span>Switch account</span></button>
+  <button class="menu-item" data-toast="Preferences opened">⚙ <span>Preferences</span></button>
+</div>
+<div id="dateMenu" class="popover">
+  <button class="menu-item" data-range="7" data-label="Last 7 days · Nov 3 – Nov 9, 2026" data-sub="Compared with Oct 27 – Nov 2, 2026"><span>Last 7 days</span></button>
+  <button class="menu-item" data-range="30" data-label="Last 30 days · Oct 11 – Nov 9, 2026" data-sub="Compared with Sep 11 – Oct 10, 2026"><span>Last 30 days</span></button>
+  <button class="menu-item" data-range="90" data-label="Last 90 days · Aug 12 – Nov 9, 2026" data-sub="Compared with May 14 – Aug 11, 2026"><span>Last 90 days</span></button>
+</div>
+<div id="comparisonModal" class="modal-backdrop"><div class="modal">
+  <div class="modal-head"><h2>Add comparison</h2><button class="icon-btn" data-modal-close aria-label="Close">×</button></div>
+  <div class="modal-body"><div class="field"><label>Dimension</label><select id="comparisonSelect"><option>Country</option><option>Device category</option><option>Session channel group</option><option>First user campaign</option></select></div><p class="muted" style="font-size:13px">Adds a visible comparison chip to the report so the control behaves like a real analytics workspace.</p></div>
+  <div class="modal-foot"><button class="pill-btn" data-modal-close>Cancel</button><button class="primary-btn" id="applyComparison">Apply</button></div>
+</div></div>
+<div id="filterModal" class="modal-backdrop"><div class="modal">
+  <div class="modal-head"><h2>Add filter</h2><button class="icon-btn" data-modal-close>×</button></div>
+  <div class="modal-body"><div class="field"><label>Filter</label><select id="filterSelect"><option>Country = Kenya</option><option>Device = mobile</option><option>Channel = Organic Search</option><option>Engagement rate &gt; 50%</option></select></div></div>
+  <div class="modal-foot"><button class="pill-btn" data-modal-close>Cancel</button><button class="primary-btn" id="applyFilter">Apply filter</button></div>
+</div></div>
+<div id="helpModal" class="modal-backdrop"><div class="modal">
+  <div class="modal-head"><h2>Analytics help</h2><button class="icon-btn" data-modal-close>×</button></div>
+  <div class="modal-body"><p>This reconstructed dashboard is interactive: use the left navigation, date selector, search, table sorting, filters, comparisons, refresh, share and CSV export controls.</p><p class="muted" style="font-size:13px">The figures are the static Rieng254 report data stored in this repository; UI interactions do not contact Google Analytics.</p></div>
+  <div class="modal-foot"><button class="primary-btn" data-modal-close>Got it</button></div>
+</div></div>
+<div id="pageModal" class="modal-backdrop"><div class="modal">
+  <div class="modal-head"><h2>Pages and screens</h2><button class="icon-btn" data-modal-close>×</button></div>
+  <div class="modal-body">
+    <div class="bar-list">
+      <div class="bar-row wide-label"><div class="bar-label">Rieng254 – Home</div><div class="bar-track"><div class="bar-fill" style="--p:100%"></div></div><div class="bar-value">249K</div></div><div class="bar-row wide-label"><div class="bar-label">Rieng254 – Trending</div><div class="bar-track"><div class="bar-fill" style="--p:64.7%"></div></div><div class="bar-value">161K</div></div><div class="bar-row wide-label"><div class="bar-label">Rieng254 – Videos</div><div class="bar-track"><div class="bar-fill" style="--p:52.6%"></div></div><div class="bar-value">131K</div></div><div class="bar-row wide-label"><div class="bar-label">Rieng254 – Shows</div><div class="bar-track"><div class="bar-fill" style="--p:29.3%"></div></div><div class="bar-value">73K</div></div><div class="bar-row wide-label"><div class="bar-label">Rieng254 – Albums & Songs</div><div class="bar-track"><div class="bar-fill" style="--p:22.9%"></div></div><div class="bar-value">57K</div></div><div class="bar-row wide-label"><div class="bar-label">Rieng254 – DJ Mix Sales</div><div class="bar-track"><div class="bar-fill" style="--p:16.9%"></div></div><div class="bar-value">42K</div></div><div class="bar-row wide-label"><div class="bar-label">Rieng254 – BoB Pre-order</div><div class="bar-track"><div class="bar-fill" style="--p:11.6%"></div></div><div class="bar-value">29K</div></div>
+    </div>
+  </div>
+</div></div>
+<div id="toast" class="toast"></div><div id="chartTooltip" class="chart-tooltip"></div>
 <script>
-const S=document.getElementById('s');
-const T=(x,y,h,css='',m='')=>{const e=document.createElement('div');e.className='t'+(m=='c'?' ce':'');e.innerHTML=h;e.style.top=y+'px';if(m=='r')e.style.right=(1536-x)+'px';else e.style.left=x+'px';e.style.cssText+=css;S.appendChild(e);return e};
-const B=(x,y,w,h,bg,css='')=>{const e=document.createElement('div');e.className='b';e.style.cssText=`left:${x}px;top:${y}px;width:${w}px;height:${h}px;background:${bg};${css}`;S.appendChild(e);return e};
-const I=(x,y,s,d,f='#5f6368')=>{const e=document.createElement('div');e.className='b';e.style.cssText=`left:${x-s/2}px;top:${y-s/2}px;width:${s}px;height:${s}px`;e.innerHTML=`<svg viewBox="0 0 24 24" width="${s}" height="${s}"><path d="${d}" fill="${f}"/></svg>`;S.appendChild(e)};
-const SR='M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z';
-const BLUE='#1a73e8',F='font-size:15.5px;font-weight:500;color:#202124';
+const q=(s,r=document)=>r.querySelector(s), qa=(s,r=document)=>[...r.querySelectorAll(s)];
+const toast=(msg)=>{const t=q('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(window.__toastTimer);window.__toastTimer=setTimeout(()=>t.classList.remove('show'),1800)};
+const closePopovers=()=>qa('.popover.open').forEach(x=>x.classList.remove('open'));
+function placePopover(pop,btn){
+  const r=btn.getBoundingClientRect(), w=Math.max(pop.offsetWidth||220,220);
+  let left=Math.min(innerWidth-w-12,Math.max(12,r.right-w));
+  let top=Math.min(innerHeight-(pop.offsetHeight||260)-12,r.bottom+8);
+  pop.style.left=left+'px';pop.style.top=top+'px';
+}
+qa('[data-menu]').forEach(btn=>btn.addEventListener('click',e=>{
+  e.stopPropagation();const pop=q('#'+btn.dataset.menu), was=pop.classList.contains('open');closePopovers();
+  if(!was){pop.classList.add('open');requestAnimationFrame(()=>placePopover(pop,btn))}
+}));
+document.addEventListener('click',e=>{if(!e.target.closest('.popover')&&!e.target.closest('[data-menu]'))closePopovers()});
+addEventListener('resize',closePopovers);
 
-/* backgrounds first */
-B(0,0,1536,77,'#fff','border-bottom:1px solid #e3e5e8;box-sizing:border-box');
-B(312,152,1206,702,'#fff','border:1px solid #e3e5e8;border-radius:10px;box-sizing:border-box');
+qa('[data-range]').forEach(b=>b.addEventListener('click',()=>{
+  q('.date-label').textContent=b.dataset.label;
+  q('.date-sub').textContent=b.dataset.sub||'';
+  closePopovers();reanimate();toast('Date range updated');
+}));
 
-/* header */
-B(18,38,9,17,'#e37400','border-radius:3px');B(30,30,9,25,'#f9ab00','border-radius:3px');B(42,22,9,33,'#f9ab00','border-radius:3px');
-T(74,38,'Analytics','font-size:25px;color:#5f6368');
-T(221,21,'All accounts &nbsp;&#8250;&nbsp; rieng254.com','font-size:14.5px;color:#5f6368');
-T(221,49,'rieng254.com','font-size:26px');T(392,48,'&#9662;','font-size:14px;color:#5f6368','c');
-B(450,12,783,52,'#eceff1','border-radius:6px');
-I(483,36,24,SR);T(512,37,'Try searching &ldquo;how to set up Analytics&rdquo;','font-size:17px;color:#5f6368');
-B(1362,30,9,9,'#5f6368','border-radius:2px');B(1374,30,9,9,'#8a8f94','border-radius:2px');B(1362,42,9,9,'#8a8f94','border-radius:2px');B(1374,42,9,9,'#5f6368','border-radius:2px');
-B(1420,26,25,25,'#3c4043','border-radius:50%');T(1432,39,'?','color:#fff;font-size:18px;font-weight:700','c');
-B(1473,16,44,44,'#1a73e8','border-radius:50%');T(1495,38,'R','color:#fff;font-size:24px','c');
-
-/* nav */
-const N=(x,y,t,c='#202124',w=500)=>T(x,y,t,`font-size:15.5px;font-weight:${w};color:${c}`);
-N(23,107,'Reports snapshot');N(23,144,'Realtime');
-B(15,172,237,1,'#dadce0');
-N(23,199,'Life cycle','#5f6368',400);T(238,199,'&#8963;','font-size:16px;color:#5f6368','c');
-[['Acquisition',241],['Engagement',283],['Monetization',325]].forEach(([n,y])=>{T(17,y,'&#9656;','font-size:10px');N(45,y,n)});
-N(45,366,'Retention');
-B(15,393,237,1,'#dadce0');
-N(23,420,'User','#5f6368',400);T(238,420,'&#8963;','font-size:16px;color:#5f6368','c');
-B(0,439,263,43,'#e8eaed','border-radius:0 22px 22px 0');T(16,461,'&#9662;','font-size:10px');N(45,461,'User attributes');
-N(64,503,'Overview');
-B(0,524,263,40,'#d3e3fd','border-radius:0 20px 20px 0');N(64,544,'Demographic details','#0b57d0');
-N(64,585,'Audiences');
-T(16,627,'&#9662;','font-size:10px');N(45,627,'Tech');N(64,669,'Overview');N(64,711,'Tech details');
-B(23,812,18,14,'transparent','border:2px solid #3c4043;border-radius:2px;box-sizing:border-box');N(59,819,'Library');
-B(15,853,237,1,'#dadce0');
-
-/* title row */
-B(308,98,34,34,BLUE,'border-radius:50%');T(325,116,'R','color:#fff;font-size:17px','c');
-B(352,102,26,26,'transparent','border:1.6px solid #c4c7c5;border-radius:50%');T(365,115,'+','color:#3c4043;font-size:21px','c');
-B(403,100,1,30,'#dadce0');
-T(424,116,'Demographic details: Country','font-size:26px');
-B(758,100,71,31,'#f8fafd','border:1px solid #dadce0;border-radius:16px;box-sizing:border-box');
-B(768,106,20,20,'transparent','border:2px solid #188038;border-radius:50%;box-sizing:border-box');T(778,116,'&#10003;','font-size:12px;color:#188038;font-weight:700','c');
-T(810,116,'&#9662;','font-size:11px;color:#5f6368','c');
-B(839,101,29,29,'transparent','border:1.6px solid #c4c7c5;border-radius:50%');T(853,115,'+','color:#3c4043;font-size:21px','c');
-T(1043,115,'Last','font-size:12px;color:#5f6368');
-T(1080,116,'Last 90 days &nbsp;&nbsp;Aug 12 - Nov 9, 2026','font-size:15.5px;font-weight:700;background:#fff;padding:2px 0');
-B(1343,102,22,22,'transparent','border:2px solid #3c4043;border-radius:3px;box-sizing:border-box');
-T(1400,114,'&#8920;','font-size:0');
-[[1394,105],[1407,100],[1407,121]].forEach(([x,y])=>B(x-3,y-3,7,7,'#3c4043','border-radius:50%'));B(1396,106,11,1.6,'#3c4043','transform:rotate(-30deg);transform-origin:0 0');B(1396,106,11,1.6,'#3c4043','transform:rotate(35deg);transform-origin:0 0');
-T(1445,114,'&#8767;','font-size:28px;color:#3c4043','c');
-T(1502,114,'&#9998;','font-size:26px;color:#3c4043','c');
-
-/* controls */
-I(348,181,20,SR);T(372,180,'Search...','font-size:15px;color:#5f6368');
-T(997,181,'Rows per page:','font-size:15px;color:#5f6368');T(1123,178,'10','font-size:15px');T(1166,178,'&#9662;','font-size:11px;color:#3c4043','c');B(1118,189,58,1,'#80868b');
-T(1213,181,'Go to:','font-size:15px;color:#5f6368');T(1291,178,'1','font-size:15px');B(1266,189,50,1,'#80868b');
-T(1351,181,'&#8249;','font-size:28px;color:#5f6368','c');T(1376,180,'1-10 of 127','font-size:15px;color:#3c4043');T(1482,181,'&#8250;','font-size:28px;color:#3c4043','c');
-B(333,207,1167,1,'#e0e0e0');
-
-/* column heads */
-T(401,236,'Country','font-size:16px;color:#5f6368');T(485,236,'&#9662;','font-size:11px;color:#3c4043','c');T(562,236,'+','font-size:26px;color:#1a73e8','c');
-const H=(r,ls,y0,st)=>ls.forEach((s,i)=>T(r,y0+i*st,s,'font-size:15.5px;color:#3c4043','r').classList.add('dt'));
-H(715,['&#8595; Users'],236,0);H(868,['New users'],236,0);H(1018,['Engaged','sessions'],236,25.5);H(1177,['Engagement','rate'],236,26);H(1330,['Engaged','sessions per','user'],236,25.5);H(1485,['Average','engagement','time'],235,25.5);
-
-/* totals */
-[[737,'19,900'],[891,'18,579'],[1043,'12,943'],[1177,'58.02%'],[1330,'0.65'],[1485,'1m 28s']].forEach(([r,v],i)=>{
- T(r,338,v,'font-size:17.5px;font-weight:700','r');
- T(i<3?r-23:r,362,i<3?'100% of total':'Avg 0%','font-size:14px;color:#5f6368','r');
+function openModal(id){const m=q('#'+id);if(m){m.classList.add('open');document.body.style.overflow='hidden'}}
+function closeModal(m){m.classList.remove('open');document.body.style.overflow=''}
+qa('[data-modal-open]').forEach(b=>b.addEventListener('click',()=>openModal(b.dataset.modalOpen)));
+qa('[data-modal-close]').forEach(b=>b.addEventListener('click',()=>closeModal(b.closest('.modal-backdrop'))));
+qa('.modal-backdrop').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)closeModal(m)}));
+addEventListener('keydown',e=>{
+  if(e.key==='Escape'){closePopovers();qa('.modal-backdrop.open').forEach(closeModal)}
+  if((e.ctrlKey||e.metaKey)&&e.key==='/'){e.preventDefault();q('#globalSearch')?.focus()}
 });
-B(333,380,1167,1,'#dadce0');
 
-/* rows */
-const D=[['Kenya','9,441','8,738','6,618','61.22%','0.70','1m 46s'],['Uganda','3,223','2,982','1,957','60.15%','0.61','1m 32s'],['Tanzania','2,609','2,377','1,569','57.91%','0.60','1m 21s'],['Rwanda','1,179','1,081','693','58.17%','0.59','1m 18s'],['Ethiopia','930','855','523','56.32%','0.56','1m 15s'],['South Sudan','510','473','301','59.24%','0.59','1m 20s'],['Burundi','473','433','282','59.59%','0.60','1m 19s'],['Somalia','426','391','247','58.12%','0.58','1m 12s'],['Nigeria','309','274','180','55.81%','0.58','1m 10s'],['South Africa','295','260','165','56.62%','0.56','1m 08s']];
-D.forEach((r,i)=>{
- const top=381+i*44.9,y=top+22;
- if(i%2==0){B(333,top,1167,44,'#f1f3f4');[[647,97],[800,97],[949,99]].forEach(([x,w])=>B(x,y-15,w,29,'#fff'))}
- B(333,top+44,1167,1,'#dadce0');
- T(362,y,i+1,'font-size:15px;color:#3c4043','c');T(402,y,r[0],F);
- [695,848,999].forEach((x,j)=>T(x,y-2,r[j+1],'font-size:15px;color:#202124','c'));
- T(1177,y+1,r[4],'font-size:15.5px;color:#202124','r');T(1330,y+1,r[5],'font-size:15.5px;color:#202124','r');T(1482,y+1,r[6],'font-size:15.5px;color:#202124','r');
+q('#applyComparison')?.addEventListener('click',()=>{
+  const v=q('#comparisonSelect').value;
+  const box=q('#compareChips');
+  if(v&&!qa('.compare-chip',box).some(c=>c.dataset.value===v)){
+    const c=document.createElement('span');c.className='compare-chip fade-in';c.dataset.value=v;
+    c.innerHTML='Compare: '+v+' <button aria-label="Remove comparison">×</button>';
+    c.querySelector('button').onclick=()=>c.remove();box.appendChild(c);
+  }
+  closeModal(q('#comparisonModal'));toast('Comparison added');
 });
-B(598,207,1,623,'#dadce0');
 
-const fit=()=>{const k=Math.min(1,innerWidth/1536)||1;S.style.transform='scale('+k+')';document.getElementById('w').style.height=864*k+'px'};
-addEventListener('resize',fit);fit();
+q('#applyFilter')?.addEventListener('click',()=>{
+  const v=q('#filterSelect').value;
+  const box=q('#compareChips');
+  const c=document.createElement('span');c.className='compare-chip fade-in';c.dataset.filter=v;
+  c.innerHTML='Filter: '+v+' <button aria-label="Remove filter">×</button>';
+  c.querySelector('button').onclick=()=>c.remove();box.appendChild(c);
+  closeModal(q('#filterModal'));toast('Filter applied');
+});
 
-/* real clickable navigation */
-(()=>{
-  const pages=[
-    ['Reports','Analytics _ Reports snapshot.html','▦'],
-    ['Campaigns & cohorts','Reports snapshot with campaigns and cohorts.html','◫'],
-    ['Traffic acquisition','Traffic acquisition.html','↗'],
-    ['Demographic details','Demographic details_ Country.html','◉'],
-    ['Tech details','Tech details_ Device category.html','▣']
-  ];
-  const current=decodeURIComponent((location.pathname.split('/').pop()||'').replace(/\\+/g,' '));
-  const nav=document.createElement('nav');
-  nav.className='app-nav';
-  nav.setAttribute('aria-label','Analytics pages');
-  nav.style.width='272px';
-  nav.style.top='77px';
-  nav.style.height='787px';
-  nav.innerHTML='<div class="app-nav__title">Analytics reports</div><div class="app-nav__group-label">Reports</div>';
-  pages.forEach((p,i)=>{
-    if(i===2) nav.insertAdjacentHTML('beforeend','<div class="app-nav__divider"></div><div class="app-nav__group-label">Acquisition</div>');
-    if(i===3) nav.insertAdjacentHTML('beforeend','<div class="app-nav__divider"></div><div class="app-nav__group-label">User</div>');
-    const a=document.createElement('a');
-    a.className='app-nav__link'+(current===p[1]?' active':'');
-    a.href=p[1];
-    a.title='Open '+p[0];
-    a.innerHTML='<span class="app-nav__icon">'+p[2]+'</span><span>'+p[0]+'</span>';
-    nav.appendChild(a);
-  });
-  nav.insertAdjacentHTML('beforeend','<div class="app-nav__hint">Use this menu to move between report pages.</div>');
-  S.appendChild(nav);
-})();
+function reanimate(){
+  const root=q('.page-wrap');root.classList.add('reanimate');
+  void root.offsetWidth;root.classList.remove('reanimate');
+}
+q('[data-action="refresh"]')?.addEventListener('click',()=>{reanimate();toast('Report refreshed')});
+q('[data-action="share"]')?.addEventListener('click',async()=>{
+  try{await navigator.clipboard.writeText(location.href);toast('Link copied to clipboard')}catch{toast('Share link ready: '+location.href)}
+});
+q('[data-action="export"]')?.addEventListener('click',()=>{
+  const table=q('table[data-table]'); if(!table){toast('Nothing to export on this view');return}
+  const rows=qa('tr',table).filter(r=>!r.hidden).map(r=>qa('th,td',r).map(c=>'"'+c.innerText.replaceAll('"','""')+'"').join(','));
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([rows.join('\n')],{type:'text/csv'}));
+  a.download=(document.title.replace(/[^a-z0-9]+/gi,'-').replace(/^-|-$/g,'')||'analytics')+'.csv';a.click();URL.revokeObjectURL(a.href);toast('CSV exported');
+});
+qa('[data-action="help"]').forEach(b=>b.addEventListener('click',()=>openModal('helpModal')));
 
-/* full-width responsive scaling */
-const appFit=()=>{
-  const k=(window.innerWidth/1536)||1;
-  S.style.transform='scale('+k+')';
-  const scaledHeight=864*k;
-  const w=document.getElementById('w');
-  w.style.height=Math.max(window.innerHeight,scaledHeight)+'px';
-  w.style.minHeight='100vh';
-};
-addEventListener('resize',appFit);
-appFit();
+function setupTable(table){
+  const id=table.dataset.table, body=table.tBodies[0], all=[...body.rows], tools=q('[data-for="'+id+'"]');
+  if(!tools)return;
+  const input=q('.table-search',tools), select=q('.rows-select',tools), meta=q('.table-meta',tools), pager=q('[data-pager="'+id+'"]');
+  let page=0, per=Number(select?.value||10), sortIndex=-1, sortDir=1, term='';
+  const value=(row,i)=>row.cells[i]?.dataset.value??row.cells[i]?.innerText.trim()??'';
+  const num=s=>{const v=Number(String(s).replace(/[,K%m\s]/gi,m=>m.toLowerCase()==='k'?'000':''));return Number.isFinite(v)?v:null};
+  function filtered(){
+    let rows=all.filter(r=>r.innerText.toLowerCase().includes(term));
+    if(sortIndex>=0)rows.sort((a,b)=>{const av=value(a,sortIndex),bv=value(b,sortIndex),an=num(av),bn=num(bv);return ((an!==null&&bn!==null)?an-bn:av.localeCompare(bv))*sortDir});
+    return rows;
+  }
+  function render(){
+    const rows=filtered(), pages=Math.max(1,Math.ceil(rows.length/per));page=Math.min(page,pages-1);
+    all.forEach(r=>r.hidden=true);rows.slice(page*per,page*per+per).forEach(r=>{r.hidden=false;body.appendChild(r)});
+    const from=rows.length?page*per+1:0,to=Math.min(rows.length,(page+1)*per);
+    meta.textContent=from+'–'+to+' of '+rows.length;
+    if(pager){q('.page-status',pager).textContent=(page+1)+' / '+pages;q('[data-prev]',pager).disabled=page===0;q('[data-next]',pager).disabled=page>=pages-1}
+  }
+  input?.addEventListener('input',()=>{term=input.value.trim().toLowerCase();page=0;render()});
+  select?.addEventListener('change',()=>{per=Number(select.value);page=0;render()});
+  qa('th',table).forEach((th,i)=>th.addEventListener('click',()=>{
+    if(sortIndex===i)sortDir*=-1;else{sortIndex=i;sortDir=1}
+    qa('.sort-indicator',table).forEach(x=>x.textContent='↕');q('.sort-indicator',th).textContent=sortDir>0?'↑':'↓';render()
+  }));
+  q('[data-prev]',pager)?.addEventListener('click',()=>{page--;render()});
+  q('[data-next]',pager)?.addEventListener('click',()=>{page++;render()});
+  table.__applySearch=v=>{input.value=v;input.dispatchEvent(new Event('input'))};
+  render();
+}
+qa('table[data-table]').forEach(setupTable);
 
-</script></body></html>
+q('#globalSearch')?.addEventListener('input',e=>{
+  const term=e.target.value.trim().toLowerCase();
+  const table=q('table[data-table]');
+  if(table?.__applySearch)table.__applySearch(term);
+  qa('[data-searchable]').forEach(el=>el.hidden=!!term&&!el.innerText.toLowerCase().includes(term));
+});
+
+const tip=q('#chartTooltip');
+qa('[data-tip]').forEach(el=>{
+  el.addEventListener('pointerenter',()=>{tip.textContent=el.dataset.tip;tip.classList.add('show')});
+  el.addEventListener('pointermove',e=>{tip.style.left=e.clientX+'px';tip.style.top=e.clientY+'px'});
+  el.addEventListener('pointerleave',()=>tip.classList.remove('show'));
+});
+
+qa('[data-drill]').forEach(b=>b.addEventListener('click',()=>{
+  const id=b.dataset.drill;
+  if(id==='countries')location.href='Demographic details_ Country.html';
+  else if(id==='traffic')location.href='Traffic acquisition.html';
+  else if(id==='tech')location.href='Tech details_ Device category.html';
+  else openModal(id);
+}));
+
+qa('.menu-item[data-toast]').forEach(b=>b.addEventListener('click',()=>{toast(b.dataset.toast);closePopovers()}));
+</script>
+</body></html>
