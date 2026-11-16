@@ -30,6 +30,8 @@ body{overflow-x:hidden;font-family:'Google Sans',Roboto,Arial,sans-serif;color:#
 @keyframes lineDraw{from{stroke-dashoffset:1200}to{stroke-dashoffset:0}}
 @keyframes barGrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 
+
+.nav-hotspot,.nav-hotspot:hover,.nav-hotspot:active{background:transparent!important}
 </style></head>
 <body><div id="w"><div id="s"></div></div>
 <script>
@@ -175,10 +177,39 @@ const UI={
 };
 document.addEventListener('click',()=>document.querySelectorAll('.ui-pop').forEach(p=>p.classList.remove('open')));
 
-UI.link(70,78,230,38,'Analytics _ Reports snapshot.html','Reports snapshot');
-UI.link(62,319,260,39,'Traffic acquisition.html','Traffic acquisition');
-UI.link(70,610,220,40,'Demographic details_ Country.html','Demographics');
-UI.link(70,650,220,40,'Tech details_ Device category.html','Tech');
+/* shared left-nav controller — same routing on every report, no visual restructuring */
+const SharedNav={
+  routes:{
+    reports:'Analytics _ Reports snapshot.html',
+    acquisition:'Traffic acquisition.html',
+    demographics:'Demographic details_ Country.html',
+    tech:'Tech details_ Device category.html'
+  },
+  mount(items){
+    const current=decodeURIComponent(location.pathname.split('/').pop()||'');
+    items.forEach(([key,x,y,w,h,label])=>{
+      const url=this.routes[key];
+      if(!url)return;
+      const b=UI.hit(x,y,w,h,()=>{
+        if(current===url){UI.toast(label+' is already open');return}
+        location.href=url;
+      },label);
+      b.classList.add('nav-hotspot');
+      b.dataset.nav=key;
+      if(current===url)b.setAttribute('aria-current','page');
+    });
+  }
+};
+
+
+SharedNav.mount([
+  ['reports',70,78,252,38,'Reports snapshot'],
+  ['acquisition',62,205,260,153,'Acquisition / Traffic acquisition'],
+  ['demographics',70,610,248,40,'Demographics'],
+  ['tech',70,650,248,40,'Tech']
+]);
+
+
 UI.hit(1110,74,300,54,()=>UI.range(1110,130),'Change date range');
 UI.hit(1380,86,120,42,()=>UI.simpleMenu(1280,132),'Report actions');
 UI.hit(1060,86,44,42,()=>UI.toast('Comparison added'),'Add comparison');
