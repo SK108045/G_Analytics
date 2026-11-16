@@ -30,6 +30,8 @@ body{overflow-x:hidden;font-family:'Google Sans',Roboto,Arial,sans-serif;color:#
 @keyframes lineDraw{from{stroke-dashoffset:1200}to{stroke-dashoffset:0}}
 @keyframes barGrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 
+
+.nav-hotspot,.nav-hotspot:hover,.nav-hotspot:active{background:transparent!important}
 </style></head>
 <body><div id="w"><div id="s">
 
@@ -194,10 +196,39 @@ const UI={
 };
 document.addEventListener('click',()=>document.querySelectorAll('.ui-pop').forEach(p=>p.classList.remove('open')));
 
-UI.link(0,165,244,39,'Analytics _ Reports snapshot.html','Reports snapshot');
-UI.link(8,304,225,40,'Traffic acquisition.html','Acquisition');
-UI.link(8,532,225,40,'Demographic details_ Country.html','Demographics');
-UI.link(8,578,225,45,'Tech details_ Device category.html','Tech details');
+/* shared left-nav controller — same routing on every report, no visual restructuring */
+const SharedNav={
+  routes:{
+    reports:'Analytics _ Reports snapshot.html',
+    acquisition:'Traffic acquisition.html',
+    demographics:'Demographic details_ Country.html',
+    tech:'Tech details_ Device category.html'
+  },
+  mount(items){
+    const current=decodeURIComponent(location.pathname.split('/').pop()||'');
+    items.forEach(([key,x,y,w,h,label])=>{
+      const url=this.routes[key];
+      if(!url)return;
+      const b=UI.hit(x,y,w,h,()=>{
+        if(current===url){UI.toast(label+' is already open');return}
+        location.href=url;
+      },label);
+      b.classList.add('nav-hotspot');
+      b.dataset.nav=key;
+      if(current===url)b.setAttribute('aria-current','page');
+    });
+  }
+};
+
+
+SharedNav.mount([
+  ['reports',0,165,244,39,'Reports snapshot'],
+  ['acquisition',8,304,225,40,'Acquisition'],
+  ['demographics',8,532,225,40,'Demographics'],
+  ['tech',8,578,225,45,'Tech']
+]);
+
+
 UI.hit(1132,148,315,62,()=>UI.range(1135,210),'Change date range');
 UI.hit(1454,164,118,44,()=>UI.simpleMenu(1350,210),'Report actions');
 UI.link(1436,520,145,48,'Demographic details_ Country.html','View countries');
