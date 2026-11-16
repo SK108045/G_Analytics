@@ -1,192 +1,441 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Reports snapshot</title>
-<meta name="color-scheme" content="light">
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Reports snapshot | Campaigns & cohorts</title><meta name="color-scheme" content="light">
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-html,body{margin:0;background:#fff}
-body{overflow-x:hidden;font-family:'Google Sans',Roboto,Arial,sans-serif;color:#202124}
-#w{width:100%;overflow:hidden}
-#s{position:relative;width:1536px;height:864px;transform-origin:0 0;background:#fff;overflow:hidden}
-.t{position:absolute;transform:translateY(-50%);white-space:nowrap}
-.b{position:absolute}
-.ce{transform:translate(-50%,-50%)}
-.dt{text-decoration:underline dotted #5f6368;text-underline-offset:4px}
-.up{font-size:12.5px;letter-spacing:.4px;color:#3c4043}
+:root{
+  --bg:#f6f8fb;--surface:#fff;--surface-2:#f8fafd;--text:#202124;--muted:#5f6368;
+  --line:#e3e7ee;--blue:#1a73e8;--blue-2:#d3e3fd;--blue-3:#e8f0fe;--green:#188038;
+  --red:#d93025;--amber:#e37400;--purple:#9334e6;--shadow:0 1px 2px rgba(60,64,67,.08),0 2px 8px rgba(60,64,67,.05);
+  --radius:14px
+}
+*{box-sizing:border-box}
+html{background:var(--bg);scroll-behavior:smooth}
+body{margin:0;min-width:320px;min-height:100vh;background:var(--bg);color:var(--text);font-family:"Google Sans",Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit}
+button{color:inherit}
+a{color:inherit}
+[hidden]{display:none!important}
 
-/* interactive app polish */
-*,*::before,*::after{box-sizing:border-box}
-html,body{width:100%;min-height:100%;margin:0}
-body{min-height:100vh;overflow-x:hidden;overflow-y:auto;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
-#w{width:100%;min-height:100vh;overflow:hidden;background:inherit}
-#s{will-change:transform}
-#s svg{shape-rendering:geometricPrecision}
-#s svg path,#s svg line{vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round}
-.app-nav{position:absolute;left:0;z-index:9999;background:#f8fafd;border-right:1px solid #e3e5e8;padding:16px 10px 18px;overflow:hidden;font-family:'Google Sans',Roboto,Arial,sans-serif}
-.app-nav *{box-sizing:border-box}
-.app-nav__title{padding:3px 14px 10px;font-size:12px;font-weight:500;letter-spacing:.45px;text-transform:uppercase;color:#80868b}
-.app-nav__group{margin:0 0 8px}
-.app-nav__group-label{padding:13px 14px 6px;font-size:12px;color:#80868b}
-.app-nav__link{display:flex;align-items:center;gap:12px;width:100%;min-height:40px;padding:9px 14px;border-radius:20px;color:#3c4043;text-decoration:none;font-size:14.5px;font-weight:500;line-height:20px;transition:background .14s ease,color .14s ease,transform .14s ease}
-.app-nav__link:hover{background:#e8f0fe;color:#174ea6}
-.app-nav__link:active{transform:scale(.985)}
-.app-nav__link.active{background:#d3e3fd;color:#0b57d0}
-.app-nav__icon{width:22px;height:22px;display:grid;place-items:center;flex:0 0 22px;border-radius:50%;font-size:14px;color:#5f6368}
-.app-nav__link.active .app-nav__icon{color:#0b57d0}
-.app-nav__divider{height:1px;margin:10px 12px;background:#e3e5e8}
-.app-nav__hint{padding:10px 14px 0;color:#9aa0a6;font-size:11.5px;line-height:16px}
+.topbar{position:fixed;z-index:50;inset:0 0 auto 0;height:72px;display:grid;grid-template-columns:248px minmax(220px,1fr) auto;align-items:center;gap:18px;padding:0 18px;background:rgba(255,255,255,.96);border-bottom:1px solid var(--line);backdrop-filter:blur(14px)}
+.brand{display:flex;align-items:center;gap:12px;font-size:22px;color:#4a4d52;font-weight:500}
+.ga-mark{width:34px;height:34px;position:relative;flex:none}
+.ga-mark i{position:absolute;bottom:1px;border-radius:5px}
+.ga-mark i:nth-child(1){left:2px;width:9px;height:17px;background:#e37400}
+.ga-mark i:nth-child(2){left:13px;width:9px;height:27px;background:#f9ab00}
+.ga-mark i:nth-child(3){left:24px;width:8px;height:33px;background:#f9ab00}
+.top-search{position:relative;max-width:690px;width:100%;justify-self:center}
+.top-search input{width:100%;height:46px;border:1px solid transparent;background:#eef1f4;border-radius:10px;padding:0 48px 0 46px;color:var(--text);outline:none;transition:.18s ease}
+.top-search input:focus{background:#fff;border-color:#c7d5ea;box-shadow:0 1px 6px rgba(60,64,67,.17)}
+.top-search .search-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--muted)}
+.kbd{position:absolute;right:12px;top:50%;transform:translateY(-50%);padding:3px 7px;border:1px solid #d5d9df;border-radius:6px;background:#fff;color:#80868b;font-size:11px}
+.top-actions{display:flex;align-items:center;gap:6px}
+.icon-btn,.pill-btn,.primary-btn{border:0;cursor:pointer;transition:background .15s ease,transform .12s ease,box-shadow .15s ease}
+.icon-btn:active,.pill-btn:active,.primary-btn:active{transform:scale(.96)}
+.icon-btn{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:transparent;color:#4f545b;font-size:18px}
+.icon-btn:hover{background:#f0f3f7}
+.avatar{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:var(--blue);color:#fff;font-weight:700;margin-left:4px;cursor:pointer}
 
-</style></head>
-<body><div id="w"><div id="s"></div></div>
+.sidebar{position:fixed;z-index:40;left:0;top:72px;bottom:0;width:248px;padding:14px 10px 22px;background:var(--surface-2);border-right:1px solid var(--line);overflow:auto}
+.nav-section-label{padding:16px 14px 7px;font-size:11px;color:#8a9098;text-transform:uppercase;letter-spacing:.55px;font-weight:600}
+.nav-link{display:flex;align-items:center;gap:12px;min-height:42px;padding:10px 14px;margin:2px 0;border-radius:22px;text-decoration:none;color:#3c4043;font-size:14px;font-weight:500;transition:.14s ease}
+.nav-link:hover{background:var(--blue-3);color:#174ea6;transform:translateX(2px)}
+.nav-link.active{background:var(--blue-2);color:#0b57d0}
+.nav-icon{width:22px;text-align:center;font-size:15px}
+.sidebar-foot{margin-top:18px;padding:14px;border-top:1px solid var(--line);font-size:11.5px;color:#9aa0a6;line-height:1.45}
+
+main{margin-left:248px;padding:98px 24px 38px;min-height:100vh}
+.page-wrap{max-width:1500px;margin:0 auto}
+.page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:18px}
+.page-title-wrap{display:flex;align-items:center;gap:10px;min-width:0;flex-wrap:wrap}
+.page-title{margin:0;font-size:25px;line-height:1.25;font-weight:500;letter-spacing:-.2px}
+.status-pill{height:30px;display:inline-flex;align-items:center;gap:7px;padding:0 10px;border:1px solid #d9dee5;border-radius:16px;background:#fff;font-size:12px;color:#4a4f55;cursor:pointer}
+.status-dot{width:18px;height:18px;border:2px solid var(--green);border-radius:50%;display:grid;place-items:center;color:var(--green);font-size:10px;font-weight:800}
+.compare-chips{display:flex;gap:8px;flex-wrap:wrap;width:100%;margin-top:4px}
+.compare-chip{display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border-radius:15px;background:#eef3fb;color:#315b8d;font-size:12px}
+.compare-chip button{border:0;background:transparent;cursor:pointer;color:#5f6368}
+.head-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+.pill-btn{min-height:38px;padding:0 13px;border:1px solid #d9dee5;border-radius:8px;background:#fff;display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:500}
+.pill-btn:hover{background:#f8fafd;box-shadow:0 1px 3px rgba(60,64,67,.12)}
+.primary-btn{min-height:38px;padding:0 15px;border-radius:8px;background:var(--blue);color:#fff;font-weight:600}
+.primary-btn:hover{box-shadow:0 2px 7px rgba(26,115,232,.28)}
+.date-btn{min-width:230px;justify-content:space-between}
+
+.grid{display:grid;gap:14px}
+.grid-2{grid-template-columns:minmax(0,1.6fr) minmax(330px,.9fr)}
+.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+.card:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(60,64,67,.10);border-color:#d7dce4}
+.card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 18px 8px}
+.card-title{margin:0;font-size:15px;font-weight:600;color:#2d3136}
+.card-body{padding:12px 18px 18px}
+.card-link{border:0;background:transparent;color:var(--blue);font-weight:600;cursor:pointer;padding:6px 0;text-decoration:none}
+.card-link:hover{text-decoration:underline}
+.card-foot{padding:8px 18px 14px;border-top:1px solid #f0f2f5;text-align:right}
+.muted{color:var(--muted)}
+
+.metric-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:6px 18px 8px}
+.metric{padding:10px;border-radius:10px;transition:background .15s ease;cursor:default}
+.metric:hover{background:#f8fafd}
+.metric-label{display:flex;align-items:center;gap:5px;color:var(--muted);font-size:12.5px}
+.metric-value{font-size:27px;font-weight:600;letter-spacing:-.35px;margin-top:8px}
+.metric-change{margin-top:4px;color:var(--green);font-size:12px;font-weight:600}
+.metric-change.down{color:var(--red)}
+
+.chart-wrap{height:235px;padding:0 12px 8px}
+.chart{width:100%;height:100%;overflow:visible}
+.chart .gridline{stroke:#edf0f4;stroke-width:1}
+.chart .axis{fill:#80868b;font-size:10px}
+.chart .series{fill:none;stroke:var(--blue);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;stroke-dasharray:1200;stroke-dashoffset:1200;animation:drawLine .95s cubic-bezier(.4,0,.2,1) forwards}
+.chart .series.alt{stroke:#8ab4f8;stroke-width:1.8;stroke-dasharray:7 6;animation-delay:.12s}
+.chart .series.purple{stroke:var(--purple)}
+.chart .point{fill:#fff;stroke:var(--blue);stroke-width:2;opacity:0;animation:showPoint .25s ease .7s forwards;cursor:crosshair}
+@keyframes drawLine{to{stroke-dashoffset:0}}
+@keyframes showPoint{to{opacity:1}}
+
+.bar-list{display:flex;flex-direction:column;gap:12px}
+.bar-row{display:grid;grid-template-columns:minmax(120px,1fr) minmax(95px,1.4fr) 66px;gap:12px;align-items:center;min-height:28px}
+.bar-row.wide-label{grid-template-columns:minmax(185px,1.6fr) minmax(90px,1fr) 64px}
+.bar-label{min-width:0;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar-track{height:7px;background:#edf1f5;border-radius:999px;overflow:hidden;position:relative}
+.bar-fill{height:100%;width:var(--p);max-width:100%;border-radius:999px;background:var(--blue);transform-origin:left;animation:growBar .7s cubic-bezier(.2,.8,.2,1) both}
+.bar-row:nth-child(2) .bar-fill{animation-delay:.05s}.bar-row:nth-child(3) .bar-fill{animation-delay:.1s}.bar-row:nth-child(4) .bar-fill{animation-delay:.15s}.bar-row:nth-child(5) .bar-fill{animation-delay:.2s}.bar-row:nth-child(6) .bar-fill{animation-delay:.25s}.bar-row:nth-child(7) .bar-fill{animation-delay:.3s}
+@keyframes growBar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.bar-value{text-align:right;font-size:13px;font-weight:500}
+
+.table-card{padding:0}
+.table-toolbar{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.table-search{height:38px;min-width:240px;flex:1;border:1px solid #d9dee5;border-radius:8px;padding:0 12px;outline:none}
+.table-search:focus{border-color:#9fc0ed;box-shadow:0 0 0 3px #e8f0fe}
+.rows-select{height:36px;border:1px solid #d9dee5;border-radius:7px;background:#fff;padding:0 8px}
+.table-meta{margin-left:auto;color:var(--muted);font-size:12px}
+.table-scroll{overflow:auto}
+table{width:100%;border-collapse:collapse;min-width:820px}
+th,td{padding:13px 14px;border-bottom:1px solid #edf0f4;text-align:right;font-size:13px;white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+th{position:relative;background:#fff;color:#5f6368;font-weight:600;font-size:12px;cursor:pointer;user-select:none}
+th:hover{background:#f8fafd}
+tbody tr{transition:background .13s ease}
+tbody tr:hover{background:#f7faff}
+tbody tr:nth-child(even){background:#fbfcfe}
+tbody tr:nth-child(even):hover{background:#f4f8fe}
+.sort-indicator{margin-left:5px;color:#9aa0a6}
+.pagination{display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:12px 16px}
+.page-btn{height:34px;min-width:34px;border:1px solid #d9dee5;background:#fff;border-radius:7px;cursor:pointer}
+.page-btn:disabled{opacity:.4;cursor:default}
+.page-status{font-size:12px;color:var(--muted)}
+
+.kpi-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.kpi-box{padding:16px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow)}
+.kpi-box strong{display:block;font-size:24px;margin-top:6px}
+.kpi-box span{font-size:12px;color:var(--muted)}
+
+.heatmap{display:grid;grid-template-columns:130px repeat(6,minmax(48px,1fr));gap:5px;align-items:center}
+.heat-h{font-size:11px;color:var(--muted);text-align:center}
+.heat-label{font-size:12px;color:#3c4043}
+.heat-cell{height:34px;border-radius:5px;background:color-mix(in srgb,var(--blue) calc(var(--i)*1%),#fff);display:grid;place-items:center;color:var(--text);font-size:10px;transition:transform .12s ease}
+.heat-cell:hover{transform:scale(1.06);outline:2px solid #d3e3fd}
+
+.popover{position:fixed;z-index:100;min-width:220px;padding:8px;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 30px rgba(60,64,67,.18);opacity:0;transform:translateY(-5px) scale(.98);pointer-events:none;transition:.14s ease}
+.popover.open{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+.menu-item{display:flex;align-items:center;gap:10px;width:100%;min-height:38px;padding:8px 10px;border:0;border-radius:7px;background:transparent;text-align:left;cursor:pointer;font-size:13px}
+.menu-item:hover{background:#f2f5f9}
+.menu-item small{display:block;color:#80868b}
+.menu-sep{height:1px;background:var(--line);margin:6px 2px}
+
+.modal-backdrop{position:fixed;z-index:110;inset:0;background:rgba(32,33,36,.32);display:grid;place-items:center;padding:18px;opacity:0;pointer-events:none;transition:.16s ease}
+.modal-backdrop.open{opacity:1;pointer-events:auto}
+.modal{width:min(560px,100%);max-height:min(760px,90vh);overflow:auto;background:#fff;border-radius:14px;box-shadow:0 18px 50px rgba(32,33,36,.22);transform:translateY(10px) scale(.98);transition:.16s ease}
+.modal-backdrop.open .modal{transform:translateY(0) scale(1)}
+.modal-head,.modal-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;border-bottom:1px solid var(--line)}
+.modal-foot{border-top:1px solid var(--line);border-bottom:0;justify-content:flex-end}
+.modal-body{padding:18px}
+.modal h2{margin:0;font-size:18px}
+.field{display:grid;gap:7px;margin-bottom:14px}
+.field label{font-size:12px;color:var(--muted);font-weight:600}
+.field select,.field input{height:40px;border:1px solid #d9dee5;border-radius:8px;padding:0 10px;background:#fff;outline:none}
+.field select:focus,.field input:focus{border-color:#9fc0ed;box-shadow:0 0 0 3px #e8f0fe}
+
+.toast{position:fixed;z-index:150;left:50%;bottom:24px;transform:translate(-50%,20px);padding:11px 16px;border-radius:8px;background:#303134;color:#fff;font-size:13px;box-shadow:0 5px 18px rgba(32,33,36,.25);opacity:0;pointer-events:none;transition:.2s ease}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.chart-tooltip{position:fixed;z-index:160;padding:7px 9px;border-radius:7px;background:#2f3337;color:#fff;font-size:11px;pointer-events:none;opacity:0;transform:translate(-50%,-115%);transition:opacity .08s ease;white-space:nowrap}
+.chart-tooltip.show{opacity:1}
+
+.empty-state{padding:34px;text-align:center;color:var(--muted)}
+.fade-in{animation:fadeUp .35s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.reanimate .series{animation:none!important}.reanimate .bar-fill{animation:none!important}
+
+@media(max-width:1180px){
+  .topbar{grid-template-columns:220px minmax(180px,1fr) auto}
+  .sidebar{width:220px}
+  main{margin-left:220px}
+  .grid-3{grid-template-columns:1fr 1fr}
+  .grid-3>.card:last-child{grid-column:1/-1}
+  .metric-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:900px){
+  .topbar{grid-template-columns:60px minmax(160px,1fr) auto;padding:0 10px}
+  .brand span{display:none}.kbd{display:none}.top-actions .hide-sm{display:none}
+  .sidebar{width:72px;padding:14px 8px}.nav-link{justify-content:center;padding:10px}.nav-link span:not(.nav-icon),.nav-section-label,.sidebar-foot{display:none}
+  main{margin-left:72px;padding:92px 14px 30px}
+  .grid-2,.grid-3{grid-template-columns:1fr}.grid-3>.card:last-child{grid-column:auto}
+  .page-head{flex-direction:column}.head-actions{justify-content:flex-start}
+}
+@media(max-width:620px){
+  .top-actions .icon-btn{display:none}.avatar{display:grid}
+  main{margin-left:0;padding:88px 10px 24px}.sidebar{display:none}
+  .page-title{font-size:21px}.metric-grid{grid-template-columns:1fr 1fr;padding:6px 12px}.metric-value{font-size:22px}
+  .head-actions{width:100%}.date-btn{min-width:0;flex:1}
+  .bar-row,.bar-row.wide-label{grid-template-columns:minmax(120px,1fr) 90px 56px;gap:8px}
+}
+</style></head><body>
+
+<header class="topbar">
+  <div class="brand"><span class="ga-mark" aria-hidden="true"><i></i><i></i><i></i></span><span>Analytics</span></div>
+  <div class="top-search"><span class="search-icon">⌕</span><input id="globalSearch" type="search" placeholder="Try searching reports, countries, channels…" aria-label="Search this report"><span class="kbd">Ctrl /</span></div>
+  <div class="top-actions">
+    <button class="icon-btn hide-sm" data-menu="appsMenu" aria-label="Apps">▦</button>
+    <button class="icon-btn hide-sm" data-action="help" aria-label="Help">?</button>
+    <button class="icon-btn" data-menu="notificationsMenu" aria-label="Notifications">♢</button>
+    <div class="avatar" data-menu="profileMenu" role="button" tabindex="0" aria-label="Profile">R</div>
+  </div>
+</header>
+<aside class="sidebar" aria-label="Analytics navigation">
+  <div class="nav-section-label">Reports</div>
+  <a class="nav-link " href="Analytics _ Reports snapshot.html"><span class="nav-icon">▦</span><span>Reports snapshot</span></a><a class="nav-link active" href="Reports snapshot with campaigns and cohorts.html"><span class="nav-icon">◫</span><span>Campaigns & cohorts</span></a><a class="nav-link " href="Traffic acquisition.html"><span class="nav-icon">↗</span><span>Traffic acquisition</span></a>
+  <div class="nav-section-label">User</div>
+  <a class="nav-link " href="Demographic details_ Country.html"><span class="nav-icon">◉</span><span>Demographic details</span></a>
+  <a class="nav-link " href="Tech details_ Device category.html"><span class="nav-icon">▣</span><span>Tech details</span></a>
+  <div class="nav-section-label">Workspace</div>
+  <a class="nav-link" href="#" onclick="event.preventDefault();toast('Library opened')"><span class="nav-icon">□</span><span>Library</span></a>
+  <a class="nav-link" href="#" onclick="event.preventDefault();toast('Admin settings opened')"><span class="nav-icon">⚙</span><span>Admin</span></a>
+  <div class="sidebar-foot">Interactive Rieng254 analytics workspace<br>Static report data · live UI controls</div>
+</aside>
+<main><div class="page-wrap">
+
+<div class="page-head">
+  <div class="page-title-wrap">
+    <h1 class="page-title">Reports snapshot: Campaigns & cohorts</h1>
+    <button class="status-pill" data-menu="statusMenu"><span class="status-dot">✓</span><span>Data quality</span><span>⌄</span></button>
+    <button class="icon-btn" data-modal-open="comparisonModal" aria-label="Add comparison">＋</button>
+    <div id="compareChips" class="compare-chips"></div>
+  </div>
+  <div class="head-actions">
+    <button class="pill-btn" data-modal-open="filterModal">☷ Filter</button>
+    <button class="pill-btn" data-action="refresh">↻ Refresh</button>
+    <button class="pill-btn" data-action="share">↗ Share</button>
+    <button class="pill-btn" data-action="export">⇩ Export</button>
+    <button class="pill-btn date-btn" data-menu="dateMenu"><span><b class="date-label">Last 90 days · Aug 12 – Nov 9, 2026</b><small class="date-sub" style="display:block;color:#80868b;font-weight:400;margin-top:2px">Compared with May 14 – Aug 11, 2026</small></span><span>⌄</span></button>
+  </div>
+</div>
+<div id="statusMenu" class="popover"><div style="padding:10px 12px"><b>Data quality is good</b><p class="muted" style="margin:5px 0 0;font-size:12px;line-height:1.4">No sampling or threshold warning in this reconstructed report.</p></div></div>
+<div class="grid grid-2">
+  <section class="card">
+    <div class="card-head"><h2 class="card-title">New users by First user channel group</h2></div>
+    <div class="card-body"><div class="bar-list">
+      <div class="bar-row" data-searchable><div class="bar-label">Organic Search</div><div class="bar-track"><div class="bar-fill" style="--p:100%"></div></div><div class="bar-value">26,331</div></div><div class="bar-row" data-searchable><div class="bar-label">Direct</div><div class="bar-track"><div class="bar-fill" style="--p:35.9%"></div></div><div class="bar-value">9,441</div></div><div class="bar-row" data-searchable><div class="bar-label">Referral</div><div class="bar-track"><div class="bar-fill" style="--p:12%"></div></div><div class="bar-value">3,149</div></div><div class="bar-row" data-searchable><div class="bar-label">Organic Social</div><div class="bar-track"><div class="bar-fill" style="--p:5.4%"></div></div><div class="bar-value">1,430</div></div><div class="bar-row" data-searchable><div class="bar-label">Unassigned</div><div class="bar-track"><div class="bar-fill" style="--p:2.7%"></div></div><div class="bar-value">706</div></div><div class="bar-row" data-searchable><div class="bar-label">Paid Search</div><div class="bar-track"><div class="bar-fill" style="--p:1.7%"></div></div><div class="bar-value">455</div></div>
+    </div></div>
+  </section>
+  <section class="card">
+    <div class="card-head"><h2 class="card-title">Active users by Country</h2><button class="icon-btn" data-drill="countries">›</button></div>
+    <div class="card-body"><div class="bar-list">
+      <div class="bar-row" data-searchable><div class="bar-label">Kenya</div><div class="bar-track"><div class="bar-fill" style="--p:100%"></div></div><div class="bar-value">13K</div></div><div class="bar-row" data-searchable><div class="bar-label">Uganda</div><div class="bar-track"><div class="bar-fill" style="--p:25.8%"></div></div><div class="bar-value">3.35K</div></div><div class="bar-row" data-searchable><div class="bar-label">Tanzania</div><div class="bar-track"><div class="bar-fill" style="--p:23.2%"></div></div><div class="bar-value">3.02K</div></div><div class="bar-row" data-searchable><div class="bar-label">Rwanda</div><div class="bar-track"><div class="bar-fill" style="--p:10%"></div></div><div class="bar-value">1.30K</div></div><div class="bar-row" data-searchable><div class="bar-label">Ethiopia</div><div class="bar-track"><div class="bar-fill" style="--p:8%"></div></div><div class="bar-value">1.04K</div></div><div class="bar-row" data-searchable><div class="bar-label">South Sudan</div><div class="bar-track"><div class="bar-fill" style="--p:5.3%"></div></div><div class="bar-value">692</div></div><div class="bar-row" data-searchable><div class="bar-label">Burundi</div><div class="bar-track"><div class="bar-fill" style="--p:3.5%"></div></div><div class="bar-value">451</div></div><div class="bar-row" data-searchable><div class="bar-label">Nigeria</div><div class="bar-track"><div class="bar-fill" style="--p:3%"></div></div><div class="bar-value">384</div></div>
+    </div></div><div class="card-foot"><button class="card-link" data-drill="countries">Open demographic report →</button></div>
+  </section>
+</div>
+<div class="grid grid-2" style="margin-top:14px">
+  <section class="card">
+    <div class="card-head"><h2 class="card-title">User activity over time</h2></div>
+    <div class="card-body">
+      <div class="kpi-strip" style="margin-bottom:4px"><div class="kpi-box"><span>30 days</span><strong>30.2K</strong></div><div class="kpi-box"><span>7 days</span><strong>10.4K</strong></div><div class="kpi-box"><span>1 day</span><strong>2.6K</strong></div></div>
+      <div class="chart-wrap"><svg class="chart" viewBox="0 0 760 220" preserveAspectRatio="none">
+    <line class="gridline" x1="28" y1="40" x2="732" y2="40"></line><line class="gridline" x1="28" y1="80" x2="732" y2="80"></line><line class="gridline" x1="28" y1="120" x2="732" y2="120"></line><line class="gridline" x1="28" y1="160" x2="732" y2="160"></line>
+    <path class="series alt" d="M28.0 192.0 L58.6 192.0 L89.2 192.0 L119.8 192.0 L150.4 184.2 L181.0 171.6 L211.7 166.2 L242.3 158.5 L272.9 157.4 L303.5 153.3 L334.1 145.7 L364.7 139.1 L395.3 123.6 L425.9 112.7 L456.5 100.2 L487.1 108.4 L517.7 102.3 L548.3 100.3 L579.0 90.9 L609.6 81.2 L640.2 68.1 L670.8 56.3 L701.4 47.0 L732.0 43.0"></path><path class="series purple" d="M28.0 192.0 L58.6 186.9 L89.2 183.1 L119.8 174.2 L150.4 166.6 L181.0 158.9 L211.7 155.1 L242.3 145.0 L272.9 138.6 L303.5 129.7 L334.1 120.8 L364.7 117.0 L395.3 106.8 L425.9 100.5 L456.5 89.0 L487.1 94.1 L517.7 82.7 L548.3 76.3 L579.0 66.1 L609.6 59.8 L640.2 52.2 L670.8 44.5 L701.4 35.6 L732.0 28.0"></path><circle class="point" cx="28" cy="192" r="3.5" data-tip="Active users · 102"></circle><circle class="point" cx="119.82608695652173" cy="174.2015503875969" r="3.5" data-tip="Active users · 116"></circle><circle class="point" cx="211.65217391304347" cy="155.13178294573643" r="3.5" data-tip="Active users · 131"></circle><circle class="point" cx="303.4782608695652" cy="129.70542635658916" r="3.5" data-tip="Active users · 151"></circle><circle class="point" cx="395.30434782608694" cy="106.82170542635659" r="3.5" data-tip="Active users · 169"></circle><circle class="point" cx="487.1304347826087" cy="94.10852713178295" r="3.5" data-tip="Active users · 179"></circle><circle class="point" cx="578.9565217391304" cy="66.13953488372093" r="3.5" data-tip="Active users · 201"></circle><circle class="point" cx="670.7826086956521" cy="44.52713178294573" r="3.5" data-tip="Active users · 218"></circle>
+  </svg></div>
+    </div>
+  </section>
+  <section class="card">
+    <div class="card-head"><h2 class="card-title">User retention by cohort</h2><span class="muted" style="font-size:12px">Week 0–5</span></div>
+    <div class="card-body">
+      <div class="heatmap">
+        <div></div><div class="heat-h">Week 0</div><div class="heat-h">Week 1</div><div class="heat-h">Week 2</div><div class="heat-h">Week 3</div><div class="heat-h">Week 4</div><div class="heat-h">Week 5</div>
+        <div class="heat-label">Aug 12</div><div class="heat-cell" style="--i:92" data-tip="Retention 92%">92%</div><div class="heat-cell" style="--i:67" data-tip="Retention 67%">67%</div><div class="heat-cell" style="--i:49" data-tip="Retention 49%">49%</div><div class="heat-cell" style="--i:38" data-tip="Retention 38%">38%</div><div class="heat-cell" style="--i:27" data-tip="Retention 27%">27%</div><div class="heat-cell" style="--i:21" data-tip="Retention 21%">21%</div><div class="heat-label">Aug 19</div><div class="heat-cell" style="--i:91" data-tip="Retention 91%">91%</div><div class="heat-cell" style="--i:64" data-tip="Retention 64%">64%</div><div class="heat-cell" style="--i:46" data-tip="Retention 46%">46%</div><div class="heat-cell" style="--i:34" data-tip="Retention 34%">34%</div><div class="heat-cell" style="--i:25" data-tip="Retention 25%">25%</div><div class="heat-cell" style="--i:18" data-tip="Retention 18%">18%</div><div class="heat-label">Aug 26</div><div class="heat-cell" style="--i:90" data-tip="Retention 90%">90%</div><div class="heat-cell" style="--i:61" data-tip="Retention 61%">61%</div><div class="heat-cell" style="--i:43" data-tip="Retention 43%">43%</div><div class="heat-cell" style="--i:31" data-tip="Retention 31%">31%</div><div class="heat-cell" style="--i:22" data-tip="Retention 22%">22%</div><div class="heat-cell" style="--i:16" data-tip="Retention 16%">16%</div><div class="heat-label">Sep 2</div><div class="heat-cell" style="--i:89" data-tip="Retention 89%">89%</div><div class="heat-cell" style="--i:58" data-tip="Retention 58%">58%</div><div class="heat-cell" style="--i:40" data-tip="Retention 40%">40%</div><div class="heat-cell" style="--i:29" data-tip="Retention 29%">29%</div><div class="heat-cell" style="--i:20" data-tip="Retention 20%">20%</div><div class="heat-cell" style="--i:14" data-tip="Retention 14%">14%</div><div class="heat-label">Sep 9</div><div class="heat-cell" style="--i:88" data-tip="Retention 88%">88%</div><div class="heat-cell" style="--i:55" data-tip="Retention 55%">55%</div><div class="heat-cell" style="--i:37" data-tip="Retention 37%">37%</div><div class="heat-cell" style="--i:26" data-tip="Retention 26%">26%</div><div class="heat-cell" style="--i:18" data-tip="Retention 18%">18%</div><div class="heat-cell" style="--i:12" data-tip="Retention 12%">12%</div><div class="heat-label">Sep 16</div><div class="heat-cell" style="--i:87" data-tip="Retention 87%">87%</div><div class="heat-cell" style="--i:52" data-tip="Retention 52%">52%</div><div class="heat-cell" style="--i:34" data-tip="Retention 34%">34%</div><div class="heat-cell" style="--i:24" data-tip="Retention 24%">24%</div><div class="heat-cell" style="--i:16" data-tip="Retention 16%">16%</div><div class="heat-cell" style="--i:10" data-tip="Retention 10%">10%</div>
+      </div>
+    </div>
+  </section>
+</div></div></main>
+
+<div id="appsMenu" class="popover">
+  <button class="menu-item" data-toast="Reports workspace selected">▦ <span>Reports</span></button>
+  <button class="menu-item" data-toast="Explore workspace selected">◫ <span>Explore</span></button>
+  <button class="menu-item" data-toast="Advertising workspace selected">◎ <span>Advertising</span></button>
+  <div class="menu-sep"></div>
+  <button class="menu-item" data-toast="Admin workspace selected">⚙ <span>Admin</span></button>
+</div>
+<div id="notificationsMenu" class="popover">
+  <button class="menu-item" data-toast="Notification marked as read"><span>●</span><span><b>Reporting snapshot updated</b><small>Latest static dataset loaded</small></span></button>
+  <button class="menu-item" data-toast="Notification marked as read"><span>●</span><span><b>Traffic report ready</b><small>Channel breakdown available</small></span></button>
+  <button class="menu-item" data-toast="All notifications marked as read"><span>✓</span><span>Mark all as read</span></button>
+</div>
+<div id="profileMenu" class="popover">
+  <div style="padding:10px 12px"><b>rieng254.com</b><div class="muted" style="font-size:12px;margin-top:4px">Analytics workspace</div></div>
+  <div class="menu-sep"></div>
+  <button class="menu-item" data-toast="Account switcher opened">⇄ <span>Switch account</span></button>
+  <button class="menu-item" data-toast="Preferences opened">⚙ <span>Preferences</span></button>
+</div>
+<div id="dateMenu" class="popover">
+  <button class="menu-item" data-range="7" data-label="Last 7 days · Nov 3 – Nov 9, 2026" data-sub="Compared with Oct 27 – Nov 2, 2026"><span>Last 7 days</span></button>
+  <button class="menu-item" data-range="30" data-label="Last 30 days · Oct 11 – Nov 9, 2026" data-sub="Compared with Sep 11 – Oct 10, 2026"><span>Last 30 days</span></button>
+  <button class="menu-item" data-range="90" data-label="Last 90 days · Aug 12 – Nov 9, 2026" data-sub="Compared with May 14 – Aug 11, 2026"><span>Last 90 days</span></button>
+</div>
+<div id="comparisonModal" class="modal-backdrop"><div class="modal">
+  <div class="modal-head"><h2>Add comparison</h2><button class="icon-btn" data-modal-close aria-label="Close">×</button></div>
+  <div class="modal-body"><div class="field"><label>Dimension</label><select id="comparisonSelect"><option>Country</option><option>Device category</option><option>Session channel group</option><option>First user campaign</option></select></div><p class="muted" style="font-size:13px">Adds a visible comparison chip to the report so the control behaves like a real analytics workspace.</p></div>
+  <div class="modal-foot"><button class="pill-btn" data-modal-close>Cancel</button><button class="primary-btn" id="applyComparison">Apply</button></div>
+</div></div>
+<div id="filterModal" class="modal-backdrop"><div class="modal">
+  <div class="modal-head"><h2>Add filter</h2><button class="icon-btn" data-modal-close>×</button></div>
+  <div class="modal-body"><div class="field"><label>Filter</label><select id="filterSelect"><option>Country = Kenya</option><option>Device = mobile</option><option>Channel = Organic Search</option><option>Engagement rate &gt; 50%</option></select></div></div>
+  <div class="modal-foot"><button class="pill-btn" data-modal-close>Cancel</button><button class="primary-btn" id="applyFilter">Apply filter</button></div>
+</div></div>
+<div id="helpModal" class="modal-backdrop"><div class="modal">
+  <div class="modal-head"><h2>Analytics help</h2><button class="icon-btn" data-modal-close>×</button></div>
+  <div class="modal-body"><p>This reconstructed dashboard is interactive: use the left navigation, date selector, search, table sorting, filters, comparisons, refresh, share and CSV export controls.</p><p class="muted" style="font-size:13px">The figures are the static Rieng254 report data stored in this repository; UI interactions do not contact Google Analytics.</p></div>
+  <div class="modal-foot"><button class="primary-btn" data-modal-close>Got it</button></div>
+</div></div>
+<div id="pageModal" class="modal-backdrop"><div class="modal">
+  <div class="modal-head"><h2>Pages and screens</h2><button class="icon-btn" data-modal-close>×</button></div>
+  <div class="modal-body">
+    <div class="bar-list">
+      <div class="bar-row wide-label"><div class="bar-label">Rieng254 – Home</div><div class="bar-track"><div class="bar-fill" style="--p:100%"></div></div><div class="bar-value">249K</div></div><div class="bar-row wide-label"><div class="bar-label">Rieng254 – Trending</div><div class="bar-track"><div class="bar-fill" style="--p:64.7%"></div></div><div class="bar-value">161K</div></div><div class="bar-row wide-label"><div class="bar-label">Rieng254 – Videos</div><div class="bar-track"><div class="bar-fill" style="--p:52.6%"></div></div><div class="bar-value">131K</div></div><div class="bar-row wide-label"><div class="bar-label">Rieng254 – Shows</div><div class="bar-track"><div class="bar-fill" style="--p:29.3%"></div></div><div class="bar-value">73K</div></div><div class="bar-row wide-label"><div class="bar-label">Rieng254 – Albums & Songs</div><div class="bar-track"><div class="bar-fill" style="--p:22.9%"></div></div><div class="bar-value">57K</div></div><div class="bar-row wide-label"><div class="bar-label">Rieng254 – DJ Mix Sales</div><div class="bar-track"><div class="bar-fill" style="--p:16.9%"></div></div><div class="bar-value">42K</div></div><div class="bar-row wide-label"><div class="bar-label">Rieng254 – BoB Pre-order</div><div class="bar-track"><div class="bar-fill" style="--p:11.6%"></div></div><div class="bar-value">29K</div></div>
+    </div>
+  </div>
+</div></div>
+<div id="toast" class="toast"></div><div id="chartTooltip" class="chart-tooltip"></div>
 <script>
-const S=document.getElementById('s');
-const T=(x,y,h,css='',m='')=>{const e=document.createElement('div');e.className='t'+(m=='c'?' ce':'');e.innerHTML=h;e.style.top=y+'px';if(m=='r')e.style.right=(1536-x)+'px';else e.style.left=x+'px';e.style.cssText+=css;S.appendChild(e);return e};
-const B=(x,y,w,h,bg,css='')=>{const e=document.createElement('div');e.className='b';e.style.cssText=`left:${x}px;top:${y}px;width:${w}px;height:${h}px;background:${bg};${css}`;S.appendChild(e);return e};
-const I=(x,y,s,d,f='#5f6368')=>{const e=document.createElement('div');e.className='b';e.style.cssText=`left:${x-s/2}px;top:${y-s/2}px;width:${s}px;height:${s}px`;e.innerHTML=`<svg viewBox="0 0 24 24" width="${s}" height="${s}"><path d="${d}" fill="${f}"/></svg>`;S.appendChild(e)};
-const SR='M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z';
-const BLUE='#1a73e8',NV=(x,y,t,c='#202124',w=500)=>T(x,y,t,`font-size:15px;font-weight:${w};color:${c}`);
-const CARD=(x,y,w,h)=>B(x,y,w,h,'#fff','border:1px solid #dadce0;border-radius:8px;box-sizing:border-box');
-const PILL=(x,y)=>{B(x,y,60,29,'#fff','border:1px solid #dadce0;border-radius:15px;box-sizing:border-box');B(x+10,y+5,19,19,'transparent','border:2px solid #188038;border-radius:50%;box-sizing:border-box');T(x+19.5,y+14.5,'&#10003;','font-size:11px;color:#188038;font-weight:700','c');T(x+43,y+14,'&#9662;','font-size:10px;color:#5f6368','c')};
+const q=(s,r=document)=>r.querySelector(s), qa=(s,r=document)=>[...r.querySelectorAll(s)];
+const toast=(msg)=>{const t=q('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(window.__toastTimer);window.__toastTimer=setTimeout(()=>t.classList.remove('show'),1800)};
+const closePopovers=()=>qa('.popover.open').forEach(x=>x.classList.remove('open'));
+function placePopover(pop,btn){
+  const r=btn.getBoundingClientRect(), w=Math.max(pop.offsetWidth||220,220);
+  let left=Math.min(innerWidth-w-12,Math.max(12,r.right-w));
+  let top=Math.min(innerHeight-(pop.offsetHeight||260)-12,r.bottom+8);
+  pop.style.left=left+'px';pop.style.top=top+'px';
+}
+qa('[data-menu]').forEach(btn=>btn.addEventListener('click',e=>{
+  e.stopPropagation();const pop=q('#'+btn.dataset.menu), was=pop.classList.contains('open');closePopovers();
+  if(!was){pop.classList.add('open');requestAnimationFrame(()=>placePopover(pop,btn))}
+}));
+document.addEventListener('click',e=>{if(!e.target.closest('.popover')&&!e.target.closest('[data-menu]'))closePopovers()});
+addEventListener('resize',closePopovers);
 
-/* backgrounds & cards first */
-B(0,0,1536,67,'#fff','border-bottom:1px solid #e3e5e8;box-sizing:border-box');
-B(0,68,265,796,'#f8fafd','border-right:1px solid #e3e5e8');
-B(266,132,1270,1,'#e3e5e8');
-CARD(311,172,439,427);CARD(765,172,741,427);CARD(310,649,590,230);CARD(916,649,590,230);
+qa('[data-range]').forEach(b=>b.addEventListener('click',()=>{
+  q('.date-label').textContent=b.dataset.label;
+  q('.date-sub').textContent=b.dataset.sub||'';
+  closePopovers();reanimate();toast('Date range updated');
+}));
 
-/* chart & map svg */
-let sv='<svg class="b" style="left:0;top:0" width="1536" height="864" viewBox="0 0 1536 864">';
-sv+='<g stroke="#e8eaed"><path d="M375 700V830M503 700V830M631 700V830" stroke-dasharray="3 3"/></g>';
-const ln=(c,p)=>`<path d="${p}" fill="none" stroke="${c}" stroke-width="2" stroke-linejoin="round"/>`;
-sv+=ln('#1a73e8','M332 788L355 786 380 782 405 779 430 775 455 773 480 770 505 766 530 762 555 760 580 756 605 752 630 748 650 741 670 744 690 745 710 742 733 742');
-sv+=ln('#9334e6','M332 807L355 805 380 803 405 800 430 797 455 795 480 792 505 791 530 790 555 792 580 793 605 794 630 796 660 788 690 794 710 797 733 792');
-sv+=ln('#4a148c','M332 814L400 814 480 812 560 813 640 814 733 818');
-sv+='<g fill="#dadce0"><path d="M778 322L830 300 880 298 910 312 900 345 880 365 860 380 835 372 810 355Z"/><path d="M895 288L930 285 925 310 900 312Z"/><path d="M880 420L930 430 945 455 930 490 905 500 895 470Z"/><path d="M955 335L1010 320 1030 340 1005 360 965 360Z"/><path d="M955 370L1040 365 1060 395 1040 440 1020 490 990 480 975 430 955 400Z"/><path d="M1030 330L1120 305 1170 320 1185 350 1160 380 1120 385 1080 380 1050 370 1035 350Z"/><path d="M1112 455L1155 450 1177 470 1152 497 1117 487Z"/></g>';
-sv+='<g fill="#aecbfa"><path d="M830 372L870 385 890 405 870 420 850 400Z"/><path d="M900 430L935 435 930 455 905 450Z"/><path d="M1085 345L1135 335 1150 360 1120 385 1090 375Z"/><path d="M1060 380L1085 380 1075 410Z"/><path d="M985 470L1010 468 1000 485Z"/><ellipse cx="1105" cy="425" rx="12" ry="4"/><ellipse cx="1137" cy="431" rx="9" ry="4"/><ellipse cx="1152" cy="441" rx="6" ry="3"/></g>';
-sv+='<path d="M1098 355L1128 348 1135 368 1112 378Z" fill="#8ab4f8"/><path d="M995 405L1010 400 1012 440 995 470 985 450Z" fill="#8ab4f8"/><path d="M1008 410L1028 405 1030 425 1012 440Z" fill="#0b57d0"/>';
-sv+='</svg>';S.insertAdjacentHTML('beforeend',sv);
-
-/* header */
-B(16,36,9,12,'#e37400','border-radius:3px');B(28,28,9,20,'#f9ab00','border-radius:3px');B(40,18,9,30,'#f9ab00','border-radius:3px');
-T(65,33,'Analytics','font-size:24px;color:#5f6368');
-T(203,19,'All accounts &nbsp;&#8250;&nbsp; rieng254.com','font-size:13px;color:#5f6368');
-T(202,44,'rieng254.com','font-size:23px');T(352,44,'&#9662;','font-size:13px;color:#5f6368','c');
-B(408,8,626,48,'#eceff1','border-radius:6px');I(444,33,24,SR);
-T(472,33,'Try searching &ldquo;add user&rdquo;','font-size:16.5px;color:#5f6368');
-[[1392,27],[1403,27],[1392,38],[1403,38]].forEach(([x,y])=>B(x,y,8,8,'#3c4043','border-radius:2px'));
-B(1438,22,24,24,'#3c4043','border-radius:50%');T(1450,34,'?','color:#fff;font-size:17px;font-weight:700','c');
-B(1483,16,34,34,'#1a73e8','border-radius:50%');T(1500,33,'A','color:#fff;font-size:19px','c');
-
-/* nav */
-B(0,71,262,36,'#d3e3fd','border-radius:0 18px 18px 0');NV(25,89,'Reports snapshot','#0b57d0');
-NV(25,125,'Realtime overview');NV(25,162,'Realtime pages');
-B(15,187,235,1,'#dadce0');
-const SEC=(y,t)=>{NV(25,y,t,'#5f6368',400);T(240,y,'&#8963;','font-size:15px;color:#5f6368','c')};
-const SUB=(y,t,tri='&#9656;')=>{T(16,y,tri,'font-size:10px');NV(42,y,t)};
-SEC(212,'Life cycle');SUB(250,'Acquisition');SUB(288,'Engagement');SUB(325,'Monetization');NV(42,362,'Retention');
-B(15,388,235,1,'#dadce0');
-SEC(412,'Search Console');SUB(450,'Search Console','&#9662;');NV(57,488,'Queries');NV(57,525,'Google organic search traf...');
-B(15,551,235,1,'#dadce0');
-SEC(574,'User');SUB(611,'User attributes');SUB(648,'Tech');
-B(23,801,18,14,'transparent','border:2px solid #3c4043;border-radius:2px;box-sizing:border-box');NV(60,808,'Library');
-B(15,850,235,1,'#dadce0');
-
-/* title row */
-B(310,85,30,30,BLUE,'border-radius:50%');T(325,100,'A','color:#fff;font-size:16px','c');
-B(349,86,28,28,'transparent','border:1.6px solid #c4c7c5;border-radius:50%');T(363,99,'+','color:#3c4043;font-size:21px','c');
-B(403,86,1,28,'#dadce0');
-T(425,99,'Reports snapshot','font-size:26px');B(425,113,188,0,'transparent','border-top:1.5px dotted #5f6368');
-B(1070,84,293,34,'#fff');T(1080,99,'Last 90 days &nbsp;&nbsp;Aug 12 - Nov 9, 2026','font-size:15px;font-weight:700');
-B(1379,90,21,19,'transparent','border:2px solid #3c4043;border-radius:3px;box-sizing:border-box');B(1388,90,2,19,'#3c4043');
-[[1420,100],[1434,92],[1434,108]].forEach(([x,y])=>B(x-3,y-3,7,7,'#3c4043','border-radius:50%'));
-T(1467,99,'&#8767;','font-size:28px;color:#3c4043','c');T(1510,99,'&#9998;','font-size:26px;color:#3c4043','c');
-
-/* section labels */
-T(311,157,'WHAT ARE YOUR TOP CAMPAIGNS?','','').className+=' up';
-T(310,633,'HOW ARE ACTIVE USERS TRENDING?').className+=' up';
-T(916,633,'HOW WELL DO YOU RETAIN YOUR USERS?').className+=' up';
-
-/* card A */
-T(335,206,'Sessions &#9662; by','font-size:15.5px');T(335,226,'Session primary channel group &#9662;','font-size:15.5px');PILL(668,193);
-T(338,257,'SESSION PRIMARY CHANNEL GROUP','font-size:11.5px;letter-spacing:.3px;color:#3c4043');T(719,257,'SESSIONS','font-size:11.5px;letter-spacing:.3px;color:#3c4043','r').classList.add('dt');
-B(338,270,383,1,'#dadce0');
-[['Organic Search','26,331',287],['Direct','9,441',118],['Referral','3,149',36],['Organic Social','1,430',8],['Unassigned','706',8],['Paid Search','455',8]].forEach(([n,v,w],i)=>{
- const y=291+i*35.8;T(337,y,n,'font-size:14.5px');T(720,y+3,v,'font-size:14.5px','r');B(337,y+14,w,3,BLUE,'border-radius:2px');B(337,y+23,384,1,'#e8eaed');
-});
-T(528,570,'View traffic acquisition','font-size:15.5px;color:#1a73e8;font-weight:500');T(718,570,'&#8594;','font-size:20px;color:#1a73e8','c');
-
-/* card B */
-T(789,204,'Active users &#9662; by <span class="dt">Country</span>','font-size:15.5px');PILL(1422,194);
-T(1218,252,'COUNTRY','font-size:11.5px;letter-spacing:.3px;color:#3c4043').classList.add('dt');T(1479,252,'ACTIVE USERS','font-size:11.5px;letter-spacing:.3px;color:#3c4043','r').classList.add('dt');
-const CT=[['Kenya','13K',184],['Uganda','3.35K',48],['Tanzania','3.02K',26],['Rwanda','1.30K',22],['Ethiopia','1.04K',18],['South Sudan','692',14],['Burundi','451',12],['Nigeria','384',10],['South Africa','337',10],['Zambia','322',10],['Somalia','298',10]];
-CT.forEach(([n,v,w],i)=>{const y=279+i*25.8;T(1219,y,n,'font-size:13.5px');T(1493,y+7,v,'font-size:13px','r');B(1219,y+11,w,2,BLUE);B(1219+w,y+12,260-w,1,'#f1f3f4')});
-T(1354,570,'View countries','font-size:15.5px;color:#1a73e8;font-weight:500');T(1478,570,'&#8594;','font-size:20px;color:#1a73e8','c');
-
-/* card C */
-T(332,672,'User activity over time','font-size:15.5px');PILL(817,661);
-[['40K',703],['30K',734],['20K',764],['10K',795],['0',825]].forEach(([l,y])=>T(751,y,l,'font-size:11px;color:#5f6368'));
-[[375,'01','Aug'],[503,'01','Sep'],[631,'01','Oct']].forEach(([x,a,b])=>{T(x,835,a,'font-size:11.5px;color:#5f6368','c');T(x,848,b,'font-size:11.5px;color:#5f6368','c')});
-const LG=[[713,'#1a73e8','30 DAYS','30.2K',742],[761,'#9334e6','7 DAYS','10.4K',793],[813,'#4a148c','1 DAY','2.6K',846]];
-LG.forEach(([y,c,l,v,vy],i)=>{B(806,y-3,7,7,c,'border-radius:50%');T(821,y,l,'font-size:11px;color:#3c4043;letter-spacing:.3px');T(828,vy,v,'font-size:22px;font-weight:500','c')});
-
-/* card D */
-T(937,674,'User activity by cohort','font-size:15.5px');PILL(1419,661);
-const WX=[1097,1167,1235,1304,1373,1446];
-WX.forEach((x,i)=>{T(x,709,'Week '+i,'font-size:11.5px;color:#3c4043','c');T(x,731,['100%','8.9%','5.1%','3.4%','2.1%','1.4%'][i],'font-size:11.5px;font-weight:700','c')});
-T(938,731,'All Users','font-size:11.5px;font-weight:700');
-const CX=[[1065,66],[1133,67],[1202,66],[1270,68],[1340,67],[1409,69]];
-const D='#0b57d0';
-const HM=[[D,'#3b82f6','#8ab4f8','#aecbfa','#c6dafc','#d2e3fc'],[D,'#4285f4','#8ab4f8','#c6dafc','#e8f0fe',null],[D,'#5b95f5','#aecbfa','#d2e3fc','#e8f0fe',null],[D,'#8ab4f8','#c6dafc','#e8f0fe',null,null],['#1a73e8','#aecbfa','#e8f0fe',null,null,null],['#4285f4','#d2e3fc',null,null,null,null]];
-['Jul 26 - Aug 1','Aug 2 - Aug 8','Aug 9 - Aug 15','Aug 16 - Aug 22','Aug 23 - Aug 29','Aug 30 - Sep 5'].forEach((l,i)=>{
- const y=752+i*20;T(940,y,l,'font-size:11.5px;color:#3c4043');
- HM[i].forEach((c,j)=>{if(c)B(CX[j][0],y-9,CX[j][1],19,c)});
+function openModal(id){const m=q('#'+id);if(m){m.classList.add('open');document.body.style.overflow='hidden'}}
+function closeModal(m){m.classList.remove('open');document.body.style.overflow=''}
+qa('[data-modal-open]').forEach(b=>b.addEventListener('click',()=>openModal(b.dataset.modalOpen)));
+qa('[data-modal-close]').forEach(b=>b.addEventListener('click',()=>closeModal(b.closest('.modal-backdrop'))));
+qa('.modal-backdrop').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)closeModal(m)}));
+addEventListener('keydown',e=>{
+  if(e.key==='Escape'){closePopovers();qa('.modal-backdrop.open').forEach(closeModal)}
+  if((e.ctrlKey||e.metaKey)&&e.key==='/'){e.preventDefault();q('#globalSearch')?.focus()}
 });
 
-const fit=()=>{const k=Math.min(1,innerWidth/1536)||1;S.style.transform='scale('+k+')';document.getElementById('w').style.height=864*k+'px'};
-addEventListener('resize',fit);fit();
+q('#applyComparison')?.addEventListener('click',()=>{
+  const v=q('#comparisonSelect').value;
+  const box=q('#compareChips');
+  if(v&&!qa('.compare-chip',box).some(c=>c.dataset.value===v)){
+    const c=document.createElement('span');c.className='compare-chip fade-in';c.dataset.value=v;
+    c.innerHTML='Compare: '+v+' <button aria-label="Remove comparison">×</button>';
+    c.querySelector('button').onclick=()=>c.remove();box.appendChild(c);
+  }
+  closeModal(q('#comparisonModal'));toast('Comparison added');
+});
 
-/* real clickable navigation */
-(()=>{
-  const pages=[
-    ['Reports','Analytics _ Reports snapshot.html','▦'],
-    ['Campaigns & cohorts','Reports snapshot with campaigns and cohorts.html','◫'],
-    ['Traffic acquisition','Traffic acquisition.html','↗'],
-    ['Demographic details','Demographic details_ Country.html','◉'],
-    ['Tech details','Tech details_ Device category.html','▣']
-  ];
-  const current=decodeURIComponent((location.pathname.split('/').pop()||'').replace(/\\+/g,' '));
-  const nav=document.createElement('nav');
-  nav.className='app-nav';
-  nav.setAttribute('aria-label','Analytics pages');
-  nav.style.width='266px';
-  nav.style.top='68px';
-  nav.style.height='796px';
-  nav.innerHTML='<div class="app-nav__title">Analytics reports</div><div class="app-nav__group-label">Reports</div>';
-  pages.forEach((p,i)=>{
-    if(i===2) nav.insertAdjacentHTML('beforeend','<div class="app-nav__divider"></div><div class="app-nav__group-label">Acquisition</div>');
-    if(i===3) nav.insertAdjacentHTML('beforeend','<div class="app-nav__divider"></div><div class="app-nav__group-label">User</div>');
-    const a=document.createElement('a');
-    a.className='app-nav__link'+(current===p[1]?' active':'');
-    a.href=p[1];
-    a.title='Open '+p[0];
-    a.innerHTML='<span class="app-nav__icon">'+p[2]+'</span><span>'+p[0]+'</span>';
-    nav.appendChild(a);
-  });
-  nav.insertAdjacentHTML('beforeend','<div class="app-nav__hint">Use this menu to move between report pages.</div>');
-  S.appendChild(nav);
-})();
+q('#applyFilter')?.addEventListener('click',()=>{
+  const v=q('#filterSelect').value;
+  const box=q('#compareChips');
+  const c=document.createElement('span');c.className='compare-chip fade-in';c.dataset.filter=v;
+  c.innerHTML='Filter: '+v+' <button aria-label="Remove filter">×</button>';
+  c.querySelector('button').onclick=()=>c.remove();box.appendChild(c);
+  closeModal(q('#filterModal'));toast('Filter applied');
+});
 
-/* full-width responsive scaling */
-const appFit=()=>{
-  const k=(window.innerWidth/1536)||1;
-  S.style.transform='scale('+k+')';
-  const scaledHeight=864*k;
-  const w=document.getElementById('w');
-  w.style.height=Math.max(window.innerHeight,scaledHeight)+'px';
-  w.style.minHeight='100vh';
-};
-addEventListener('resize',appFit);
-appFit();
+function reanimate(){
+  const root=q('.page-wrap');root.classList.add('reanimate');
+  void root.offsetWidth;root.classList.remove('reanimate');
+}
+q('[data-action="refresh"]')?.addEventListener('click',()=>{reanimate();toast('Report refreshed')});
+q('[data-action="share"]')?.addEventListener('click',async()=>{
+  try{await navigator.clipboard.writeText(location.href);toast('Link copied to clipboard')}catch{toast('Share link ready: '+location.href)}
+});
+q('[data-action="export"]')?.addEventListener('click',()=>{
+  const table=q('table[data-table]'); if(!table){toast('Nothing to export on this view');return}
+  const rows=qa('tr',table).filter(r=>!r.hidden).map(r=>qa('th,td',r).map(c=>'"'+c.innerText.replaceAll('"','""')+'"').join(','));
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([rows.join('\n')],{type:'text/csv'}));
+  a.download=(document.title.replace(/[^a-z0-9]+/gi,'-').replace(/^-|-$/g,'')||'analytics')+'.csv';a.click();URL.revokeObjectURL(a.href);toast('CSV exported');
+});
+qa('[data-action="help"]').forEach(b=>b.addEventListener('click',()=>openModal('helpModal')));
 
-</script></body></html>
+function setupTable(table){
+  const id=table.dataset.table, body=table.tBodies[0], all=[...body.rows], tools=q('[data-for="'+id+'"]');
+  if(!tools)return;
+  const input=q('.table-search',tools), select=q('.rows-select',tools), meta=q('.table-meta',tools), pager=q('[data-pager="'+id+'"]');
+  let page=0, per=Number(select?.value||10), sortIndex=-1, sortDir=1, term='';
+  const value=(row,i)=>row.cells[i]?.dataset.value??row.cells[i]?.innerText.trim()??'';
+  const num=s=>{const v=Number(String(s).replace(/[,K%m\s]/gi,m=>m.toLowerCase()==='k'?'000':''));return Number.isFinite(v)?v:null};
+  function filtered(){
+    let rows=all.filter(r=>r.innerText.toLowerCase().includes(term));
+    if(sortIndex>=0)rows.sort((a,b)=>{const av=value(a,sortIndex),bv=value(b,sortIndex),an=num(av),bn=num(bv);return ((an!==null&&bn!==null)?an-bn:av.localeCompare(bv))*sortDir});
+    return rows;
+  }
+  function render(){
+    const rows=filtered(), pages=Math.max(1,Math.ceil(rows.length/per));page=Math.min(page,pages-1);
+    all.forEach(r=>r.hidden=true);rows.slice(page*per,page*per+per).forEach(r=>{r.hidden=false;body.appendChild(r)});
+    const from=rows.length?page*per+1:0,to=Math.min(rows.length,(page+1)*per);
+    meta.textContent=from+'–'+to+' of '+rows.length;
+    if(pager){q('.page-status',pager).textContent=(page+1)+' / '+pages;q('[data-prev]',pager).disabled=page===0;q('[data-next]',pager).disabled=page>=pages-1}
+  }
+  input?.addEventListener('input',()=>{term=input.value.trim().toLowerCase();page=0;render()});
+  select?.addEventListener('change',()=>{per=Number(select.value);page=0;render()});
+  qa('th',table).forEach((th,i)=>th.addEventListener('click',()=>{
+    if(sortIndex===i)sortDir*=-1;else{sortIndex=i;sortDir=1}
+    qa('.sort-indicator',table).forEach(x=>x.textContent='↕');q('.sort-indicator',th).textContent=sortDir>0?'↑':'↓';render()
+  }));
+  q('[data-prev]',pager)?.addEventListener('click',()=>{page--;render()});
+  q('[data-next]',pager)?.addEventListener('click',()=>{page++;render()});
+  table.__applySearch=v=>{input.value=v;input.dispatchEvent(new Event('input'))};
+  render();
+}
+qa('table[data-table]').forEach(setupTable);
+
+q('#globalSearch')?.addEventListener('input',e=>{
+  const term=e.target.value.trim().toLowerCase();
+  const table=q('table[data-table]');
+  if(table?.__applySearch)table.__applySearch(term);
+  qa('[data-searchable]').forEach(el=>el.hidden=!!term&&!el.innerText.toLowerCase().includes(term));
+});
+
+const tip=q('#chartTooltip');
+qa('[data-tip]').forEach(el=>{
+  el.addEventListener('pointerenter',()=>{tip.textContent=el.dataset.tip;tip.classList.add('show')});
+  el.addEventListener('pointermove',e=>{tip.style.left=e.clientX+'px';tip.style.top=e.clientY+'px'});
+  el.addEventListener('pointerleave',()=>tip.classList.remove('show'));
+});
+
+qa('[data-drill]').forEach(b=>b.addEventListener('click',()=>{
+  const id=b.dataset.drill;
+  if(id==='countries')location.href='Demographic details_ Country.html';
+  else if(id==='traffic')location.href='Traffic acquisition.html';
+  else if(id==='tech')location.href='Tech details_ Device category.html';
+  else openModal(id);
+}));
+
+qa('.menu-item[data-toast]').forEach(b=>b.addEventListener('click',()=>{toast(b.dataset.toast);closePopovers()}));
+</script>
+</body></html>
