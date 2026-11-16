@@ -226,6 +226,7 @@ document.addEventListener('click',()=>document.querySelectorAll('.ui-pop').forEa
 const GlobalNav={
   routes:{
     reports:'Analytics _ Reports snapshot.html',
+    campaigns:'Reports snapshot with campaigns and cohorts.html',
     acquisition:'Traffic acquisition.html',
     demographics:'Demographic details_ Country.html',
     tech:'Tech details_ Device category.html'
@@ -244,7 +245,7 @@ const GlobalNav={
     const active=opts.active;
     nav.innerHTML=
       '<div class="global-nav-inner">'+
-        '<a href="'+this.routes.reports+'" class="g-nav-item '+(active==='reports'?'active':'')+'" data-key="reports"><span class="g-nav-icon">⌂</span><span>Reports snapshot</span></a>'+
+        '<a href="'+this.routes.reports+'" class="g-nav-item '+(active==='reports'?'active':'')+'" data-key="reports"><span class="g-nav-icon">⌂</span><span>Reports snapshot</span></a>'+'<a href="'+this.routes.campaigns+'" class="g-nav-item '+(active==='campaigns'?'active':'')+'" data-key="campaigns"><span class="g-nav-icon">◫</span><span>Campaigns &amp; cohorts</span></a>'+
         '<button class="g-nav-item" data-toast="Realtime"><span class="g-nav-icon">◴</span><span>Realtime</span></button>'+
         '<div class="g-nav-divider"></div>'+
         '<div class="g-nav-group" data-group="life">'+
