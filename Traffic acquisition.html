@@ -219,8 +219,8 @@ H(922,['Sessions']);H(1036,['Engaged','sessions']);H(1170,['Average','engagement
 const R=['Organic Search','Direct','Organic Social','Referral','Paid Search','Unassigned'];
 const RY=[653,686,719,751,784,817];
 R.forEach((n,i)=>{T(427,RY[i],i+1,'font-size:14px;color:#3c4043','c');T(464,RY[i],n,'font-size:14.5px;font-weight:500')});
-const N=[[[806,910,1030],[[49500,80100,66000],[39900,64400,51400],[19000,30000,23700],[11800,18800,15100],[6200,10900,8800],[6700,11800,9500],[3900,6600,3900]]]];
-const ny=[648,688,726,765,784,804,842];
+const N=[[[806,910,1030],[[49500,80100,66000],[39900,64400,51400],[19000,30000,23700],[11800,18800,15100],[6200,10900,8800],[6700,11800,9500]]]];
+const ny=RY;
 N[0][1].forEach((row,k)=>row.forEach((v,j)=>{
  const x=N[0][0][j];B(x-54,ny[k]-12,108,24,'#fff');
  T(x,ny[k],v.toLocaleString('en-US'),'font-size:14.5px;color:#202124','c');
