@@ -376,10 +376,10 @@ const PortalLayout={
     this.cfg={startX,targetX,minY,baseWidth,scale};
     [...S.children].forEach(el=>{
       if(el.classList.contains('portal-nav')||el.classList.contains('portal-nav-mask'))return;
-      const y=parseFloat(el.style.top);
-      if(!Number.isFinite(y)||y<minY)return;
 
-      if(el.tagName==='svg'){
+      /* Full-page chart SVGs sit at top:0, so inspect their drawn bounds
+         before applying the normal element top-position filter. */
+      if(el.tagName.toLowerCase()==='svg'){
         try{
           const b=el.getBBox();
           if(b.x>=startX-28&&b.y>=minY-10){
@@ -389,6 +389,9 @@ const PortalLayout={
         }catch{}
         return;
       }
+
+      const y=parseFloat(el.style.top);
+      if(!Number.isFinite(y)||y<minY)return;
 
       const left=parseFloat(el.style.left);
       const right=parseFloat(el.style.right);
