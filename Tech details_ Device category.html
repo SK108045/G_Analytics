@@ -169,9 +169,12 @@ B(73,883,225,1,'#dadce0');
 T(361,97,'Tech details: Device category','font-size:22px');
 B(659,83,63,28,'#fff','border:1px solid #dadce0;border-radius:15px;box-sizing:border-box');
 B(670,88,19,19,'transparent','border:2px solid #188038;border-radius:50%;box-sizing:border-box');T(679.5,97.5,'&#10003;','font-size:11px;color:#188038;font-weight:700','c');T(706,97,'&#9662;','font-size:10px;color:#5f6368','c');
-T(1148,100,'Last 90 days &nbsp;&nbsp;Aug 12 - Nov 9, 2026','font-size:13.5px;font-weight:700');
-B(1440,87,18,18,'transparent','border:2px solid #3c4043;border-radius:3px;box-sizing:border-box');
-[[1477,95],[1490,88],[1490,102]].forEach(([x,y])=>B(x-3,y-3,6,6,'#3c4043','border-radius:50%'));T(1519,94,'&#8767;','font-size:26px;color:#3c4043','c');
+B(1128,78,278,40,'#fff','border:1px solid #dadce0;border-radius:5px;box-sizing:border-box');
+T(1140,99,'Last 90 days &nbsp;&nbsp;Aug 12 - Nov 9, 2026','font-size:13.5px;font-weight:600;color:#202124');
+T(1388,99,'&#9662;','font-size:10px;color:#5f6368','c');
+B(1412,81,32,32,'transparent','border-radius:50%');I(1428,97,18,'M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7a3.27 3.27 0 0 0 0-1.39l7.05-4.11A3 3 0 1 0 15 5c0 .23.03.45.08.66L8.03 9.77a3 3 0 1 0 0 4.46l7.12 4.16c-.05.19-.07.39-.07.61a3 3 0 1 0 2.92-2.92z','#5f6368');
+B(1450,81,32,32,'transparent','border-radius:50%');I(1466,97,18,'M5 20h14v-2H5v2zm7-18-5.5 5.5 1.42 1.42L11 5.84V16h2V5.84l3.08 3.08L17.5 7.5 12 2z','#5f6368');
+B(1488,81,32,32,'transparent','border-radius:50%');I(1504,97,19,'M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z','#5f6368');
 T(372,131,'&#9660;','font-size:15px;color:#202124','c');
 B(385,120,204,24,'#fff','border:1px solid #80868b;border-radius:12px;box-sizing:border-box');
 T(394,132,'<b>Include</b> First user campaign ...','font-size:12px');T(577,132,'&#10005;','font-size:12px;color:#3c4043','c');
@@ -326,8 +329,10 @@ PortalNav.mount({"active":"tech","top":60,"width":260,"maskWidth":360,"height":8
 
 UI.setExport(['Device category','Users','New users','Engaged sessions','Engagement rate','Engaged sessions per user','Average engagement time'],D.map(r=>r.slice(0,7)),'tech-details-device-category');
 UI.hit(165,18,155,38,()=>UI.property(170,52),'Property selector');
-UI.hit(1138,82,300,38,()=>UI.range(1080,122),'Change date range');
-UI.hit(1430,78,95,42,()=>UI.simpleMenu(1235,122),'Share and export');
+UI.hit(1128,78,278,40,()=>UI.range(1110,122),'Change date range');
+UI.hit(1412,81,32,32,()=>UI.share(),'Share report');
+UI.hit(1450,81,32,32,()=>UI.downloadCSV(),'Download CSV');
+UI.hit(1488,81,32,32,()=>UI.simpleMenu(1220,122),'More report actions');
 UI.searchInput(405,7,620,43,'Try searching "users today"','#eceff1','14px');
 UI.input(392,578,230,40,'Search...',v=>UI.filterRows(v,[['mobile',775],['tablet',812],['desktop',849]]),'#fff','13.5px');
 UI.hit(1335,577,75,38,()=>UI.rowsMenu(1280,618,593,3),'Rows per page');
