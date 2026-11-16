@@ -165,12 +165,13 @@ T(482,106,'Traffic acquisition: Session default channel group','font-size:24px')
 B(1003,90,59,31,'#f8f9fa','border:1px solid #dadce0;border-radius:16px;box-sizing:border-box');
 T(1016,105,'&#9888;','font-size:20px;color:#e37400','c');T(1044,105,'&#9662;','font-size:11px;color:#5f6368','c');
 B(1068,92,25,25,'transparent','border:1.6px solid #c4c7c5;border-radius:50%');T(1080,104,'+','color:#3c4043;font-size:20px','c');
-B(1112,76,293,49,'#fff','box-shadow:0 1px 3px rgba(60,64,67,.15)');
-T(1120,93,'Last 30 days &nbsp;&nbsp;Oct 11 - Nov 9, 2026','font-size:15.5px;font-weight:700');
-T(1128,116,'Compare: Sep 11 &ndash; Oct 10, 2026','font-size:12.5px;color:#3c4043');
-B(1390,95,15,16,'transparent','border:2px solid #3c4043;border-radius:3px');T(1437,103,'&#10150;','font-size:0');
-T(1437,103,'&#9919;','font-size:0');
-CI(1437,103,'&lt;','#3c4043',24);T(1477,103,'&#8767;','font-size:26px;color:#3c4043','c');
+B(1110,77,294,48,'#fff','border:1px solid #dadce0;border-radius:5px;box-sizing:border-box');
+T(1122,93,'Last 30 days &nbsp;&nbsp;Oct 11 - Nov 9, 2026','font-size:14px;font-weight:600;color:#202124');
+T(1122,115,'Compare: Sep 11 &ndash; Oct 10, 2026','font-size:11.5px;color:#5f6368');
+T(1386,93,'&#9662;','font-size:10px;color:#5f6368','c');
+B(1410,84,34,34,'transparent','border-radius:50%');I(1427,101,19,'M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7a3.27 3.27 0 0 0 0-1.39l7.05-4.11A3 3 0 1 0 15 5c0 .23.03.45.08.66L8.03 9.77a3 3 0 1 0 0 4.46l7.12 4.16c-.05.19-.07.39-.07.61a3 3 0 1 0 2.92-2.92z','#5f6368');
+B(1450,84,34,34,'transparent','border-radius:50%');I(1467,101,19,'M5 20h14v-2H5v2zm7-18-5.5 5.5 1.42 1.42L11 5.84V16h2V5.84l3.08 3.08L17.5 7.5 12 2z','#5f6368');
+B(1490,84,34,34,'transparent','border-radius:50%');I(1507,101,20,'M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z','#5f6368');
 
 /* chart */
 const L=[["Organic Search","#1a73e8",402],["Direct","#4f9cf9",525],["Organic Social","#9334e6",602],["Referral","#c06ce8",729],["Paid Search","#8e63f5",819],["Unassigned","#4a148c",932]];
@@ -345,8 +346,10 @@ PortalNav.mount({"active":"acquisition","top":68,"width":260,"maskWidth":372,"he
 const trafficExport=[['Organic Search','49,500','80,100','66,000','1m 21s','1.33','19.4'],['Direct','39,900','64,400','51,400','1m 15s','1.29','17.9'],['Organic Social','19,000','30,000','23,700','1m 03s','1.24','16.2'],['Referral','11,800','18,800','15,100','1m 27s','1.28','20.1'],['Paid Search','6,200','10,900','8,800','0m 59s','1.42','14.8'],['Unassigned','6,700','11,800','9,500','0m 41s','1.01','11.2']];
 UI.setExport(['Session default channel group','Users','Sessions','Engaged sessions','Average engagement time per session','Engaged sessions per user','Events per session'],trafficExport,'traffic-acquisition');
 UI.hit(188,20,175,42,()=>UI.property(195,60),'Property selector');
-UI.hit(1110,74,300,54,()=>UI.range(1080,130),'Change date range');
-UI.hit(1380,86,120,42,()=>UI.simpleMenu(1210,132),'Share and export');
+UI.hit(1110,77,294,48,()=>UI.range(1090,130),'Change date range');
+UI.hit(1410,84,34,34,()=>UI.share(),'Share report');
+UI.hit(1450,84,34,34,()=>UI.downloadCSV(),'Download CSV');
+UI.hit(1490,84,34,34,()=>UI.simpleMenu(1215,130),'More report actions');
 UI.hit(1060,86,44,42,()=>UI.comparison(1010,132,970,132),'Add comparison');
 UI.searchInput(554,8,612,50,'Try searching "how to set up Analytics"','#eceff1','17px');
 UI.input(395,448,300,42,'Search...',v=>UI.filterRows(v,[['Organic Search',653],['Direct',686],['Organic Social',719],['Referral',751],['Paid Search',784],['Unassigned',817]]),'#fff','14.5px');
