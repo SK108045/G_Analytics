@@ -184,12 +184,13 @@ T(21,848,'&#9881;','font-size:27px;color:#5f6368;transform:translateY(-52%)');T(
 B(274,172,28,28,BLUE,'border-radius:50%');T(288,186,'A','color:#fff;font-size:16px;transform:translate(-50%,-50%)');
 B(312,176,21,21,'transparent','border:1.6px solid #c4c7c5;border-radius:50%');T(322,186,'+','color:#3c4043;font-size:20px;transform:translate(-50%,-52%)');
 T(353,187,'Reports snapshot','font-size:22px;color:#202124');
-B(1135,150,305,58,'#fff','box-shadow:0 1px 3px rgba(60,64,67,.15);border-radius:2px');
-T(1141,161,'Last 90 days &nbsp;&nbsp;Aug 12 - Nov 9, 2026','font-size:16.5px;font-weight:700;color:#202124');
-T(1150,187,'Compare: May 14 - Aug 11, 2026','font-size:13px;color:#3c4043');
-T(1230,200,'Compare: Apr. 22, 2026 - Jul 23, 2026','font-size:8px;color:#9aa0a6');
-B(1466,175,17,17,'transparent','border:2.2px solid #3c4043;border-radius:3px');T(1507,185,'&#9696;','font-size:22px;color:#3c4043');
-T(1549,185,'&#8767;','font-size:26px;color:#3c4043');
+B(1134,157,300,48,'#fff','border:1px solid #dadce0;border-radius:5px;box-sizing:border-box');
+T(1146,171,'Last 90 days &nbsp;&nbsp;Aug 12 - Nov 9, 2026','font-size:14px;font-weight:600;color:#202124');
+T(1146,193,'Compare: May 14 - Aug 11, 2026','font-size:11.5px;color:#5f6368');
+T(1417,171,'&#9662;','font-size:10px;color:#5f6368','c');
+B(1444,164,34,34,'transparent','border-radius:50%');I(1461,181,19,'M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7a3.27 3.27 0 0 0 0-1.39l7.05-4.11A3 3 0 1 0 15 5c0 .23.03.45.08.66L8.03 9.77a3 3 0 1 0 0 4.46l7.12 4.16c-.05.19-.07.39-.07.61a3 3 0 1 0 2.92-2.92z','#5f6368');
+B(1484,164,34,34,'transparent','border-radius:50%');I(1501,181,19,'M5 20h14v-2H5v2zm7-18-5.5 5.5 1.42 1.42L11 5.84V16h2V5.84l3.08 3.08L17.5 7.5 12 2z','#5f6368');
+B(1524,164,34,34,'transparent','border-radius:50%');I(1541,181,20,'M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z','#5f6368');
 
 /* card 1 */
 B(632,227,110,4,BLUE,'border-radius:0 0 3px 3px');
@@ -358,8 +359,10 @@ PortalNav.mount({"active":"reports","top":76,"width":271,"maskWidth":273,"height
 
 UI.setExport(['Metric','Value','Change'],[['Total users','445K','24.3%'],['New users','430K','26.1%'],['Engaged sessions','1.12M','27.8%'],['Average engagement time','1m 38s','17.9%']],'reports-snapshot');
 UI.hit(198,108,190,42,()=>UI.property(205,151),'Property selector');
-UI.hit(1132,148,315,62,()=>UI.range(1125,212),'Change date range');
-UI.hit(1454,164,118,44,()=>UI.simpleMenu(1320,214),'Share and export');
+UI.hit(1134,157,300,48,()=>UI.range(1125,210),'Change date range');
+UI.hit(1444,164,34,34,()=>UI.share(),'Share report');
+UI.hit(1484,164,34,34,()=>UI.downloadCSV(),'Download CSV');
+UI.hit(1524,164,34,34,()=>UI.simpleMenu(1270,207),'More report actions');
 UI.hit(305,168,38,38,()=>UI.comparison(350,207,350,210),'Add comparison');
 UI.link(1436,520,145,48,'Demographic details_ Country.html','View countries');
 UI.link(532,836,185,45,'Traffic acquisition.html','View acquisition');
