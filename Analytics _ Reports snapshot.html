@@ -214,7 +214,6 @@ T(1355,290,'COUNTRY','font-size:11.5px;color:#5f6368;letter-spacing:.3px');T(155
  T(1557,y+(i==4?3:0),v,'font-size:14.5px;color:#202124',true);
  B(1355,y+11,w,2,BLUE);B(1480,y+11,78,1,'#f1f3f4');
 });
-T(1513,481,'30K','font-size:14px;color:#202124',true);
 T(1449,547,'View countries &nbsp;&#8594;','font-size:15.5px;color:#1a73e8;font-weight:500');
 
 /* card 3 */
@@ -223,8 +222,7 @@ Q(661,614);T(705,614,'&#8250;','font-size:24px;color:#3c4043;transform:translate
 [['Organic Search',672,219,'190K',679],['Direct',698,119,'99K',707],['Referral',724,65,'51K',733],['Organic Social',750,46,'55K',760],['Paid Search',776,32,'38K',786],['Email',802,16,'28K',813],['Unassigned',829,8,'13K',841]].forEach(([n,y,w,v,vy])=>{
  T(295,y,n,'font-size:14px;color:#202124');B(398,y-10,w,20,BLUE);T(694,vy,v,'font-size:14.5px;color:#202124',true);
 });
-T(694,880,'6.5K','font-size:14.5px;color:#202124',true);
-T(550,864,'View user acqui','font-size:15px;color:#1a73e8;font-weight:500');
+T(522,864,'View user acquisition &nbsp;&#8594;','font-size:15px;color:#1a73e8;font-weight:500');
 
 /* card 4 */
 T(760,609,'Sessions by','font-size:16px;font-weight:500');T(760,628,'Session primary channel group (Default Channel Group)','font-size:14px;color:#202124');
@@ -236,8 +234,7 @@ B(764,664,382,1,'#e8eaed');
  T(765,y,n,'font-size:14px;color:#202124');T(1012,y-1,r,'font-size:14px;color:#202124',true);
  T(1058,y+2,v,'font-size:14.5px;color:#202124',true);T(1091,y,'&#129093; '+d,'font-size:13.5px;font-weight:500;color:#188038');
 });
-T(977,865,'View','font-size:15px;color:#1a73e8;font-weight:500');T(1075,865,'ssition &nbsp;&#8594;','font-size:15px;color:#1a73e8;font-weight:500');
-T(1058,880,'6.5K','font-size:14.5px;color:#202124',true);
+T(958,865,'View traffic acquisition &nbsp;&#8594;','font-size:15px;color:#1a73e8;font-weight:500');
 
 /* card 5 */
 T(1205,611,'Views by Page title and screen class','font-size:16px;font-weight:500');Q(1457,616);T(1562,612,'&#8250;','font-size:24px;color:#3c4043;transform:translate(-50%,-55%)');
@@ -247,7 +244,7 @@ T(1205,651,'PAGE TITLE AND SCREEN CLASS','font-size:11.5px;color:#5f6368');T(155
  T(1205,y,n,'font-size:14px;color:#202124');B(1367,y+10,122,1,'#f1f3f4');B(1367,y+9,w,2,BLUE);
  T(1535,y+2,v,'font-size:14.5px;color:#202124',true);
 });
-T(1391,866,'View pages and','font-size:15px;color:#1a73e8;font-weight:500');
+T(1365,866,'View pages and screens &nbsp;&#8594;','font-size:15px;color:#1a73e8;font-weight:500');
 
 /* scale to fit width */
 const fit=()=>{const k=(innerWidth/1600)||1;S.style.transform='scale('+k+')';document.getElementById('w').style.height=(818*k+28)+'px'};
@@ -375,6 +372,7 @@ UI.hit(1530,92,55,50,()=>UI.profile(1275,142),'Account');
 UI.hit(1538,240,45,45,()=>location.href='Demographic details_ Country.html','Open country report');
 UI.hit(688,595,37,38,()=>location.href='Traffic acquisition.html','Open acquisition');
 UI.hit(1130,595,37,38,()=>location.href='Traffic acquisition.html','Open traffic acquisition');
+UI.link(948,836,215,45,'Traffic acquisition.html','Open traffic acquisition footer');
 UI.hit(1540,595,40,40,()=>UI.pagesModal(),'Open pages and screens');
 UI.chartHover(297,360,696,132,30000,['Last 90 days','Preceding period']);
 UI.restoreDate();UI.restoreComparison(350,210);
