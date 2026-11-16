@@ -33,9 +33,14 @@ body{overflow-x:hidden;font-family:'Google Sans',Roboto,Arial,sans-serif;color:#
 
 
 
-/* portal-level navbar: identical physical size on every page */
+
+/* sidebar now lives in the same scaled canvas as the report */
+.portal-nav-mask,.portal-nav{translate:0 0!important}
+.portal-nav-mask{
+  position:absolute;left:0;z-index:4998;background:#f8fafd;pointer-events:none
+}
 .portal-nav{
-  position:fixed;left:0;top:68px;bottom:0;width:265px;z-index:5000;
+  position:absolute;left:0;z-index:5000;
   background:#f8fafd;border-right:1px solid #e3e5e8;
   font-family:'Google Sans',Roboto,Arial,sans-serif;color:#202124;
   box-sizing:border-box;padding:12px 10px 16px;overflow:auto;
@@ -58,17 +63,9 @@ body{overflow-x:hidden;font-family:'Google Sans',Roboto,Arial,sans-serif;color:#
 }
 .portal-nav a.active .picon{color:#0b57d0}
 .portal-nav .pdivider{height:1px;background:#dadce0;margin:9px 5px}
-@media(max-width:700px){
-  .portal-nav{width:220px}
-}
-
-
 @view-transition{navigation:auto}
 .portal-nav{view-transition-name:portal-sidebar}
 ::view-transition-old(portal-sidebar),::view-transition-new(portal-sidebar){animation-duration:0s}
-.portal-nav-cleaner{
-  position:fixed;left:265px;top:68px;bottom:0;z-index:4999;pointer-events:none
-}
 
 </style></head>
 <body><div id="w"><div id="s"></div></div>
@@ -197,7 +194,7 @@ const UI={
 };
 document.addEventListener('click',()=>document.querySelectorAll('.ui-pop').forEach(p=>p.classList.remove('open')));
 
-/* one portal navbar shared visually and behaviorally by every page */
+/* one clean portal sidebar; old page nav is masked underneath */
 const PortalNav={
   routes:{
     reports:'Analytics _ Reports snapshot.html',
@@ -213,62 +210,41 @@ const PortalNav={
     demographics:'Demographics',
     tech:'Tech details'
   },
-  icons:{
-    reports:'⌂',
-    campaigns:'◫',
-    acquisition:'↗',
-    demographics:'◉',
-    tech:'▣'
-  },
-  mount(active){
-    document.querySelector('.portal-nav')?.remove();
+  icons:{reports:'⌂',campaigns:'◫',acquisition:'↗',demographics:'◉',tech:'▣'},
+  mount(opts){
+    S.querySelector('.portal-nav')?.remove();
+    S.querySelector('.portal-nav-mask')?.remove();
+
+    const mask=document.createElement('div');
+    mask.className='portal-nav-mask';
+    mask.style.cssText='top:'+opts.top+'px;width:'+opts.maskWidth+'px;height:'+opts.height+'px';
+    S.appendChild(mask);
+
     const nav=document.createElement('nav');
     nav.className='portal-nav';
     nav.setAttribute('aria-label','Analytics portal navigation');
+    nav.style.cssText='top:'+opts.top+'px;width:'+opts.width+'px;height:'+opts.height+'px';
     nav.innerHTML=
       '<div class="portal-nav-title">Reports</div>'+
       Object.keys(this.routes).map(key=>
-        '<a href="'+this.routes[key]+'" class="'+(active===key?'active':'')+'" data-key="'+key+'"'+(active===key?' aria-current="page"':'')+'>'+
+        '<a href="'+this.routes[key]+'" class="'+(opts.active===key?'active':'')+'" data-key="'+key+'"'+(opts.active===key?' aria-current="page"':'')+'>'+
           '<span class="picon">'+this.icons[key]+'</span>'+
           '<span>'+this.labels[key]+'</span>'+
         '</a>'
       ).join('');
-    document.body.appendChild(nav);
+    S.appendChild(nav);
 
     nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',e=>{
       const current=decodeURIComponent(location.pathname.split('/').pop()||'');
-      if(current===a.getAttribute('href')){
-        e.preventDefault();
-      }else{
-        sessionStorage.setItem('analyticsPortalNav','1');
-      }
+      if(current===a.getAttribute('href'))e.preventDefault();
     }));
   }
 };
 
-
-const PortalCleaner={
-  mount(baseWidth,legacyWidth){
-    document.querySelector('.portal-nav-cleaner')?.remove();
-    const oldVisualWidth=legacyWidth*(innerWidth/baseWidth);
-    const extra=Math.max(0,oldVisualWidth-265);
-    if(extra<1)return;
-    const d=document.createElement('div');
-    d.className='portal-nav-cleaner';
-    d.style.width=extra+'px';
-    d.style.background=getComputedStyle(document.body).backgroundColor||'#f8fafd';
-    document.body.appendChild(d);
-  }
-};
-
-PortalNav.mount('tech');
-PortalCleaner.mount(1536,309);
-addEventListener('resize',()=>PortalCleaner.mount(1536,309));
+PortalNav.mount({"active":"tech","top":60,"width":260,"maskWidth":309,"height":834});
 
 
-
-
-UI.hit(1138,82,300,38,()=>UI.range(1135,122),'Change date range');
+addEventListener('resize',()=>UI.hit(1138,82,300,38,()=>UI.range(1135,122),'Change date range');
 UI.hit(1430,78,95,42,()=>UI.simpleMenu(1320,122),'Report actions');
 UI.input(392,578,230,40,'Search...',v=>UI.filterRows(v,[["mobile",775],["tablet",812],["desktop",849]]),'#fff','13.5px');
 UI.hit(1335,577,75,38,()=>UI.toast('Rows per page selector'),'Rows per page');
