@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Traffic acquisition: Session default channel group</title>
+<meta name="color-scheme" content="light">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;background:#f1f3f4}
+body{overflow-x:hidden;font-family:'Google Sans',Roboto,Arial,sans-serif;color:#202124}
+#w{width:100%;overflow:hidden}
+#s{position:relative;width:1536px;height:864px;transform-origin:0 0;background:#f1f3f4;overflow:hidden}
+.t{position:absolute;transform:translateY(-50%);white-space:nowrap}
+.b{position:absolute}
+.ce{transform:translate(-50%,-50%)}
+.dt{text-decoration:underline dotted #5f6368;text-underline-offset:3px}
+</style></head>
+<body><div id="w"><div id="s"></div></div>
+<script>
+const S=document.getElementById('s');
+const T=(x,y,h,css='',m='')=>{const e=document.createElement('div');e.className='t'+(m=='c'?' ce':'');e.innerHTML=h;e.style.top=y+'px';if(m=='r')e.style.right=(1536-x)+'px';else e.style.left=x+'px';e.style.cssText+=css;S.appendChild(e);return e};
+const B=(x,y,w,h,bg,css='')=>{const e=document.createElement('div');e.className='b';e.style.cssText=`left:${x}px;top:${y}px;width:${w}px;height:${h}px;background:${bg};${css}`;S.appendChild(e);return e};
+const I=(x,y,s,d,f='#5f6368')=>{const e=document.createElement('div');e.className='b';e.style.cssText=`left:${x-s/2}px;top:${y-s/2}px;width:${s}px;height:${s}px`;e.innerHTML=`<svg viewBox="0 0 24 24" width="${s}" height="${s}"><path d="${d}" fill="${f}"/></svg>`;S.appendChild(e)};
+const CI=(x,y,g,col='#5f6368',s=22)=>{const e=B(x-s/2,y-s/2,s-4,s-4,'transparent',`border:2px solid ${col};border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;color:${col};font-weight:700`);e.innerHTML=g};
+const BLUE='#1a73e8',G='#5f6368',DK='#202124';
+
+/* backgrounds first */
+B(0,0,1536,68,'#fff','box-shadow:0 1px 2px rgba(60,64,67,.25)');
+B(0,68,60,796,'#f8fafd','border-right:1px solid #e3e5e8');
+B(372,139,1115,725,'#fff','box-shadow:0 0 3px rgba(60,64,67,.3)');
+B(1529,225,6,425,'#c4c7c5','border-radius:3px');
+
+/* header */
+B(16,32,8,16,'#e37400','border-radius:3px');B(27,25,8,23,'#f9ab00','border-radius:3px');B(38,17,8,31,'#f9ab00','border-radius:3px');
+T(66,34,'Analytics','font-size:23px;color:#5f6368');
+T(196,18,'All accounts &nbsp;&#8250;&nbsp; rieng254.com','font-size:14px;color:#5f6368');
+T(196,44,'rieng254.com &#9662;','font-size:23px');
+B(554,8,612,50,'#eceff1','border-radius:6px');
+I(592,34,24,'M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z');
+T(621,35,'Try searching &ldquo;how to set up Analytics&rdquo;','font-size:17px;color:#5f6368');
+[[1342,28],[1353,28],[1342,39],[1353,39]].forEach(([x,y])=>B(x,y,9,9,'#3c4043','border-radius:2px'));
+B(1388,22,24,24,'#3c4043','border-radius:50%');T(1400,34,'?','color:#fff;font-size:17px;font-weight:700','c');
+B(1443,26,4,4,'#3c4043','border-radius:50%');B(1443,33,4,4,'#3c4043','border-radius:50%');B(1443,40,4,4,'#3c4043','border-radius:50%');
+B(1474,14,38,38,'#e8eaed','border-radius:50%');
+
+/* rail */
+I(30,103,24,'M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z');
+B(10,133,40,40,'#1a73e8','border-radius:50%;box-shadow:0 0 0 2px #d3e3fd');
+B(22,146,3,12,'#fff');B(28,141,3,17,'#fff');B(34,150,3,8,'#fff');
+CI(30,205,'&#8767;');CI(30,257,'&#9678;');
+I(30,813,26,'M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58a.5.5 0 0 0 .12-.61l-1.92-3.32a.5.5 0 0 0-.59-.22l-2.39.96a7 7 0 0 0-1.62-.94l-.36-2.54A.48.48 0 0 0 13.9 2h-3.84a.48.48 0 0 0-.48.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.48.48 0 0 0-.59.22L2.7 8.47a.48.48 0 0 0 .12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.5.5 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.5.5 0 0 0-.12-.61l-2.01-1.58zM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2z');
+
+/* second nav */
+T(82,96,'Reports snapshot','font-size:15px;font-weight:500');T(82,134,'Realtime','font-size:15px;font-weight:500');
+B(70,164,252,39,'#e8eaed','border-radius:20px');T(82,184,'CMO - Acquisition Report','font-size:15px;color:#5f6368');T(298,184,'&#8963;','font-size:15px;color:#5f6368','c');
+B(62,205,260,38,'#e3e6ea','border-radius:0 19px 19px 0');T(72,223,'&#9662;','font-size:9px;color:#202124');T(99,223,'Acquisition','font-size:15px;font-weight:500');
+T(116,262,'Overview','font-size:15px;font-weight:500');T(116,300,'User acquisition','font-size:15px;font-weight:500');
+B(62,319,260,39,'#d3e3fd','border-radius:0 19px 19px 0');T(116,338,'Traffic acquisition','font-size:15px;font-weight:500;color:#0b57d0');
+B(75,365,243,1,'#dadce0');
+T(81,389,'Life cycle','font-size:15px;color:#5f6368');T(298,389,'&#8963;','font-size:15px;color:#5f6368','c');
+[['Acquisition',427],['Engagement',466],['Monetization',504]].forEach(([n,y])=>{T(73,y,'&#9656;','font-size:10px;color:#202124');T(98,y,n,'font-size:15px;font-weight:500')});
+T(98,543,'Retention','font-size:15px;font-weight:500');
+B(75,568,243,1,'#dadce0');
+T(81,594,'User','font-size:15px;color:#5f6368');T(298,594,'&#8963;','font-size:15px;color:#5f6368','c');
+[['Demographics',632],['Tech',670]].forEach(([n,y])=>{T(73,y,'&#9656;','font-size:10px;color:#202124');T(98,y,n,'font-size:15px;font-weight:500')});
+B(75,795,243,1,'#dadce0');T(293,824,'&#8249;','font-size:28px;color:#3c4043','c');
+
+/* title row */
+B(374,89,26,26,BLUE,'border-radius:50%');T(387,102,'A','color:#fff;font-size:15px','c');
+B(409,91,25,25,'transparent','border:1.6px solid #c4c7c5;border-radius:50%');T(421,103,'+','color:#3c4043;font-size:20px','c');
+B(459,90,1,25,'#dadce0');
+T(482,106,'Traffic acquisition: Session default channel group','font-size:24px');
+B(1003,90,59,31,'#f8f9fa','border:1px solid #dadce0;border-radius:16px;box-sizing:border-box');
+T(1016,105,'&#9888;','font-size:20px;color:#e37400','c');T(1044,105,'&#9662;','font-size:11px;color:#5f6368','c');
+B(1068,92,25,25,'transparent','border:1.6px solid #c4c7c5;border-radius:50%');T(1080,104,'+','color:#3c4043;font-size:20px','c');
+B(1112,76,293,49,'#fff','box-shadow:0 1px 3px rgba(60,64,67,.15)');
+T(1120,93,'Last 30 days &nbsp;&nbsp;Oct 11 - Nov 9, 2026','font-size:15.5px;font-weight:700');
+T(1128,116,'Compare: Sep 11 &ndash; Oct 10, 2026','font-size:12.5px;color:#3c4043');
+B(1390,95,15,16,'transparent','border:2px solid #3c4043;border-radius:3px');T(1437,103,'&#10150;','font-size:0');
+T(1437,103,'&#9919;','font-size:0');
+CI(1437,103,'&lt;','#3c4043',24);T(1477,103,'&#8767;','font-size:26px;color:#3c4043','c');
+
+/* chart */
+const L=[['Organic Search','#1a73e8',205,30,402],['Direct','#4f9cf9',228,28,525],['Organic Social','#9334e6',278,9,602],['Referral','#c06ce8',294,8,729],['Paid Search','#8e63f5',311,8,819],['Unassigned','#4a148c',330,3,932]];
+const bs=[.3,-.6,0,-.8,-.2,-.9,-.4,.3,0,.9,-.5,.2,-.7,0,-.6,.3,-.4,.4,0,.6,.7,.55];
+let sv='<svg class="b" style="left:0;top:0" width="1536" height="864" viewBox="0 0 1536 864">';
+sv+='<path d="M398 348H1000" stroke="#c4c7c5"/>';
+L.forEach(([n,c,y0,a],i)=>{const sh=i==1?1:0;let d='';bs.forEach((v,k)=>{const x=398+k*(602/21),y=y0-(sh?bs[(k+21)%22]*.9:v)*a;d+=(k?'L':'M')+x.toFixed(1)+' '+y.toFixed(1)});sv+=`<path d="${d}" fill="none" stroke="${c}" stroke-width="2" stroke-linejoin="round"/>`});
+sv+='</svg>';S.insertAdjacentHTML('beforeend',sv);
+[['8K',155],['6K',202],['4K',249],['2K',297],['0',348]].forEach(([l,y])=>T(1016,y,l,'font-size:12px;color:#5f6368'));
+[['22',410],['29',542],['06',689],['13',834],['20',976]].forEach(([l,x])=>T(x,363,l,'font-size:12px;color:#5f6368','c'));
+T(404,376,'Sep','font-size:12px;color:#5f6368','c');T(689,377,'Oct','font-size:12px;color:#5f6368','c');
+L.forEach(([n,c,,,x])=>{B(x-6,406,12,12,c,'border-radius:50%');T(x+11,412,n,'font-size:12.5px;color:#3c4043')});
+[['Organic Search',233,149],['Direct',189,182],['Organic Social',88,217],['Referral',60,251],['Paid Search',42,285],['Unassigned',22,319]].forEach(([n,w,y],i)=>{
+ B(1199,y,w,28,'#1a73e8');T(1178,y+15,n,'font-size:13px;color:#202124','r');
+});
+[['0',1199],['20K',1262],['40K',1326],['60K',1389],['80K',1452]].forEach(([l,x])=>T(x,374,l,'font-size:12px;color:#5f6368','c'));
+B(396,446,1064,1,'#e8eaed');
+
+/* table controls */
+I(407,468,19,'M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z');
+T(424,468,'Search...','font-size:14.5px;color:#5f6368');
+T(1013,469,'Rows per page:','font-size:14.5px;color:#5f6368');T(1125,466,'10','font-size:14.5px');T(1160,466,'&#9662;','font-size:11px;color:#3c4043','c');B(1120,477,60,1,'#80868b');
+T(1215,469,'Go to:','font-size:14.5px;color:#5f6368');T(1289,466,'1','font-size:14.5px');B(1268,477,44,1,'#80868b');
+T(1350,469,'&#8249;','font-size:26px;color:#5f6368','c');T(1373,469,'1-6 of 6','font-size:14.5px;color:#3c4043');T(1446,469,'&#8250;','font-size:26px;color:#3c4043','c');
+B(396,490,1064,1,'#e0e0e0');
+
+/* table head */
+B(437,494,289,44,'#fff','border:2px solid #1a73e8;box-sizing:border-box');
+T(459,517,'Session default channel group','font-size:14.5px;color:#5f6368');T(678,517,'&#9662;','font-size:11px;color:#3c4043','c');T(709,517,'+','font-size:24px;color:#1a73e8','c');
+B(736,492,1,350,'#e0e0e0');
+const H=(x,ls)=>ls.forEach((s,i)=>T(x,513+i*(ls.length==4?19:20),s,'font-size:14px;color:#3c4043','c').classList.add('dt'));
+T(814,513,'&#8595; Users','font-size:14px;color:#3c4043;text-decoration:underline dotted #5f6368;text-underline-offset:3px','c');
+H(922,['Sessions']);H(1036,['Engaged','sessions']);H(1170,['Average','engagement','time per','session']);H(1293,['Engaged','sessions','per user']);H(1418,['Events','per','session']);
+
+/* totals */
+[[806,'130,700'],[910,'211,700'],[1030,'169,600'],[1174,'1m 18s'],[1306,'1.30'],[1428,'18.7']].forEach(([x,v],i)=>{
+ T(x,601,v,'font-size:17px;font-weight:700;color:#202124','c');
+ T(x,622,i<3?'100% of total':'Avg 0%','font-size:12px;color:#5f6368'+(i<3?';height:9px;overflow:hidden;opacity:.7':''),'c');
+});
+
+/* rows */
+[637,703,768].forEach(y=>B(396,y,1064,33,'#f1f3f4'));
+[669,702,735,768,801,834].forEach(y=>B(396,y,1064,1,'#e0e0e0'));
+const R=['Organic Search','Direct','Organic Social','Referral','Paid Search','Unassigned'];
+const RY=[653,686,719,751,784,817];
+R.forEach((n,i)=>{T(427,RY[i],i+1,'font-size:14px;color:#3c4043','c');T(464,RY[i],n,'font-size:14.5px;font-weight:500')});
+const N=[[[806,910,1030],[[49500,80100,66000],[39900,64400,51400],[19000,30000,23700],[11800,18800,15100],[6200,10900,8800],[6700,11800,9500],[3900,6600,3900]]]];
+const ny=[648,688,726,765,784,804,842];
+N[0][1].forEach((row,k)=>row.forEach((v,j)=>{
+ const x=N[0][0][j];B(x-54,ny[k]-12,108,24,'#fff');
+ T(x,ny[k],v.toLocaleString('en-US'),'font-size:14.5px;color:#202124','c');
+}));
+const E=[['1m 21s','1m 15s','1m 03s','1m 27s','0m 59s','0m 41s'],['1.33','1.29','1.24','1.28','1.42','1.01'],['19.4','17.9','16.2','20.1','14.8','11.2']];
+E.forEach((col,j)=>col.forEach((v,i)=>T([1174,1306,1428][j],RY[i],v,'font-size:14.5px;color:#202124','c')));
+
+/* feedback button */
+B(1480,766,42,42,'#fff','border-radius:50%;box-shadow:0 1px 4px rgba(60,64,67,.4)');
+B(1492,778,18,16,'transparent','border:2px solid #3c4043;border-radius:3px;box-sizing:border-box');
+T(1501,786,'!','font-size:11px;font-weight:700;color:#3c4043','c');
+
+const fit=()=>{const k=Math.min(1,innerWidth/1536)||1;S.style.transform='scale('+k+')';document.getElementById('w').style.height=864*k+'px'};
+addEventListener('resize',fit);fit();
+</script></body></html>

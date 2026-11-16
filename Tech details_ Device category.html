@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Tech details: Device category</title>
+<meta name="color-scheme" content="light">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;background:#f8fafd}
+body{overflow-x:hidden;font-family:'Google Sans',Roboto,Arial,sans-serif;color:#202124}
+#w{width:100%;overflow:hidden}
+#s{position:relative;width:1536px;height:894px;transform-origin:0 0;background:#f8fafd;overflow:hidden}
+.t{position:absolute;transform:translateY(-50%);white-space:nowrap}
+.b{position:absolute}
+.ce{transform:translate(-50%,-50%)}
+.dt{text-decoration:underline dotted #5f6368;text-underline-offset:4px}
+</style></head>
+<body><div id="w"><div id="s"></div></div>
+<script>
+const S=document.getElementById('s');
+const T=(x,y,h,css='',m='')=>{const e=document.createElement('div');e.className='t'+(m=='c'?' ce':'');e.innerHTML=h;e.style.top=y+'px';if(m=='r')e.style.right=(1536-x)+'px';else e.style.left=x+'px';e.style.cssText+=css;S.appendChild(e);return e};
+const B=(x,y,w,h,bg,css='')=>{const e=document.createElement('div');e.className='b';e.style.cssText=`left:${x}px;top:${y}px;width:${w}px;height:${h}px;background:${bg};${css}`;S.appendChild(e);return e};
+const I=(x,y,s,d,f='#5f6368')=>{const e=document.createElement('div');e.className='b';e.style.cssText=`left:${x-s/2}px;top:${y-s/2}px;width:${s}px;height:${s}px`;e.innerHTML=`<svg viewBox="0 0 24 24" width="${s}" height="${s}"><path d="${d}" fill="${f}"/></svg>`;S.appendChild(e)};
+const SR='M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z';
+const BLUE='#1a73e8',NV=(x,y,t,c='#202124',w=500)=>T(x,y,t,`font-size:14px;font-weight:${w};color:${c}`);
+const GY='font-size:14px;color:#202124';
+
+/* backgrounds first */
+B(0,0,1536,60,'#fff','border-bottom:1px solid #e3e5e8;box-sizing:border-box');
+B(0,60,60,834,'#f8fafd');B(60,60,1,834,'#e3e5e8');
+B(361,170,1156,714,'#fff','border:1px solid #e3e5e8;border-radius:10px;box-sizing:border-box');
+B(1138,85,294,29,'#fff');
+B(632,617,1,251,'#dadce0');
+[[757,36],[831,37]].forEach(([y,h])=>B(392,y,1093,h,'#eef1f5'));
+[794,831,868].forEach(y=>B(392,y,1093,1,'#dadce0'));
+B(392,576,1093,1,'#e8eaed');B(392,617,1093,1,'#e8eaed');
+
+/* chart svg */
+let sv='<svg class="b" style="left:0;top:0" width="1536" height="894" viewBox="0 0 1536 894">';
+sv+='<g stroke="#e8eaed"><path d="M395 234H978M395 292H978M395 352H978M395 413H978M395 466H978"/><path d="M1155 230V505M1233 230V505M1311 230V505M1388 230V505M1466 230V505" /></g>';
+const A=[[396,352],[440,348],[480,350],[520,345],[560,330],[600,345],[630,358],[655,335],[686,293],[720,318],[760,325],[785,312],[815,340],[848,368],[880,335],[910,350],[940,360],[962,366]];
+const ip=x=>{for(let i=1;i<A.length;i++)if(x<=A[i][0]){const[a,b]=A[i-1],[c,d]=A[i];return b+(d-b)*(x-a)/(c-a)}return A[A.length-1][1]};
+let p='';for(let x=396;x<=962;x+=8){const y=ip(x)+9*Math.sin(x*.37)+5*Math.sin(x*.91);p+=(x==396?'M':'L')+x+' '+y.toFixed(1)}
+sv+=`<path d="${p}" fill="none" stroke="#1a73e8" stroke-width="1.8" stroke-linejoin="round"/>`;
+const wl=(c,y0,a)=>{let q='';for(let x=396;x<=962;x+=8){q+=(x==396?'M':'L')+x+' '+(y0+a*Math.sin(x*.3)+a*.6*Math.sin(x*.77)).toFixed(1)}return `<path d="${q}" fill="none" stroke="${c}" stroke-width="1.8"/>`};
+sv+=wl('#4054d6',453,3)+wl('#7b2fd6',464,2);
+sv+='</svg>';S.insertAdjacentHTML('beforeend',sv);
+
+/* header */
+B(18,32,8,13,'#e37400','border-radius:3px');B(28,25,8,20,'#f9ab00','border-radius:3px');B(38,15,8,30,'#f9ab00','border-radius:3px');
+T(62,28,'Analytics','font-size:19px;color:#5f6368');B(155,12,1,35,'#dadce0');
+T(174,14,'All accounts &nbsp;&#8250;&nbsp; rieng254.com','font-size:11.5px;color:#5f6368');
+T(173,38,'rieng254.com','font-size:20px');T(309,38,'&#9662;','font-size:12px;color:#5f6368','c');
+B(405,7,620,43,'#eceff1','border-radius:6px');I(435,29,22,SR);
+T(460,29,'Try searching &ldquo;users today&rdquo;','font-size:14px;color:#5f6368');
+[[1385,22],[1395,22],[1385,32],[1395,32]].forEach(([x,y])=>B(x,y,8,8,'#3c4043','border-radius:2px'));
+B(1435,19,21,21,'#3c4043','border-radius:50%');T(1445,30,'?','color:#fff;font-size:15px;font-weight:700','c');
+B(1484,14,31,31,'#8ab4f8','border-radius:50%');B(1494,19,11,11,'#1a73e8','border-radius:50%');B(1490,32,19,10,'#1a73e8','border-radius:10px 10px 0 0');
+
+/* rail */
+B(11,73,38,38,'#1a73e8','border-radius:50%;box-shadow:0 0 0 2px #d3e3fd');
+B(23,92,3,10,'#fff');B(29,86,3,16,'#fff');B(35,94,3,8,'#fff');
+[[141,'&#8767;'],[190,'&#9678;']].forEach(([y,g])=>{B(19,y-11,22,22,'transparent','border:2px solid #5f6368;border-radius:50%;box-sizing:border-box');T(30,y,g,'font-size:10px;color:#5f6368','c')});
+
+/* nav */
+NV(80,88,'Reports snapshot');NV(80,120,'Realtime');B(73,143,225,1,'#dadce0');
+NV(80,166,'Life cycle','#5f6368',400);T(291,166,'&#8963;','font-size:14px;color:#5f6368','c');
+const SUB=(y,t,tri='&#9656;')=>{T(75,y,tri,'font-size:9px');NV(99,y,t)};
+SUB(201,'Acquisition');SUB(236,'Engagement');SUB(272,'Monetization','&#9662;');
+NV(116,307,'Overview');NV(116,342,'Ecommerce purchases');NV(116,378,'In-app purchases');NV(116,413,'Publisher ads');NV(100,449,'Retention');
+B(60,484,248,34,'#e8eaed','border-radius:0 17px 17px 0');NV(80,500,'User','#5f6368',400);T(289,500,'&#8963;','font-size:14px;color:#5f6368','c');
+SUB(536,'Demographics');
+B(60,555,249,34,'#e3e6ea','border-radius:0 17px 17px 0');SUB(572,'Tech','&#9662;');
+NV(115,608,'Overview');
+B(60,626,249,34,'#d3e3fd','border-radius:0 17px 17px 0');NV(115,643,'Tech details','#0b57d0');
+B(78,842,17,14,'transparent','border:2px solid #3c4043;border-radius:2px;box-sizing:border-box');NV(110,849,'Library');
+B(73,883,225,1,'#dadce0');
+
+/* title */
+T(361,97,'Tech details: Device category','font-size:22px');
+B(659,83,63,28,'#fff','border:1px solid #dadce0;border-radius:15px;box-sizing:border-box');
+B(670,88,19,19,'transparent','border:2px solid #188038;border-radius:50%;box-sizing:border-box');T(679.5,97.5,'&#10003;','font-size:11px;color:#188038;font-weight:700','c');T(706,97,'&#9662;','font-size:10px;color:#5f6368','c');
+T(1148,100,'Last 90 days &nbsp;&nbsp;Aug 12 - Nov 9, 2026','font-size:13.5px;font-weight:700');
+B(1440,87,18,18,'transparent','border:2px solid #3c4043;border-radius:3px;box-sizing:border-box');
+[[1477,95],[1490,88],[1490,102]].forEach(([x,y])=>B(x-3,y-3,6,6,'#3c4043','border-radius:50%'));T(1519,94,'&#8767;','font-size:26px;color:#3c4043','c');
+T(372,131,'&#9660;','font-size:15px;color:#202124','c');
+B(385,120,204,24,'#fff','border:1px solid #80868b;border-radius:12px;box-sizing:border-box');
+T(394,132,'<b>Include</b> First user campaign ...','font-size:12px');T(577,132,'&#10005;','font-size:12px;color:#3c4043','c');
+
+/* card titles & line chart labels */
+T(392,203,'Users by Device category over time','font-size:14.5px');T(1052,203,'Users by Device category','font-size:14.5px');
+[['4K',242],['3K',299],['2K',358],['1K',420],['0',473]].forEach(([l,y])=>T(980,y,l,'font-size:11.5px;color:#5f6368'));
+[['27',404],['03',456],['10',503],['17',548],['24',594],['31',639],['07',685],['14',730],['21',775],['28',820],['05',865],['12',911],['19',955]].forEach(([l,x])=>T(x,494,l,'font-size:11.5px;color:#5f6368','c'));
+[['Jul',405],['Aug',456],['Sep',685],['Oct',865]].forEach(([l,x])=>T(x,507,l,'font-size:11.5px;color:#5f6368','c'));
+[['mobile',399,'#1a73e8'],['tablet',467,'#4054d6'],['desktop',534,'#7b2fd6']].forEach(([n,x,c])=>{B(x-5,534,10,10,c,'border-radius:50%');T(x+11,539,n,'font-size:12.5px;color:#3c4043')});
+
+/* bar chart */
+B(1155,263,266,62,'#2563e0');B(1155,335,37,62,'#2563e0');B(1155,407,18,12,'#2563e0');B(1155,446,18,23,'#2563e0');
+B(1388,278,82,28,'#fff');T(1414,292,'76.3K','font-size:13.5px');
+B(1167,349,97,27,'#fff');T(1193,362,'10.2K','font-size:13.5px');
+B(1155,420,105,26,'#fff');T(1162,432,'4.8K','font-size:13.5px');
+[['mobile',296],['tablet',368],['desktop',440]].forEach(([n,y])=>T(1052,y,n,'font-size:13px'));
+[['0',1155],['20K',1233],['40K',1311],['60K',1388],['80K',1466]].forEach(([l,x])=>T(x,513,l,'font-size:11.5px;color:#5f6368','c'));
+
+/* table controls */
+I(400,597,18,SR);T(419,596,'Search...','font-size:13.5px;color:#5f6368');
+T(1237,596,'Rows per page:','font-size:13.5px;color:#5f6368');T(1348,593,'10','font-size:13.5px');T(1390,593,'&#9662;','font-size:10px;color:#3c4043','c');B(1343,603,58,1,'#80868b');
+T(1430,596,'1-3 of 3','font-size:13.5px;color:#3c4043');
+
+/* col heads */
+T(450,641,'Device category','font-size:14.5px;color:#5f6368');T(573,641,'&#9662;','font-size:10px;color:#3c4043','c');T(601,640,'+','font-size:24px;color:#1a73e8','c');
+const H=(r,ls)=>ls.forEach((s,i)=>T(r,640+i*21.5,s,'font-size:13.5px;color:#3c4043','r').classList.add('dt'));
+H(758,['&#8595; Users']);H(888,['New users']);H(1022,['Engaged','sessions']);H(1162,['Engagement','rate']);H(1300,['Engaged','sessions per','user']);H(1440,['Average','engagement','time']);
+
+/* totals */
+[[762,'91,267',757],[889,'85,667',888],[1043,'111,548',1022]].forEach(([r,v,r2])=>{T(r,720,v,'font-size:17px;font-weight:700','r');T(r2,740,'100% of total','font-size:11px;color:#5f6368','r')});
+[[1161,'64.2%'],[1299,'1.22'],[1440,'1m 37s']].forEach(([r,v])=>{T(r,716,v,'font-size:14.5px;font-weight:700','r');T(r,740,'Avg 0%','font-size:12px;color:#5f6368','r')});
+
+/* rows */
+const D=[['mobile','76,261','71,392','93,111','64.0%','1.22','1m 35s',775],['tablet','10,175','9,420','13,160','66.3%','1.29','1m 49s',812],['desktop','4,831','4,855','5,277','61.1%','1.09','1m 12s',849]];
+D.forEach((r,i)=>{
+ const y=r[7];
+ if(i!=1)[[674,111],[793,112],[948,112]].forEach(([x,w])=>B(x,y-14,w,27,'#fff'));
+ T(419,y,i+1,'font-size:13.5px;color:#3c4043','c');T(449,y,r[0],'font-size:14.5px;font-weight:500');
+ [729,848,1003].forEach((x,j)=>T(x,y-(i==1?3:1),r[j+1],'font-size:14.5px','c'));
+ T(1161,y+(i==1?3:1),r[4],'font-size:14px','r');T(1300,y,r[5],'font-size:14px','r');T(1440,y,r[6],'font-size:14px','r');
+});
+
+const fit=()=>{const k=Math.min(1,innerWidth/1536)||1;S.style.transform='scale('+k+')';document.getElementById('w').style.height=894*k+'px'};
+addEventListener('resize',fit);fit();
+</script></body></html>

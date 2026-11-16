@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Demographic details: Country</title>
+<meta name="color-scheme" content="light">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;background:#f8fafd}
+body{overflow-x:hidden;font-family:'Google Sans',Roboto,Arial,sans-serif;color:#202124}
+#w{width:100%;overflow:hidden}
+#s{position:relative;width:1536px;height:864px;transform-origin:0 0;background:#f8fafd;overflow:hidden}
+.t{position:absolute;transform:translateY(-50%);white-space:nowrap}
+.b{position:absolute}
+.ce{transform:translate(-50%,-50%)}
+.dt{text-decoration:underline dotted #5f6368;text-underline-offset:4px}
+</style></head>
+<body><div id="w"><div id="s"></div></div>
+<script>
+const S=document.getElementById('s');
+const T=(x,y,h,css='',m='')=>{const e=document.createElement('div');e.className='t'+(m=='c'?' ce':'');e.innerHTML=h;e.style.top=y+'px';if(m=='r')e.style.right=(1536-x)+'px';else e.style.left=x+'px';e.style.cssText+=css;S.appendChild(e);return e};
+const B=(x,y,w,h,bg,css='')=>{const e=document.createElement('div');e.className='b';e.style.cssText=`left:${x}px;top:${y}px;width:${w}px;height:${h}px;background:${bg};${css}`;S.appendChild(e);return e};
+const I=(x,y,s,d,f='#5f6368')=>{const e=document.createElement('div');e.className='b';e.style.cssText=`left:${x-s/2}px;top:${y-s/2}px;width:${s}px;height:${s}px`;e.innerHTML=`<svg viewBox="0 0 24 24" width="${s}" height="${s}"><path d="${d}" fill="${f}"/></svg>`;S.appendChild(e)};
+const SR='M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z';
+const BLUE='#1a73e8',F='font-size:15.5px;font-weight:500;color:#202124';
+
+/* backgrounds first */
+B(0,0,1536,77,'#fff','border-bottom:1px solid #e3e5e8;box-sizing:border-box');
+B(312,152,1206,702,'#fff','border:1px solid #e3e5e8;border-radius:10px;box-sizing:border-box');
+
+/* header */
+B(18,38,9,17,'#e37400','border-radius:3px');B(30,30,9,25,'#f9ab00','border-radius:3px');B(42,22,9,33,'#f9ab00','border-radius:3px');
+T(74,38,'Analytics','font-size:25px;color:#5f6368');
+T(221,21,'All accounts &nbsp;&#8250;&nbsp; rieng254.com','font-size:14.5px;color:#5f6368');
+T(221,49,'rieng254.com','font-size:26px');T(392,48,'&#9662;','font-size:14px;color:#5f6368','c');
+B(450,12,783,52,'#eceff1','border-radius:6px');
+I(483,36,24,SR);T(512,37,'Try searching &ldquo;how to set up Analytics&rdquo;','font-size:17px;color:#5f6368');
+B(1362,30,9,9,'#5f6368','border-radius:2px');B(1374,30,9,9,'#8a8f94','border-radius:2px');B(1362,42,9,9,'#8a8f94','border-radius:2px');B(1374,42,9,9,'#5f6368','border-radius:2px');
+B(1420,26,25,25,'#3c4043','border-radius:50%');T(1432,39,'?','color:#fff;font-size:18px;font-weight:700','c');
+B(1473,16,44,44,'#1a73e8','border-radius:50%');T(1495,38,'R','color:#fff;font-size:24px','c');
+
+/* nav */
+const N=(x,y,t,c='#202124',w=500)=>T(x,y,t,`font-size:15.5px;font-weight:${w};color:${c}`);
+N(23,107,'Reports snapshot');N(23,144,'Realtime');
+B(15,172,237,1,'#dadce0');
+N(23,199,'Life cycle','#5f6368',400);T(238,199,'&#8963;','font-size:16px;color:#5f6368','c');
+[['Acquisition',241],['Engagement',283],['Monetization',325]].forEach(([n,y])=>{T(17,y,'&#9656;','font-size:10px');N(45,y,n)});
+N(45,366,'Retention');
+B(15,393,237,1,'#dadce0');
+N(23,420,'User','#5f6368',400);T(238,420,'&#8963;','font-size:16px;color:#5f6368','c');
+B(0,439,263,43,'#e8eaed','border-radius:0 22px 22px 0');T(16,461,'&#9662;','font-size:10px');N(45,461,'User attributes');
+N(64,503,'Overview');
+B(0,524,263,40,'#d3e3fd','border-radius:0 20px 20px 0');N(64,544,'Demographic details','#0b57d0');
+N(64,585,'Audiences');
+T(16,627,'&#9662;','font-size:10px');N(45,627,'Tech');N(64,669,'Overview');N(64,711,'Tech details');
+B(23,812,18,14,'transparent','border:2px solid #3c4043;border-radius:2px;box-sizing:border-box');N(59,819,'Library');
+B(15,853,237,1,'#dadce0');
+
+/* title row */
+B(308,98,34,34,BLUE,'border-radius:50%');T(325,116,'R','color:#fff;font-size:17px','c');
+B(352,102,26,26,'transparent','border:1.6px solid #c4c7c5;border-radius:50%');T(365,115,'+','color:#3c4043;font-size:21px','c');
+B(403,100,1,30,'#dadce0');
+T(424,116,'Demographic details: Country','font-size:26px');
+B(758,100,71,31,'#f8fafd','border:1px solid #dadce0;border-radius:16px;box-sizing:border-box');
+B(768,106,20,20,'transparent','border:2px solid #188038;border-radius:50%;box-sizing:border-box');T(778,116,'&#10003;','font-size:12px;color:#188038;font-weight:700','c');
+T(810,116,'&#9662;','font-size:11px;color:#5f6368','c');
+B(839,101,29,29,'transparent','border:1.6px solid #c4c7c5;border-radius:50%');T(853,115,'+','color:#3c4043;font-size:21px','c');
+T(1043,115,'Last','font-size:12px;color:#5f6368');
+T(1080,116,'Last 90 days &nbsp;&nbsp;Aug 12 - Nov 9, 2026','font-size:15.5px;font-weight:700;background:#fff;padding:2px 0');
+B(1343,102,22,22,'transparent','border:2px solid #3c4043;border-radius:3px;box-sizing:border-box');
+T(1400,114,'&#8920;','font-size:0');
+[[1394,105],[1407,100],[1407,121]].forEach(([x,y])=>B(x-3,y-3,7,7,'#3c4043','border-radius:50%'));B(1396,106,11,1.6,'#3c4043','transform:rotate(-30deg);transform-origin:0 0');B(1396,106,11,1.6,'#3c4043','transform:rotate(35deg);transform-origin:0 0');
+T(1445,114,'&#8767;','font-size:28px;color:#3c4043','c');
+T(1502,114,'&#9998;','font-size:26px;color:#3c4043','c');
+
+/* controls */
+I(348,181,20,SR);T(372,180,'Search...','font-size:15px;color:#5f6368');
+T(997,181,'Rows per page:','font-size:15px;color:#5f6368');T(1123,178,'10','font-size:15px');T(1166,178,'&#9662;','font-size:11px;color:#3c4043','c');B(1118,189,58,1,'#80868b');
+T(1213,181,'Go to:','font-size:15px;color:#5f6368');T(1291,178,'1','font-size:15px');B(1266,189,50,1,'#80868b');
+T(1351,181,'&#8249;','font-size:28px;color:#5f6368','c');T(1376,180,'1-10 of 127','font-size:15px;color:#3c4043');T(1482,181,'&#8250;','font-size:28px;color:#3c4043','c');
+B(333,207,1167,1,'#e0e0e0');
+
+/* column heads */
+T(401,236,'Country','font-size:16px;color:#5f6368');T(485,236,'&#9662;','font-size:11px;color:#3c4043','c');T(562,236,'+','font-size:26px;color:#1a73e8','c');
+const H=(r,ls,y0,st)=>ls.forEach((s,i)=>T(r,y0+i*st,s,'font-size:15.5px;color:#3c4043','r').classList.add('dt'));
+H(715,['&#8595; Users'],236,0);H(868,['New users'],236,0);H(1018,['Engaged','sessions'],236,25.5);H(1177,['Engagement','rate'],236,26);H(1330,['Engaged','sessions per','user'],236,25.5);H(1485,['Average','engagement','time'],235,25.5);
+
+/* totals */
+[[737,'19,900'],[891,'18,579'],[1043,'12,943'],[1177,'58.02%'],[1330,'0.65'],[1485,'1m 28s']].forEach(([r,v],i)=>{
+ T(r,338,v,'font-size:17.5px;font-weight:700','r');
+ T(i<3?r-23:r,362,i<3?'100% of total':'Avg 0%','font-size:14px;color:#5f6368','r');
+});
+B(333,380,1167,1,'#dadce0');
+
+/* rows */
+const D=[['Kenya','9,441','8,738','6,618','61.22%','0.70','1m 46s'],['Uganda','3,223','2,982','1,957','60.15%','0.61','1m 32s'],['Tanzania','2,609','2,377','1,569','57.91%','0.60','1m 21s'],['Rwanda','1,179','1,081','693','58.17%','0.59','1m 18s'],['Ethiopia','930','855','523','56.32%','0.56','1m 15s'],['South Sudan','510','473','301','59.24%','0.59','1m 20s'],['Burundi','473','433','282','59.59%','0.60','1m 19s'],['Somalia','426','391','247','58.12%','0.58','1m 12s'],['Nigeria','309','274','180','55.81%','0.58','1m 10s'],['South Africa','295','260','165','56.62%','0.56','1m 08s']];
+D.forEach((r,i)=>{
+ const top=381+i*44.9,y=top+22;
+ if(i%2==0){B(333,top,1167,44,'#f1f3f4');[[647,97],[800,97],[949,99]].forEach(([x,w])=>B(x,y-15,w,29,'#fff'))}
+ B(333,top+44,1167,1,'#dadce0');
+ T(362,y,i+1,'font-size:15px;color:#3c4043','c');T(402,y,r[0],F);
+ [695,848,999].forEach((x,j)=>T(x,y-2,r[j+1],'font-size:15px;color:#202124','c'));
+ T(1177,y+1,r[4],'font-size:15.5px;color:#202124','r');T(1330,y+1,r[5],'font-size:15.5px;color:#202124','r');T(1482,y+1,r[6],'font-size:15.5px;color:#202124','r');
+});
+B(598,207,1,623,'#dadce0');
+
+const fit=()=>{const k=Math.min(1,innerWidth/1536)||1;S.style.transform='scale('+k+')';document.getElementById('w').style.height=864*k+'px'};
+addEventListener('resize',fit);fit();
+</script></body></html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Reports snapshot</title>
+<meta name="color-scheme" content="light">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;background:#fff}
+body{overflow-x:hidden;font-family:'Google Sans',Roboto,Arial,sans-serif;color:#202124}
+#w{width:100%;overflow:hidden}
+#s{position:relative;width:1536px;height:864px;transform-origin:0 0;background:#fff;overflow:hidden}
+.t{position:absolute;transform:translateY(-50%);white-space:nowrap}
+.b{position:absolute}
+.ce{transform:translate(-50%,-50%)}
+.dt{text-decoration:underline dotted #5f6368;text-underline-offset:4px}
+.up{font-size:12.5px;letter-spacing:.4px;color:#3c4043}
+</style></head>
+<body><div id="w"><div id="s"></div></div>
+<script>
+const S=document.getElementById('s');
+const T=(x,y,h,css='',m='')=>{const e=document.createElement('div');e.className='t'+(m=='c'?' ce':'');e.innerHTML=h;e.style.top=y+'px';if(m=='r')e.style.right=(1536-x)+'px';else e.style.left=x+'px';e.style.cssText+=css;S.appendChild(e);return e};
+const B=(x,y,w,h,bg,css='')=>{const e=document.createElement('div');e.className='b';e.style.cssText=`left:${x}px;top:${y}px;width:${w}px;height:${h}px;background:${bg};${css}`;S.appendChild(e);return e};
+const I=(x,y,s,d,f='#5f6368')=>{const e=document.createElement('div');e.className='b';e.style.cssText=`left:${x-s/2}px;top:${y-s/2}px;width:${s}px;height:${s}px`;e.innerHTML=`<svg viewBox="0 0 24 24" width="${s}" height="${s}"><path d="${d}" fill="${f}"/></svg>`;S.appendChild(e)};
+const SR='M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z';
+const BLUE='#1a73e8',NV=(x,y,t,c='#202124',w=500)=>T(x,y,t,`font-size:15px;font-weight:${w};color:${c}`);
+const CARD=(x,y,w,h)=>B(x,y,w,h,'#fff','border:1px solid #dadce0;border-radius:8px;box-sizing:border-box');
+const PILL=(x,y)=>{B(x,y,60,29,'#fff','border:1px solid #dadce0;border-radius:15px;box-sizing:border-box');B(x+10,y+5,19,19,'transparent','border:2px solid #188038;border-radius:50%;box-sizing:border-box');T(x+19.5,y+14.5,'&#10003;','font-size:11px;color:#188038;font-weight:700','c');T(x+43,y+14,'&#9662;','font-size:10px;color:#5f6368','c')};
+
+/* backgrounds & cards first */
+B(0,0,1536,67,'#fff','border-bottom:1px solid #e3e5e8;box-sizing:border-box');
+B(0,68,265,796,'#f8fafd','border-right:1px solid #e3e5e8');
+B(266,132,1270,1,'#e3e5e8');
+CARD(311,172,439,427);CARD(765,172,741,427);CARD(310,649,590,230);CARD(916,649,590,230);
+
+/* chart & map svg */
+let sv='<svg class="b" style="left:0;top:0" width="1536" height="864" viewBox="0 0 1536 864">';
+sv+='<g stroke="#e8eaed"><path d="M375 700V830M503 700V830M631 700V830" stroke-dasharray="3 3"/></g>';
+const ln=(c,p)=>`<path d="${p}" fill="none" stroke="${c}" stroke-width="2" stroke-linejoin="round"/>`;
+sv+=ln('#1a73e8','M332 788L355 786 380 782 405 779 430 775 455 773 480 770 505 766 530 762 555 760 580 756 605 752 630 748 650 741 670 744 690 745 710 742 733 742');
+sv+=ln('#9334e6','M332 807L355 805 380 803 405 800 430 797 455 795 480 792 505 791 530 790 555 792 580 793 605 794 630 796 660 788 690 794 710 797 733 792');
+sv+=ln('#4a148c','M332 814L400 814 480 812 560 813 640 814 733 818');
+sv+='<g fill="#dadce0"><path d="M778 322L830 300 880 298 910 312 900 345 880 365 860 380 835 372 810 355Z"/><path d="M895 288L930 285 925 310 900 312Z"/><path d="M880 420L930 430 945 455 930 490 905 500 895 470Z"/><path d="M955 335L1010 320 1030 340 1005 360 965 360Z"/><path d="M955 370L1040 365 1060 395 1040 440 1020 490 990 480 975 430 955 400Z"/><path d="M1030 330L1120 305 1170 320 1185 350 1160 380 1120 385 1080 380 1050 370 1035 350Z"/><path d="M1112 455L1155 450 1177 470 1152 497 1117 487Z"/></g>';
+sv+='<g fill="#aecbfa"><path d="M830 372L870 385 890 405 870 420 850 400Z"/><path d="M900 430L935 435 930 455 905 450Z"/><path d="M1085 345L1135 335 1150 360 1120 385 1090 375Z"/><path d="M1060 380L1085 380 1075 410Z"/><path d="M985 470L1010 468 1000 485Z"/><ellipse cx="1105" cy="425" rx="12" ry="4"/><ellipse cx="1137" cy="431" rx="9" ry="4"/><ellipse cx="1152" cy="441" rx="6" ry="3"/></g>';
+sv+='<path d="M1098 355L1128 348 1135 368 1112 378Z" fill="#8ab4f8"/><path d="M995 405L1010 400 1012 440 995 470 985 450Z" fill="#8ab4f8"/><path d="M1008 410L1028 405 1030 425 1012 440Z" fill="#0b57d0"/>';
+sv+='</svg>';S.insertAdjacentHTML('beforeend',sv);
+
+/* header */
+B(16,36,9,12,'#e37400','border-radius:3px');B(28,28,9,20,'#f9ab00','border-radius:3px');B(40,18,9,30,'#f9ab00','border-radius:3px');
+T(65,33,'Analytics','font-size:24px;color:#5f6368');
+T(203,19,'All accounts &nbsp;&#8250;&nbsp; rieng254.com','font-size:13px;color:#5f6368');
+T(202,44,'rieng254.com','font-size:23px');T(352,44,'&#9662;','font-size:13px;color:#5f6368','c');
+B(408,8,626,48,'#eceff1','border-radius:6px');I(444,33,24,SR);
+T(472,33,'Try searching &ldquo;add user&rdquo;','font-size:16.5px;color:#5f6368');
+[[1392,27],[1403,27],[1392,38],[1403,38]].forEach(([x,y])=>B(x,y,8,8,'#3c4043','border-radius:2px'));
+B(1438,22,24,24,'#3c4043','border-radius:50%');T(1450,34,'?','color:#fff;font-size:17px;font-weight:700','c');
+B(1483,16,34,34,'#1a73e8','border-radius:50%');T(1500,33,'A','color:#fff;font-size:19px','c');
+
+/* nav */
+B(0,71,262,36,'#d3e3fd','border-radius:0 18px 18px 0');NV(25,89,'Reports snapshot','#0b57d0');
+NV(25,125,'Realtime overview');NV(25,162,'Realtime pages');
+B(15,187,235,1,'#dadce0');
+const SEC=(y,t)=>{NV(25,y,t,'#5f6368',400);T(240,y,'&#8963;','font-size:15px;color:#5f6368','c')};
+const SUB=(y,t,tri='&#9656;')=>{T(16,y,tri,'font-size:10px');NV(42,y,t)};
+SEC(212,'Life cycle');SUB(250,'Acquisition');SUB(288,'Engagement');SUB(325,'Monetization');NV(42,362,'Retention');
+B(15,388,235,1,'#dadce0');
+SEC(412,'Search Console');SUB(450,'Search Console','&#9662;');NV(57,488,'Queries');NV(57,525,'Google organic search traf...');
+B(15,551,235,1,'#dadce0');
+SEC(574,'User');SUB(611,'User attributes');SUB(648,'Tech');
+B(23,801,18,14,'transparent','border:2px solid #3c4043;border-radius:2px;box-sizing:border-box');NV(60,808,'Library');
+B(15,850,235,1,'#dadce0');
+
+/* title row */
+B(310,85,30,30,BLUE,'border-radius:50%');T(325,100,'A','color:#fff;font-size:16px','c');
+B(349,86,28,28,'transparent','border:1.6px solid #c4c7c5;border-radius:50%');T(363,99,'+','color:#3c4043;font-size:21px','c');
+B(403,86,1,28,'#dadce0');
+T(425,99,'Reports snapshot','font-size:26px');B(425,113,188,0,'transparent','border-top:1.5px dotted #5f6368');
+B(1070,84,293,34,'#fff');T(1080,99,'Last 90 days &nbsp;&nbsp;Aug 12 - Nov 9, 2026','font-size:15px;font-weight:700');
+B(1379,90,21,19,'transparent','border:2px solid #3c4043;border-radius:3px;box-sizing:border-box');B(1388,90,2,19,'#3c4043');
+[[1420,100],[1434,92],[1434,108]].forEach(([x,y])=>B(x-3,y-3,7,7,'#3c4043','border-radius:50%'));
+T(1467,99,'&#8767;','font-size:28px;color:#3c4043','c');T(1510,99,'&#9998;','font-size:26px;color:#3c4043','c');
+
+/* section labels */
+T(311,157,'WHAT ARE YOUR TOP CAMPAIGNS?','','').className+=' up';
+T(310,633,'HOW ARE ACTIVE USERS TRENDING?').className+=' up';
+T(916,633,'HOW WELL DO YOU RETAIN YOUR USERS?').className+=' up';
+
+/* card A */
+T(335,206,'Sessions &#9662; by','font-size:15.5px');T(335,226,'Session primary channel group &#9662;','font-size:15.5px');PILL(668,193);
+T(338,257,'SESSION PRIMARY CHANNEL GROUP','font-size:11.5px;letter-spacing:.3px;color:#3c4043');T(719,257,'SESSIONS','font-size:11.5px;letter-spacing:.3px;color:#3c4043','r').classList.add('dt');
+B(338,270,383,1,'#dadce0');
+[['Organic Search','26,331',287],['Direct','9,441',118],['Referral','3,149',36],['Organic Social','1,430',8],['Unassigned','706',8],['Paid Search','455',8]].forEach(([n,v,w],i)=>{
+ const y=291+i*35.8;T(337,y,n,'font-size:14.5px');T(720,y+3,v,'font-size:14.5px','r');B(337,y+14,w,3,BLUE,'border-radius:2px');B(337,y+23,384,1,'#e8eaed');
+});
+T(528,570,'View traffic acquisition','font-size:15.5px;color:#1a73e8;font-weight:500');T(718,570,'&#8594;','font-size:20px;color:#1a73e8','c');
+
+/* card B */
+T(789,204,'Active users &#9662; by <span class="dt">Country</span>','font-size:15.5px');PILL(1422,194);
+T(1218,252,'COUNTRY','font-size:11.5px;letter-spacing:.3px;color:#3c4043').classList.add('dt');T(1479,252,'ACTIVE USERS','font-size:11.5px;letter-spacing:.3px;color:#3c4043','r').classList.add('dt');
+const CT=[['Kenya','13K',184],['Uganda','3.35K',48],['Tanzania','3.02K',26],['Rwanda','1.30K',22],['Ethiopia','1.04K',18],['South Sudan','692',14],['Burundi','451',12],['Nigeria','384',10],['South Africa','337',10],['Zambia','322',10],['Somalia','298',10]];
+CT.forEach(([n,v,w],i)=>{const y=279+i*25.8;T(1219,y,n,'font-size:13.5px');T(1493,y+7,v,'font-size:13px','r');B(1219,y+11,w,2,BLUE);B(1219+w,y+12,260-w,1,'#f1f3f4')});
+T(1354,570,'View countries','font-size:15.5px;color:#1a73e8;font-weight:500');T(1478,570,'&#8594;','font-size:20px;color:#1a73e8','c');
+
+/* card C */
+T(332,672,'User activity over time','font-size:15.5px');PILL(817,661);
+[['40K',703],['30K',734],['20K',764],['10K',795],['0',825]].forEach(([l,y])=>T(751,y,l,'font-size:11px;color:#5f6368'));
+[[375,'01','Aug'],[503,'01','Sep'],[631,'01','Oct']].forEach(([x,a,b])=>{T(x,835,a,'font-size:11.5px;color:#5f6368','c');T(x,848,b,'font-size:11.5px;color:#5f6368','c')});
+const LG=[[713,'#1a73e8','30 DAYS','30.2K',742],[761,'#9334e6','7 DAYS','10.4K',793],[813,'#4a148c','1 DAY','2.6K',846]];
+LG.forEach(([y,c,l,v,vy],i)=>{B(806,y-3,7,7,c,'border-radius:50%');T(821,y,l,'font-size:11px;color:#3c4043;letter-spacing:.3px');T(828,vy,v,'font-size:22px;font-weight:500','c')});
+
+/* card D */
+T(937,674,'User activity by cohort','font-size:15.5px');PILL(1419,661);
+const WX=[1097,1167,1235,1304,1373,1446];
+WX.forEach((x,i)=>{T(x,709,'Week '+i,'font-size:11.5px;color:#3c4043','c');T(x,731,['100%','8.9%','5.1%','3.4%','2.1%','1.4%'][i],'font-size:11.5px;font-weight:700','c')});
+T(938,731,'All Users','font-size:11.5px;font-weight:700');
+const CX=[[1065,66],[1133,67],[1202,66],[1270,68],[1340,67],[1409,69]];
+const D='#0b57d0';
+const HM=[[D,'#3b82f6','#8ab4f8','#aecbfa','#c6dafc','#d2e3fc'],[D,'#4285f4','#8ab4f8','#c6dafc','#e8f0fe',null],[D,'#5b95f5','#aecbfa','#d2e3fc','#e8f0fe',null],[D,'#8ab4f8','#c6dafc','#e8f0fe',null,null],['#1a73e8','#aecbfa','#e8f0fe',null,null,null],['#4285f4','#d2e3fc',null,null,null,null]];
+['Jul 26 - Aug 1','Aug 2 - Aug 8','Aug 9 - Aug 15','Aug 16 - Aug 22','Aug 23 - Aug 29','Aug 30 - Sep 5'].forEach((l,i)=>{
+ const y=752+i*20;T(940,y,l,'font-size:11.5px;color:#3c4043');
+ HM[i].forEach((c,j)=>{if(c)B(CX[j][0],y-9,CX[j][1],19,c)});
+});
+
+const fit=()=>{const k=Math.min(1,innerWidth/1536)||1;S.style.transform='scale('+k+')';document.getElementById('w').style.height=864*k+'px'};
+addEventListener('resize',fit);fit();
+</script></body></html>
