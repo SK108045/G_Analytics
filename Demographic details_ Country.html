@@ -67,6 +67,10 @@ body{overflow-x:hidden;font-family:'Google Sans',Roboto,Arial,sans-serif;color:#
 .portal-nav{view-transition-name:portal-sidebar}
 ::view-transition-old(portal-sidebar),::view-transition-new(portal-sidebar){animation-duration:0s}
 
+
+/* GA-like content-height page ending */
+html,body{background:#f8fafd!important}
+#w{background:#f8fafd;padding-bottom:28px;box-sizing:border-box}
 </style></head>
 <body><div id="w"><div id="s"></div></div>
 <script>
@@ -157,7 +161,7 @@ D.forEach((r,i)=>{
 });
 B(598,207,1,623,'#dadce0');
 
-const fit=()=>{const k=(innerWidth/1536)||1;S.style.transform='scale('+k+')';document.getElementById('w').style.height=Math.max(innerHeight,864*k)+'px'};
+const fit=()=>{const k=(innerWidth/1536)||1;S.style.transform='scale('+k+')';document.getElementById('w').style.height=(864*k+28)+'px'};
 addEventListener('resize',fit);fit();
 
 /* preserve-design interaction layer */
