@@ -157,13 +157,12 @@ B(758,100,71,31,'#f8fafd','border:1px solid #dadce0;border-radius:16px;box-sizin
 B(768,106,20,20,'transparent','border:2px solid #188038;border-radius:50%;box-sizing:border-box');T(778,116,'&#10003;','font-size:12px;color:#188038;font-weight:700','c');
 T(810,116,'&#9662;','font-size:11px;color:#5f6368','c');
 B(839,101,29,29,'transparent','border:1.6px solid #c4c7c5;border-radius:50%');T(853,115,'+','color:#3c4043;font-size:21px','c');
-T(1043,115,'Last','font-size:12px;color:#5f6368');
-T(1080,116,'Last 90 days &nbsp;&nbsp;Aug 12 - Nov 9, 2026','font-size:15.5px;font-weight:700;background:#fff;padding:2px 0');
-B(1343,102,22,22,'transparent','border:2px solid #3c4043;border-radius:3px;box-sizing:border-box');
-T(1400,114,'&#8920;','font-size:0');
-[[1394,105],[1407,100],[1407,121]].forEach(([x,y])=>B(x-3,y-3,7,7,'#3c4043','border-radius:50%'));B(1396,106,11,1.6,'#3c4043','transform:rotate(-30deg);transform-origin:0 0');B(1396,106,11,1.6,'#3c4043','transform:rotate(35deg);transform-origin:0 0');
-T(1445,114,'&#8767;','font-size:28px;color:#3c4043','c');
-T(1502,114,'&#9998;','font-size:26px;color:#3c4043','c');
+B(1040,94,300,42,'#fff','border:1px solid #dadce0;border-radius:5px;box-sizing:border-box');
+T(1052,115,'Last 90 days &nbsp;&nbsp;Aug 12 - Nov 9, 2026','font-size:14px;font-weight:600;color:#202124');
+T(1322,115,'&#9662;','font-size:10px;color:#5f6368','c');
+B(1352,98,34,34,'transparent','border-radius:50%');I(1369,115,19,'M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7a3.27 3.27 0 0 0 0-1.39l7.05-4.11A3 3 0 1 0 15 5c0 .23.03.45.08.66L8.03 9.77a3 3 0 1 0 0 4.46l7.12 4.16c-.05.19-.07.39-.07.61a3 3 0 1 0 2.92-2.92z','#5f6368');
+B(1392,98,34,34,'transparent','border-radius:50%');I(1409,115,19,'M5 20h14v-2H5v2zm7-18-5.5 5.5 1.42 1.42L11 5.84V16h2V5.84l3.08 3.08L17.5 7.5 12 2z','#5f6368');
+B(1432,98,34,34,'transparent','border-radius:50%');I(1449,115,20,'M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z','#5f6368');
 
 /* controls */
 I(348,181,20,SR);T(372,180,'Search...','font-size:15px;color:#5f6368');
@@ -307,8 +306,10 @@ PortalNav.mount({"active":"demographics","top":77,"width":260,"maskWidth":307,"h
 
 UI.setExport(['Country','Users','New users','Engaged sessions','Engagement rate','Engaged sessions per user','Average engagement time'],D.map(r=>r.slice()),'demographic-details-country');
 UI.hit(205,28,195,42,()=>UI.property(210,66),'Property selector');
-UI.hit(1068,94,350,45,()=>UI.range(1040,140),'Change date range');
-UI.hit(1330,92,185,44,()=>UI.simpleMenu(1210,140),'Share and export');
+UI.hit(1040,94,300,42,()=>UI.range(1035,140),'Change date range');
+UI.hit(1352,98,34,34,()=>UI.share(),'Share report');
+UI.hit(1392,98,34,34,()=>UI.downloadCSV(),'Download CSV');
+UI.hit(1432,98,34,34,()=>UI.simpleMenu(1180,140),'More report actions');
 UI.hit(838,94,40,40,()=>UI.comparison(850,136,880,136),'Add comparison');
 UI.searchInput(450,12,783,52,'Try searching "how to set up Analytics"','#eceff1','17px');
 UI.input(333,158,260,45,'Search...',v=>UI.filterRows(v,D.map((r,i)=>[r[0],403+i*44.9])),'#fff','15px');
