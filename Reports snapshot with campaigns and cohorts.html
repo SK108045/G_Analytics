@@ -167,10 +167,12 @@ B(310,85,30,30,BLUE,'border-radius:50%');T(325,100,'A','color:#fff;font-size:16p
 B(349,86,28,28,'transparent','border:1.6px solid #c4c7c5;border-radius:50%');T(363,99,'+','color:#3c4043;font-size:21px','c');
 B(403,86,1,28,'#dadce0');
 T(425,99,'Reports snapshot','font-size:26px');B(425,113,188,0,'transparent','border-top:1.5px dotted #5f6368');
-B(1070,84,293,34,'#fff');T(1080,99,'Last 90 days &nbsp;&nbsp;Aug 12 - Nov 9, 2026','font-size:15px;font-weight:700');
-B(1379,90,21,19,'transparent','border:2px solid #3c4043;border-radius:3px;box-sizing:border-box');B(1388,90,2,19,'#3c4043');
-[[1420,100],[1434,92],[1434,108]].forEach(([x,y])=>B(x-3,y-3,7,7,'#3c4043','border-radius:50%'));
-T(1467,99,'&#8767;','font-size:28px;color:#3c4043','c');T(1510,99,'&#9998;','font-size:26px;color:#3c4043','c');
+B(1068,80,296,40,'#fff','border:1px solid #dadce0;border-radius:5px;box-sizing:border-box');
+T(1080,101,'Last 90 days &nbsp;&nbsp;Aug 12 - Nov 9, 2026','font-size:14px;font-weight:600;color:#202124');
+T(1346,101,'&#9662;','font-size:10px;color:#5f6368','c');
+B(1374,83,34,34,'transparent','border-radius:50%');I(1391,100,19,'M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7a3.27 3.27 0 0 0 0-1.39l7.05-4.11A3 3 0 1 0 15 5c0 .23.03.45.08.66L8.03 9.77a3 3 0 1 0 0 4.46l7.12 4.16c-.05.19-.07.39-.07.61a3 3 0 1 0 2.92-2.92z','#5f6368');
+B(1414,83,34,34,'transparent','border-radius:50%');I(1431,100,19,'M5 20h14v-2H5v2zm7-18-5.5 5.5 1.42 1.42L11 5.84V16h2V5.84l3.08 3.08L17.5 7.5 12 2z','#5f6368');
+B(1454,83,34,34,'transparent','border-radius:50%');I(1471,100,20,'M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z','#5f6368');
 
 /* section labels */
 T(311,157,'WHAT ARE YOUR TOP CAMPAIGNS?','','').className+=' up';
@@ -324,8 +326,10 @@ PortalNav.mount({"active":"campaigns","top":68,"width":260,"maskWidth":309,"heig
 
 UI.setExport(['Channel','Sessions'],[['Organic Search','26,331'],['Direct','9,441'],['Referral','3,149'],['Organic Social','1,430'],['Unassigned','706'],['Paid Search','455']],'campaigns-and-cohorts');
 UI.hit(190,25,175,40,()=>UI.property(195,60),'Property selector');
-UI.hit(1120,72,300,48,()=>UI.range(1060,122),'Change date range');
-UI.hit(1390,80,125,42,()=>UI.simpleMenu(1250,126),'Share and export');
+UI.hit(1068,80,296,40,()=>UI.range(1055,124),'Change date range');
+UI.hit(1374,83,34,34,()=>UI.share(),'Share report');
+UI.hit(1414,83,34,34,()=>UI.downloadCSV(),'Download CSV');
+UI.hit(1454,83,34,34,()=>UI.simpleMenu(1205,124),'More report actions');
 UI.hit(345,82,38,38,()=>UI.comparison(390,122,390,124),'Add comparison');
 UI.link(520,548,205,45,'Traffic acquisition.html','View traffic acquisition');
 UI.link(1335,548,150,45,'Demographic details_ Country.html','View countries');
