@@ -63,6 +63,12 @@ body{overflow-x:hidden;font-family:'Google Sans',Roboto,Arial,sans-serif;color:#
 @keyframes barGrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 
 
+/* final interaction polish */
+.hotspot:focus-visible,.real-input:focus-visible{outline:2px solid #1a73e8;outline-offset:2px}
+#s{animation:portalIn .16s ease-out}
+@keyframes portalIn{from{opacity:.82}to{opacity:1}}
+.ui-search-glyph{position:absolute;z-index:912;color:#5f6368;pointer-events:none}
+
 /* sidebar now lives in the same scaled canvas as the report */
 .portal-nav-mask,.portal-nav{translate:0 0!important}
 .portal-nav-mask{
@@ -244,7 +250,7 @@ const UI={
  hit(x,y,w,h,fn,title=''){const b=document.createElement('button');b.className='hotspot';b.style.cssText=`left:${x}px;top:${y}px;width:${w}px;height:${h}px`;b.title=title;b.setAttribute('aria-label',title||'control');b.onclick=e=>{e.stopPropagation();fn(e)};S.appendChild(b);return b},
  link(x,y,w,h,url,title=''){return this.hit(x,y,w,h,()=>location.href=url,title)},
  closePop(){S.querySelectorAll('.ui-pop,.ui-search-results').forEach(p=>p.remove())},
- input(x,y,w,h,placeholder,onInput,bg='#fff',fs='14px'){const i=document.createElement('input');i.className='real-input';i.type='search';i.placeholder=placeholder;i.style.cssText=`left:${x}px;top:${y}px;width:${w}px;height:${h}px;background:${bg};font-size:${fs};padding:0 10px;border-radius:4px`;i.addEventListener('input',()=>onInput?.(i.value));S.appendChild(i);return i},
+ input(x,y,w,h,placeholder,onInput,bg='#fff',fs='14px'){const i=document.createElement('input');i.className='real-input';i.type='search';i.placeholder=placeholder;i.style.cssText=`left:${x}px;top:${y}px;width:${w}px;height:${h}px;background:${bg};font-size:${fs};padding:0 10px 0 38px;border-radius:4px`;i.addEventListener('input',()=>onInput?.(i.value));S.appendChild(i);const g=document.createElement('div');g.className='ui-search-glyph';g.style.cssText=`left:${x+12}px;top:${y+(h-20)/2}px;width:20px;height:20px`;g.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20"><path fill="#5f6368" d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 1 0 14 15.5l.27.28h.79l5 4.99L20.49 19l-4.99-5zM9.5 14A4.5 4.5 0 1 1 9.5 5a4.5 4.5 0 0 1 0 9z"/></svg>';S.appendChild(g);return i},
  pop(x,y,items,title='',sub='',width=270){this.closePop();const p=document.createElement('div');p.className='ui-pop';p.style.cssText=`left:${x}px;top:${y}px;width:${width}px`;if(title){const h=document.createElement('div');h.className='ui-pop-title';h.textContent=title;p.appendChild(h)}if(sub){const s=document.createElement('div');s.className='ui-pop-sub';s.textContent=sub;p.appendChild(s)}items.forEach(it=>{if(it==='---'){const d=document.createElement('div');d.className='ui-pop-divider';p.appendChild(d);return}const o=Array.isArray(it)?{label:it[0],action:it[1]}:it;const b=document.createElement(o.href?'a':'button');if(o.href){b.href=o.href;b.className='ui-menu-link'}if(o.selected)b.classList.add('selected');if(o.disabled)b.disabled=true;b.innerHTML=(o.icon?'<span class="ui-menu-icon">'+o.icon+'</span>':'')+'<span>'+o.label+'</span>';if(o.action)b.onclick=e=>{e.stopPropagation();o.action();if(o.keep!==true)p.remove()};p.appendChild(b)});S.appendChild(p);requestAnimationFrame(()=>p.classList.add('open'));return p},
  toast(msg){let t=S.querySelector('.ui-toast');if(!t){t=document.createElement('div');t.className='ui-toast';S.appendChild(t)}t.textContent=msg;t.classList.add('show');clearTimeout(UI.tt);UI.tt=setTimeout(()=>t.classList.remove('show'),1800)},
  modal(title,html,actions=[]){S.querySelector('.ui-modal-backdrop')?.remove();const bg=document.createElement('div');bg.className='ui-modal-backdrop';bg.innerHTML='<div class="ui-modal"><div class="ui-modal-head"><span>'+title+'</span><button class="ui-modal-close" aria-label="Close">×</button></div><div class="ui-modal-body">'+html+'</div><div class="ui-modal-foot"></div></div>';const close=()=>bg.remove();bg.querySelector('.ui-modal-close').onclick=close;bg.addEventListener('click',e=>{if(e.target===bg)close()});const foot=bg.querySelector('.ui-modal-foot');actions.forEach(a=>{const b=document.createElement('button');b.className='ui-btn'+(a.primary?' primary':'');b.textContent=a.label;b.onclick=()=>a.action(close,bg);foot.appendChild(b)});S.appendChild(bg);return bg},
@@ -274,6 +280,7 @@ const UI={
  help(x,y){this.pop(x,y,[{label:'Search reports from the top search bar',icon:'⌕',disabled:true},{label:'Use the date picker to change the range',icon:'▦',disabled:true},{label:'Use Share & export for CSV/PDF',icon:'⇩',disabled:true}], 'Quick help','Controls in this portal follow GA report patterns.',300)},
  profile(x,y){this.pop(x,y,[{label:'Rieng254 Analytics',icon:'R',disabled:true},{label:'Property: rieng254.com',icon:'◆',disabled:true},'---',{label:'Copy current report link',icon:'⧉',action:()=>this.share()},{label:'Reports snapshot',icon:'⌂',href:'Analytics _ Reports snapshot.html'}],'Account','Rieng254 reporting portal',285)},
  notifications(x,y){this.pop(x,y,[{label:'No report alerts',icon:'✓',disabled:true}], 'Notifications','The static portal has no live alert feed.',260)},
+ property(x,y){this.pop(x,y,[{label:'rieng254.com',icon:'✓',selected:true,disabled:true},'---',{label:'Copy property name',icon:'⧉',action:()=>navigator.clipboard?.writeText('rieng254.com').then(()=>this.toast('Property name copied'))}], 'Analytics property','All accounts › rieng254.com',270)},
  rowsMenu(x,y,yHint,loaded){const choices=[10,25,50];this.pop(x,y,choices.map(n=>({label:String(n)+' rows per page',selected:n===10,action:()=>{const nums=[...S.querySelectorAll('.t')].filter(e=>/^\\d+$/.test(e.textContent.trim())&&Math.abs(parseFloat(e.style.top)-yHint)<25);if(nums[0])nums[0].textContent=n;this.toast('Rows per page set to '+n+(loaded<n?' ('+loaded+' rows loaded in this snapshot)':''))}})),'Rows per page','Display preference for this report',250)},
  snapshotNext(){this.toast('This static snapshot contains the rows currently shown')},
  pagesModal(){const rows=[['Rieng254 – Home','249K'],['Rieng254 – Trending','161K'],['Rieng254 – Videos','131K'],['Rieng254 – Shows','73K'],['Rieng254 – Albums & Songs','57K'],['Rieng254 – DJ Mix Sales','42K'],['Rieng254 – BoB Pre-order','29K']];this.modal('Pages and screens','<div style="display:grid;grid-template-columns:1fr auto;gap:9px 18px">'+rows.map(r=>'<div>'+r[0]+'</div><div style="font-weight:500">'+r[1]+'</div>').join('')+'</div>',[{label:'Close',action:c=>c()}])},
@@ -337,6 +344,7 @@ PortalNav.mount({"active":"acquisition","top":68,"width":260,"maskWidth":372,"he
 
 const trafficExport=[['Organic Search','49,500','80,100','66,000','1m 21s','1.33','19.4'],['Direct','39,900','64,400','51,400','1m 15s','1.29','17.9'],['Organic Social','19,000','30,000','23,700','1m 03s','1.24','16.2'],['Referral','11,800','18,800','15,100','1m 27s','1.28','20.1'],['Paid Search','6,200','10,900','8,800','0m 59s','1.42','14.8'],['Unassigned','6,700','11,800','9,500','0m 41s','1.01','11.2']];
 UI.setExport(['Session default channel group','Users','Sessions','Engaged sessions','Average engagement time per session','Engaged sessions per user','Events per session'],trafficExport,'traffic-acquisition');
+UI.hit(188,20,175,42,()=>UI.property(195,60),'Property selector');
 UI.hit(1110,74,300,54,()=>UI.range(1080,130),'Change date range');
 UI.hit(1380,86,120,42,()=>UI.simpleMenu(1210,132),'Share and export');
 UI.hit(1060,86,44,42,()=>UI.comparison(1010,132,970,132),'Add comparison');
