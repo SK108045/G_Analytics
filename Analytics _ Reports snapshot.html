@@ -181,7 +181,7 @@ B(24,780,17,21,'transparent','border:2.5px solid #3c4043;border-radius:3px');T(6
 T(21,848,'&#9881;','font-size:27px;color:#5f6368;transform:translateY(-52%)');T(65,848,'Admin','font-size:15px;font-weight:500');
 
 /* title row */
-B(274,172,28,28,BLUE,'border-radius:50%');T(288,186,'A','color:#fff;font-size:16px;transform:translate(-50%,-50%)');
+B(274,172,28,28,BLUE,'border-radius:50%');T(288,186,'R','color:#fff;font-size:16px;transform:translate(-50%,-50%)');
 B(312,176,21,21,'transparent','border:1.6px solid #c4c7c5;border-radius:50%');T(322,186,'+','color:#3c4043;font-size:20px;transform:translate(-50%,-52%)');
 T(353,187,'Reports snapshot','font-size:22px;color:#202124');
 B(1134,157,300,48,'#fff','border:1px solid #dadce0;border-radius:5px;box-sizing:border-box');
@@ -331,7 +331,8 @@ const PortalNav={
     [...S.children].forEach(el=>{
       if(el.classList.contains('portal-nav')||el.classList.contains('portal-nav-mask'))return;
       const x=parseFloat(el.style.left),y=parseFloat(el.style.top);
-      if(!Number.isFinite(x)||!Number.isFinite(y)||y<opts.top-4)return;
+      const legacyHideTop=Number.isFinite(opts.legacyHideTop)?opts.legacyHideTop:opts.top-4;
+      if(!Number.isFinite(x)||!Number.isFinite(y)||y<legacyHideTop)return;
       const w=el.offsetWidth||parseFloat(el.style.width)||0;
       if(x+w<=opts.legacyWidth+8)el.style.visibility='hidden';
     });
@@ -410,7 +411,7 @@ const PortalLayout={
   }
 };
 
-PortalNav.mount({"active":"reports","top":76,"width":271,"maskWidth":273,"height":742,"legacyWidth":252});
+PortalNav.mount({"active":"reports","top":76,"width":271,"maskWidth":273,"height":742,"legacyWidth":252,"legacyHideTop":160});
 
 
 UI.setExport(['Metric','Value','Change'],[['Total users','445K','24.3%'],['New users','430K','26.1%'],['Engaged sessions','1.12M','27.8%'],['Average engagement time','1m 38s','17.9%']],'reports-snapshot');
