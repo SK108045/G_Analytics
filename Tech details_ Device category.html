@@ -244,7 +244,7 @@ const PortalNav={
 PortalNav.mount({"active":"tech","top":60,"width":260,"maskWidth":309,"height":834});
 
 
-addEventListener('resize',()=>UI.hit(1138,82,300,38,()=>UI.range(1135,122),'Change date range');
+UI.hit(1138,82,300,38,()=>UI.range(1135,122),'Change date range');
 UI.hit(1430,78,95,42,()=>UI.simpleMenu(1320,122),'Report actions');
 UI.input(392,578,230,40,'Search...',v=>UI.filterRows(v,[["mobile",775],["tablet",812],["desktop",849]]),'#fff','13.5px');
 UI.hit(1335,577,75,38,()=>UI.toast('Rows per page selector'),'Rows per page');
