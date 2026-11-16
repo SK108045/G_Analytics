@@ -9,10 +9,33 @@ html,body{margin:0;background:#f4f6f8}
 body{overflow-x:hidden;font-family:'Google Sans',Roboto,Arial,sans-serif;color:#202124}
 #w{width:100%;overflow:hidden}
 #s{position:relative;width:1600px;height:818px;transform-origin:0 0;background:#f4f6f8;overflow:hidden}
-#s>*{translate:0 -82px}
+#s>*:not(.app-nav){translate:0 -82px}
 .t{position:absolute;transform:translateY(-50%);white-space:nowrap}
 .b{position:absolute}
 .c{position:absolute;background:#fff;border-radius:8px;box-shadow:0 1px 2px rgba(60,64,67,.18)}
+
+/* interactive app polish */
+*,*::before,*::after{box-sizing:border-box}
+html,body{width:100%;min-height:100%;margin:0}
+body{min-height:100vh;overflow-x:hidden;overflow-y:auto;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+#w{width:100%;min-height:100vh;overflow:hidden;background:inherit}
+#s{will-change:transform}
+#s svg{shape-rendering:geometricPrecision}
+#s svg path,#s svg line{vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round}
+.app-nav{position:absolute;left:0;z-index:9999;background:#f8fafd;border-right:1px solid #e3e5e8;padding:16px 10px 18px;overflow:hidden;font-family:'Google Sans',Roboto,Arial,sans-serif}
+.app-nav *{box-sizing:border-box}
+.app-nav__title{padding:3px 14px 10px;font-size:12px;font-weight:500;letter-spacing:.45px;text-transform:uppercase;color:#80868b}
+.app-nav__group{margin:0 0 8px}
+.app-nav__group-label{padding:13px 14px 6px;font-size:12px;color:#80868b}
+.app-nav__link{display:flex;align-items:center;gap:12px;width:100%;min-height:40px;padding:9px 14px;border-radius:20px;color:#3c4043;text-decoration:none;font-size:14.5px;font-weight:500;line-height:20px;transition:background .14s ease,color .14s ease,transform .14s ease}
+.app-nav__link:hover{background:#e8f0fe;color:#174ea6}
+.app-nav__link:active{transform:scale(.985)}
+.app-nav__link.active{background:#d3e3fd;color:#0b57d0}
+.app-nav__icon{width:22px;height:22px;display:grid;place-items:center;flex:0 0 22px;border-radius:50%;font-size:14px;color:#5f6368}
+.app-nav__link.active .app-nav__icon{color:#0b57d0}
+.app-nav__divider{height:1px;margin:10px 12px;background:#e3e5e8}
+.app-nav__hint{padding:10px 14px 0;color:#9aa0a6;font-size:11.5px;line-height:16px}
+
 </style></head>
 <body><div id="w"><div id="s">
 
@@ -161,5 +184,49 @@ T(1391,866,'View pages and','font-size:15px;color:#1a73e8;font-weight:500');
 /* scale to fit width */
 const fit=()=>{const k=Math.min(1,innerWidth/1600)||1;S.style.transform='scale('+k+')';document.getElementById('w').style.height=818*k+'px'};
 addEventListener('resize',fit);fit();
+
+/* real clickable navigation */
+(()=>{
+  const pages=[
+    ['Reports','Analytics _ Reports snapshot.html','▦'],
+    ['Campaigns & cohorts','Reports snapshot with campaigns and cohorts.html','◫'],
+    ['Traffic acquisition','Traffic acquisition.html','↗'],
+    ['Demographic details','Demographic details_ Country.html','◉'],
+    ['Tech details','Tech details_ Device category.html','▣']
+  ];
+  const current=decodeURIComponent((location.pathname.split('/').pop()||'').replace(/\\+/g,' '));
+  const nav=document.createElement('nav');
+  nav.className='app-nav';
+  nav.setAttribute('aria-label','Analytics pages');
+  nav.style.width='252px';
+  nav.style.top='76px';
+  nav.style.height='742px';
+  nav.innerHTML='<div class="app-nav__title">Analytics reports</div><div class="app-nav__group-label">Reports</div>';
+  pages.forEach((p,i)=>{
+    if(i===2) nav.insertAdjacentHTML('beforeend','<div class="app-nav__divider"></div><div class="app-nav__group-label">Acquisition</div>');
+    if(i===3) nav.insertAdjacentHTML('beforeend','<div class="app-nav__divider"></div><div class="app-nav__group-label">User</div>');
+    const a=document.createElement('a');
+    a.className='app-nav__link'+(current===p[1]?' active':'');
+    a.href=p[1];
+    a.title='Open '+p[0];
+    a.innerHTML='<span class="app-nav__icon">'+p[2]+'</span><span>'+p[0]+'</span>';
+    nav.appendChild(a);
+  });
+  nav.insertAdjacentHTML('beforeend','<div class="app-nav__hint">Use this menu to move between report pages.</div>');
+  S.appendChild(nav);
+})();
+
+/* full-width responsive scaling */
+const appFit=()=>{
+  const k=(window.innerWidth/1600)||1;
+  S.style.transform='scale('+k+')';
+  const scaledHeight=818*k;
+  const w=document.getElementById('w');
+  w.style.height=Math.max(window.innerHeight,scaledHeight)+'px';
+  w.style.minHeight='100vh';
+};
+addEventListener('resize',appFit);
+appFit();
+
 </script>
 </div></div></body></html>
