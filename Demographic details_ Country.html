@@ -225,7 +225,7 @@ const PortalNav={
 PortalNav.mount({"active":"demographics","top":77,"width":260,"maskWidth":263,"height":787});
 
 
-addEventListener('resize',()=>UI.hit(1068,94,350,45,()=>UI.range(1080,132),'Change date range');
+UI.hit(1068,94,350,45,()=>UI.range(1080,132),'Change date range');
 UI.hit(1330,92,185,44,()=>UI.simpleMenu(1280,138),'Report actions');
 UI.hit(838,94,40,40,()=>UI.toast('Comparison added'),'Add comparison');
 UI.input(333,158,260,45,'Search...',v=>UI.filterRows(v,[["Kenya",403],["Uganda",448],["Tanzania",493],["Rwanda",538],["Ethiopia",583],["South Sudan",628],["Burundi",673],["Somalia",718],["Nigeria",763],["South Africa",808]]),'#fff','15px');
