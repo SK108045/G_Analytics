@@ -314,6 +314,14 @@ const PortalNav={
     S.querySelector('.portal-nav')?.remove();
     S.querySelector('.portal-nav-mask')?.remove();
 
+    [...S.children].forEach(el=>{
+      if(el.classList.contains('portal-nav')||el.classList.contains('portal-nav-mask'))return;
+      const x=parseFloat(el.style.left),y=parseFloat(el.style.top);
+      if(!Number.isFinite(x)||!Number.isFinite(y)||y<opts.top-4)return;
+      const w=el.offsetWidth||parseFloat(el.style.width)||0;
+      if(x+w<=opts.legacyWidth+8)el.style.visibility='hidden';
+    });
+
     const mask=document.createElement('div');
     mask.className='portal-nav-mask';
     mask.style.cssText='top:'+opts.top+'px;width:'+opts.maskWidth+'px;height:'+opts.height+'px';
@@ -340,7 +348,28 @@ const PortalNav={
   }
 };
 
-PortalNav.mount({"active":"acquisition","top":68,"width":260,"maskWidth":372,"height":796});
+const PortalLayout={
+  align(startX,targetX,minY){
+    const dx=targetX-startX;
+    if(!dx)return;
+    [...S.children].forEach(el=>{
+      if(el.classList.contains('portal-nav')||el.classList.contains('portal-nav-mask'))return;
+      const x=parseFloat(el.style.left),y=parseFloat(el.style.top);
+      if(Number.isFinite(x)&&Number.isFinite(y)&&y>=minY&&x>=startX-4){
+        el.style.left=(x+dx)+'px';
+        return;
+      }
+      if(el.tagName==='svg'&&Number.isFinite(x)&&x===0){
+        try{
+          const b=el.getBBox();
+          if(b.x>=startX-24&&b.y>=minY-8)el.style.left=dx+'px';
+        }catch{}
+      }
+    });
+  }
+};
+
+PortalNav.mount({"active":"acquisition","top":68,"width":260,"maskWidth":262,"height":796,"legacyWidth":322});
 
 
 const trafficExport=[['Organic Search','49,500','80,100','66,000','1m 21s','1.33','19.4'],['Direct','39,900','64,400','51,400','1m 15s','1.29','17.9'],['Organic Social','19,000','30,000','23,700','1m 03s','1.24','16.2'],['Referral','11,800','18,800','15,100','1m 27s','1.28','20.1'],['Paid Search','6,200','10,900','8,800','0m 59s','1.42','14.8'],['Unassigned','6,700','11,800','9,500','0m 41s','1.01','11.2']];
@@ -362,6 +391,7 @@ UI.hit(1474,760,54,54,()=>UI.feedback(),'Send feedback');
 UI.chartHover(398,155,602,193,8000,['Organic Search','Direct','Organic Social','Referral','Paid Search','Unassigned']);
 UI.restoreDate();UI.restoreComparison(970,132);
 
+PortalLayout.align(372,262,70);
 setTimeout(()=>UI.animate(),120);
 
 </script></body></html>
