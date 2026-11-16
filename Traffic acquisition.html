@@ -32,31 +32,35 @@ body{overflow-x:hidden;font-family:'Google Sans',Roboto,Arial,sans-serif;color:#
 
 
 
-/* one shared visible left navbar across every analytics page */
-#s>.global-nav{translate:0 0!important}
-.global-nav{
-  position:absolute;left:0;z-index:2000;background:#f8fafd;border-right:1px solid #e3e5e8;
-  overflow:hidden;font-family:'Google Sans',Roboto,Arial,sans-serif;color:#202124
+
+/* portal-level navbar: identical physical size on every page */
+.portal-nav{
+  position:fixed;left:0;top:68px;bottom:0;width:265px;z-index:5000;
+  background:#f8fafd;border-right:1px solid #e3e5e8;
+  font-family:'Google Sans',Roboto,Arial,sans-serif;color:#202124;
+  box-sizing:border-box;padding:12px 10px 16px;overflow:auto;
 }
-.global-nav *{box-sizing:border-box}
-.global-nav-inner{height:100%;padding:10px 10px 14px;display:flex;flex-direction:column}
-.g-nav-item,.g-nav-section{
-  width:100%;border:0;background:transparent;color:#202124;text-decoration:none;
-  display:flex;align-items:center;gap:12px;min-height:40px;padding:8px 12px;border-radius:20px;
-  font-size:15px;font-weight:500;line-height:20px;text-align:left;cursor:pointer
+.portal-nav *{box-sizing:border-box}
+.portal-nav-title{
+  padding:4px 12px 10px;font-size:12px;color:#5f6368;
+  text-transform:uppercase;letter-spacing:.45px;font-weight:500
 }
-.g-nav-item:hover,.g-nav-section:hover{background:#eef3fb}
-.g-nav-item.active{background:#d3e3fd;color:#0b57d0}
-.g-nav-icon{width:22px;min-width:22px;text-align:center;color:#5f6368;font-size:15px}
-.g-nav-item.active .g-nav-icon{color:#0b57d0}
-.g-nav-section{font-weight:400;color:#5f6368;cursor:pointer}
-.g-nav-caret{margin-left:auto;color:#5f6368;font-size:13px;transition:transform .15s ease}
-.g-nav-group.collapsed .g-nav-caret{transform:rotate(-90deg)}
-.g-nav-group.collapsed .g-nav-children{display:none}
-.g-nav-child{padding-left:27px}
-.g-nav-divider{height:1px;background:#dadce0;margin:7px 4px}
-.g-nav-spacer{flex:1;min-height:18px}
-.g-nav-bottom{border-top:1px solid #dadce0;padding-top:8px}
+.portal-nav a{
+  display:flex;align-items:center;gap:12px;width:100%;min-height:42px;
+  padding:9px 12px;margin:2px 0;border-radius:21px;text-decoration:none;
+  color:#202124;font-size:15px;font-weight:500;line-height:20px;
+  transition:background .12s ease,color .12s ease;
+}
+.portal-nav a:hover{background:#eef3fb}
+.portal-nav a.active{background:#d3e3fd;color:#0b57d0}
+.portal-nav .picon{
+  width:22px;min-width:22px;text-align:center;color:#5f6368;font-size:15px
+}
+.portal-nav a.active .picon{color:#0b57d0}
+.portal-nav .pdivider{height:1px;background:#dadce0;margin:9px 5px}
+@media(max-width:700px){
+  .portal-nav{width:220px}
+}
 
 </style></head>
 <body><div id="w"><div id="s"></div></div>
@@ -203,8 +207,8 @@ const UI={
 };
 document.addEventListener('click',()=>document.querySelectorAll('.ui-pop').forEach(p=>p.classList.remove('open')));
 
-/* shared visible navbar */
-const GlobalNav={
+/* one portal navbar shared visually and behaviorally by every page */
+const PortalNav={
   routes:{
     reports:'Analytics _ Reports snapshot.html',
     campaigns:'Reports snapshot with campaigns and cohorts.html',
@@ -212,60 +216,48 @@ const GlobalNav={
     demographics:'Demographic details_ Country.html',
     tech:'Tech details_ Device category.html'
   },
-  go(key,label){
-    const url=this.routes[key];
-    if(url){const current=decodeURIComponent(location.pathname.split('/').pop()||'');if(current===url){UI.toast(label+' is already open');return}location.href=url}
-    else UI.toast(label+' section opened');
+  labels:{
+    reports:'Reports snapshot',
+    campaigns:'Campaigns & cohorts',
+    acquisition:'Traffic acquisition',
+    demographics:'Demographics',
+    tech:'Tech details'
   },
-  mount(opts){
-    S.querySelector('.global-nav')?.remove();
-    const nav=document.createElement('aside');
-    nav.className='global-nav';
-    nav.setAttribute('aria-label','Analytics navigation');
-    nav.style.cssText='top:'+opts.top+'px;width:'+opts.width+'px;height:'+opts.height+'px';
-    const active=opts.active;
+  icons:{
+    reports:'⌂',
+    campaigns:'◫',
+    acquisition:'↗',
+    demographics:'◉',
+    tech:'▣'
+  },
+  mount(active){
+    document.querySelector('.portal-nav')?.remove();
+    const nav=document.createElement('nav');
+    nav.className='portal-nav';
+    nav.setAttribute('aria-label','Analytics portal navigation');
     nav.innerHTML=
-      '<div class="global-nav-inner">'+
-        '<a href="'+this.routes.reports+'" class="g-nav-item '+(active==='reports'?'active':'')+'" data-key="reports"><span class="g-nav-icon">⌂</span><span>Reports snapshot</span></a>'+'<a href="'+this.routes.campaigns+'" class="g-nav-item '+(active==='campaigns'?'active':'')+'" data-key="campaigns"><span class="g-nav-icon">◫</span><span>Campaigns &amp; cohorts</span></a>'+
-        '<button class="g-nav-item" data-toast="Realtime"><span class="g-nav-icon">◴</span><span>Realtime</span></button>'+
-        '<div class="g-nav-divider"></div>'+
-        '<div class="g-nav-group" data-group="life">'+
-          '<button class="g-nav-section"><span>Life cycle</span><span class="g-nav-caret">⌃</span></button>'+
-          '<div class="g-nav-children">'+
-            '<a href="'+this.routes.acquisition+'" class="g-nav-item g-nav-child '+(active==='acquisition'?'active':'')+'" data-key="acquisition"><span class="g-nav-icon">▶</span><span>Acquisition</span></a>'+
-            '<button class="g-nav-item g-nav-child" data-toast="Engagement"><span class="g-nav-icon">▶</span><span>Engagement</span></button>'+
-            '<button class="g-nav-item g-nav-child" data-toast="Monetization"><span class="g-nav-icon">⊙</span><span>Monetization</span></button>'+
-            '<button class="g-nav-item g-nav-child" data-toast="Retention"><span class="g-nav-icon">◇</span><span>Retention</span></button>'+
-          '</div>'+
-        '</div>'+
-        '<div class="g-nav-divider"></div>'+
-        '<div class="g-nav-group" data-group="user">'+
-          '<button class="g-nav-section"><span>User</span><span class="g-nav-caret">⌃</span></button>'+
-          '<div class="g-nav-children">'+
-            '<a href="'+this.routes.demographics+'" class="g-nav-item g-nav-child '+(active==='demographics'?'active':'')+'" data-key="demographics"><span class="g-nav-icon">◉</span><span>Demographics</span></a>'+
-            '<a href="'+this.routes.tech+'" class="g-nav-item g-nav-child '+(active==='tech'?'active':'')+'" data-key="tech"><span class="g-nav-icon">▣</span><span>Tech</span></a>'+
-          '</div>'+
-        '</div>'+
-        '<div class="g-nav-spacer"></div>'+
-        '<div class="g-nav-bottom">'+
-          '<button class="g-nav-item" data-toast="Library"><span class="g-nav-icon">▭</span><span>Library</span></button>'+
-          '<button class="g-nav-item" data-toast="Admin"><span class="g-nav-icon">⚙</span><span>Admin</span></button>'+
-        '</div>'+
-      '</div>';
-    S.appendChild(nav);
+      '<div class="portal-nav-title">Reports</div>'+
+      Object.keys(this.routes).map(key=>
+        '<a href="'+this.routes[key]+'" class="'+(active===key?'active':'')+'" data-key="'+key+'"'+(active===key?' aria-current="page"':'')+'>'+
+          '<span class="picon">'+this.icons[key]+'</span>'+
+          '<span>'+this.labels[key]+'</span>'+
+        '</a>'
+      ).join('');
+    document.body.appendChild(nav);
 
-    nav.querySelectorAll('.g-nav-section').forEach(b=>b.addEventListener('click',()=>{
-      b.closest('.g-nav-group').classList.toggle('collapsed');
-    }));
-    nav.querySelectorAll('[data-toast]').forEach(b=>b.addEventListener('click',()=>UI.toast(b.dataset.toast+' opened')));
-    nav.querySelectorAll('a[data-key]').forEach(a=>a.addEventListener('click',e=>{
+    nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',e=>{
       const current=decodeURIComponent(location.pathname.split('/').pop()||'');
-      if(current===a.getAttribute('href')){e.preventDefault();UI.toast(a.textContent.trim()+' is already open')}
+      if(current===a.getAttribute('href')){
+        e.preventDefault();
+      }else{
+        sessionStorage.setItem('analyticsPortalNav','1');
+      }
     }));
   }
 };
 
-GlobalNav.mount({"top":68,"width":322,"height":796,"active":"acquisition"});
+PortalNav.mount('acquisition');
+
 
 
 
