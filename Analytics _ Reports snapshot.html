@@ -328,6 +328,14 @@ const PortalNav={
     S.querySelector('.portal-nav')?.remove();
     S.querySelector('.portal-nav-mask')?.remove();
 
+    [...S.children].forEach(el=>{
+      if(el.classList.contains('portal-nav')||el.classList.contains('portal-nav-mask'))return;
+      const x=parseFloat(el.style.left),y=parseFloat(el.style.top);
+      if(!Number.isFinite(x)||!Number.isFinite(y)||y<opts.top-4)return;
+      const w=el.offsetWidth||parseFloat(el.style.width)||0;
+      if(x+w<=opts.legacyWidth+8)el.style.visibility='hidden';
+    });
+
     const mask=document.createElement('div');
     mask.className='portal-nav-mask';
     mask.style.cssText='top:'+opts.top+'px;width:'+opts.maskWidth+'px;height:'+opts.height+'px';
@@ -354,7 +362,28 @@ const PortalNav={
   }
 };
 
-PortalNav.mount({"active":"reports","top":76,"width":271,"maskWidth":273,"height":742});
+const PortalLayout={
+  align(startX,targetX,minY){
+    const dx=targetX-startX;
+    if(!dx)return;
+    [...S.children].forEach(el=>{
+      if(el.classList.contains('portal-nav')||el.classList.contains('portal-nav-mask'))return;
+      const x=parseFloat(el.style.left),y=parseFloat(el.style.top);
+      if(Number.isFinite(x)&&Number.isFinite(y)&&y>=minY&&x>=startX-4){
+        el.style.left=(x+dx)+'px';
+        return;
+      }
+      if(el.tagName==='svg'&&Number.isFinite(x)&&x===0){
+        try{
+          const b=el.getBBox();
+          if(b.x>=startX-24&&b.y>=minY-8)el.style.left=dx+'px';
+        }catch{}
+      }
+    });
+  }
+};
+
+PortalNav.mount({"active":"reports","top":76,"width":271,"maskWidth":273,"height":742,"legacyWidth":252});
 
 
 UI.setExport(['Metric','Value','Change'],[['Total users','445K','24.3%'],['New users','430K','26.1%'],['Engaged sessions','1.12M','27.8%'],['Average engagement time','1m 38s','17.9%']],'reports-snapshot');
@@ -380,6 +409,7 @@ UI.hit(1540,595,40,40,()=>UI.pagesModal(),'Open pages and screens');
 UI.chartHover(297,360,696,132,30000,['Last 90 days','Preceding period']);
 UI.restoreDate();UI.restoreComparison(350,210);
 
+PortalLayout.align(273,273,145);
 setTimeout(()=>UI.animate(),120);
 
 </script>
