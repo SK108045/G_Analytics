@@ -163,7 +163,7 @@ B(23,801,18,14,'transparent','border:2px solid #3c4043;border-radius:2px;box-siz
 B(15,850,235,1,'#dadce0');
 
 /* title row */
-B(310,85,30,30,BLUE,'border-radius:50%');T(325,100,'A','color:#fff;font-size:16px','c');
+B(310,85,30,30,BLUE,'border-radius:50%');T(325,100,'R','color:#fff;font-size:16px','c');
 B(349,86,28,28,'transparent','border:1.6px solid #c4c7c5;border-radius:50%');T(363,99,'+','color:#3c4043;font-size:21px','c');
 B(403,86,1,28,'#dadce0');
 T(425,99,'Reports snapshot','font-size:26px');B(425,113,188,0,'transparent','border-top:1.5px dotted #5f6368');
@@ -298,7 +298,8 @@ const PortalNav={
     [...S.children].forEach(el=>{
       if(el.classList.contains('portal-nav')||el.classList.contains('portal-nav-mask'))return;
       const x=parseFloat(el.style.left),y=parseFloat(el.style.top);
-      if(!Number.isFinite(x)||!Number.isFinite(y)||y<opts.top-4)return;
+      const legacyHideTop=Number.isFinite(opts.legacyHideTop)?opts.legacyHideTop:opts.top-4;
+      if(!Number.isFinite(x)||!Number.isFinite(y)||y<legacyHideTop)return;
       const w=el.offsetWidth||parseFloat(el.style.width)||0;
       if(x+w<=opts.legacyWidth+8)el.style.visibility='hidden';
     });
