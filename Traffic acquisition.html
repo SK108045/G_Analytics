@@ -158,7 +158,7 @@ T(81,594,'User','font-size:15px;color:#5f6368');T(298,594,'&#8963;','font-size:1
 B(75,795,243,1,'#dadce0');T(293,824,'&#8249;','font-size:28px;color:#3c4043','c');
 
 /* title row */
-B(374,89,26,26,BLUE,'border-radius:50%');T(387,102,'A','color:#fff;font-size:15px','c');
+B(374,89,26,26,BLUE,'border-radius:50%');T(387,102,'R','color:#fff;font-size:15px','c');
 B(409,91,25,25,'transparent','border:1.6px solid #c4c7c5;border-radius:50%');T(421,103,'+','color:#3c4043;font-size:20px','c');
 B(459,90,1,25,'#dadce0');
 T(482,106,'Traffic acquisition: Session default channel group','font-size:24px');
@@ -317,7 +317,8 @@ const PortalNav={
     [...S.children].forEach(el=>{
       if(el.classList.contains('portal-nav')||el.classList.contains('portal-nav-mask'))return;
       const x=parseFloat(el.style.left),y=parseFloat(el.style.top);
-      if(!Number.isFinite(x)||!Number.isFinite(y)||y<opts.top-4)return;
+      const legacyHideTop=Number.isFinite(opts.legacyHideTop)?opts.legacyHideTop:opts.top-4;
+      if(!Number.isFinite(x)||!Number.isFinite(y)||y<legacyHideTop)return;
       const w=el.offsetWidth||parseFloat(el.style.width)||0;
       if(x+w<=opts.legacyWidth+8)el.style.visibility='hidden';
     });
