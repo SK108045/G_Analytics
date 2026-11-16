@@ -301,7 +301,8 @@ const PortalNav={
     [...S.children].forEach(el=>{
       if(el.classList.contains('portal-nav')||el.classList.contains('portal-nav-mask'))return;
       const x=parseFloat(el.style.left),y=parseFloat(el.style.top);
-      if(!Number.isFinite(x)||!Number.isFinite(y)||y<opts.top-4)return;
+      const legacyHideTop=Number.isFinite(opts.legacyHideTop)?opts.legacyHideTop:opts.top-4;
+      if(!Number.isFinite(x)||!Number.isFinite(y)||y<legacyHideTop)return;
       const w=el.offsetWidth||parseFloat(el.style.width)||0;
       if(x+w<=opts.legacyWidth+8)el.style.visibility='hidden';
     });
