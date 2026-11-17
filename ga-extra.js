@@ -40,14 +40,31 @@
   }
   window.GAToast=toast;
 
+  function shellMenu(anchor,title,items){
+    document.querySelectorAll('.shell-menu').forEach(x=>x.remove());
+    const r=anchor.getBoundingClientRect(),m=document.createElement('div');
+    m.className='panel-menu shell-menu';
+    m.style.cssText='top:'+(r.bottom+6)+'px;right:'+Math.max(10,innerWidth-r.right)+'px;left:auto;min-width:230px';
+    if(title){const h=document.createElement('div');h.style.cssText='padding:7px 10px 6px;font-size:11px;color:#5f6368;font-weight:700;text-transform:uppercase';h.textContent=title;m.appendChild(h)}
+    items.forEach(item=>{
+      if(item==='---'){const d=document.createElement('div');d.style.cssText='height:1px;background:#e8eaed;margin:5px 2px';m.appendChild(d);return}
+      const b=document.createElement('button');b.type='button';b.innerHTML=(item.icon?'<span style="display:inline-block;width:22px">'+item.icon+'</span>':'')+'<span>'+item.label+'</span>';
+      b.style.cssText='display:flex;align-items:center;gap:4px';
+      b.onclick=()=>{m.remove();if(item.href){progress.start();location.href=item.href}else item.action?.()};
+      m.appendChild(b);
+    });
+    document.body.appendChild(m);
+    setTimeout(()=>document.addEventListener('click',function close(e){if(!m.contains(e.target)&&e.target!==anchor){m.remove();document.removeEventListener('click',close)}},true),0);
+  }
+
   function top(){
     const h=document.createElement('header');
     h.className='ga-top';
     h.innerHTML=
-      '<div class="ga-brand"><div class="ga-logo"><i></i><i></i><i></i></div><div class="ga-word">Analytics</div>'+
-      '<div class="ga-prop"><div class="ga-crumb">All accounts › rieng254.com</div><div class="ga-prop-row"><div class="ga-prop-name">rieng254.com</div><span class="ga-prop-caret" aria-hidden="true"></span></div></div></div>'+
-      '<div class="ga-search-wrap"><input class="ga-search" placeholder="Try searching reports"></div>'+
-      '<div class="ga-top-actions"><button class="ga-icon">▦</button><button class="ga-icon">?</button><div class="ga-avatar">R</div></div>';
+      '<div class="ga-brand" data-home role="button" tabindex="0"><div class="ga-logo"><i></i><i></i><i></i></div><div class="ga-word">Analytics</div>'+
+      '<div class="ga-prop" data-property role="button" tabindex="0" aria-label="Analytics property"><div class="ga-crumb">All accounts › rieng254.com</div><div class="ga-prop-row"><div class="ga-prop-name">rieng254.com</div><span class="ga-prop-caret" aria-hidden="true"></span></div></div></div>'+
+      '<div class="ga-search-wrap"><input class="ga-search" placeholder="Try searching reports" aria-label="Search reports"></div>'+
+      '<div class="ga-top-actions"><button class="ga-icon" data-apps aria-label="Analytics sections">▦</button><button class="ga-icon" data-help aria-label="Help">?</button><button class="ga-avatar" data-account aria-label="Account">R</button></div>';
     document.body.appendChild(h);
     h.querySelector('.ga-search').addEventListener('keydown',e=>{
       if(e.key!=='Enter')return;
@@ -63,6 +80,35 @@
       const m=all.find(x=>x[1].toLowerCase().includes(q));
       if(m){progress.start();location.href=routes[m[0]]}else toast('No matching report');
     });
+    const goHome=()=>{progress.start();location.href=routes.reports};
+    h.querySelector('[data-home]').addEventListener('click',e=>{if(!e.target.closest('[data-property]'))goHome()});
+    h.querySelector('[data-home]').addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&!e.target.closest('[data-property]')){e.preventDefault();goHome()}});
+    h.querySelector('[data-property]').addEventListener('click',e=>{e.stopPropagation();shellMenu(e.currentTarget,'Analytics property',[
+      {label:'rieng254.com',icon:'✓',action:()=>toast('Current property: rieng254.com')},
+      '---',
+      {label:'Copy property name',icon:'⧉',action:()=>navigator.clipboard?.writeText('rieng254.com').then(()=>toast('Property name copied')).catch(()=>toast('Property: rieng254.com'))}
+    ])});
+    h.querySelector('[data-apps]').onclick=e=>shellMenu(e.currentTarget,'Analytics sections',[
+      {label:'Reports snapshot',icon:'⌂',href:routes.reports},
+      {label:'Realtime overview',icon:'◴',href:routes.realtime},
+      {label:'Realtime pages',icon:'▤',href:routes.realtimePages},
+      {label:'Tech details',icon:'▣',href:routes.tech},
+      {label:'Demographic details',icon:'◉',href:routes.demographics},
+      {label:'Audiences',icon:'◎',href:routes.audiences},
+      {label:'Library',icon:'▭',href:routes.library}
+    ]);
+    h.querySelector('[data-help]').onclick=e=>shellMenu(e.currentTarget,'Quick help',[
+      {label:'Search reports from the top search bar',icon:'⌕',action:()=>h.querySelector('.ga-search').focus()},
+      {label:'Open Reports snapshot',icon:'⌂',href:routes.reports},
+      {label:'Open Library',icon:'▭',href:routes.library}
+    ]);
+    h.querySelector('[data-account]').onclick=e=>shellMenu(e.currentTarget,'Account',[
+      {label:'Rieng254 Analytics',icon:'R',action:()=>toast('Rieng254 Analytics')},
+      {label:'Property: rieng254.com',icon:'◆',action:()=>toast('Property: rieng254.com')},
+      '---',
+      {label:'Copy current report link',icon:'⧉',action:()=>navigator.clipboard?.writeText(location.href).then(()=>toast('Report link copied')).catch(()=>toast(location.href))},
+      {label:'Reports snapshot',icon:'⌂',href:routes.reports}
+    ]);
   }
 
   const state=(key,def=true)=>{const v=localStorage.getItem('gaNav:'+key);return v===null?def:v==='1'};
@@ -83,6 +129,7 @@
       link('reports','Reports snapshot','','⌂')+
       link('realtime','Realtime overview')+
       link('realtimePages','Realtime pages')+
+      link('tech','Tech details','','▣')+
       '<div class="pnav-divider"></div>'+
       '<div class="pnav-group" data-group="import">'+
         '<button class="pnav-section" type="button" data-toggle="import"><span class="pnav-caret">⌄</span><span class="ptext">Data import</span></button>'+
@@ -101,7 +148,6 @@
           '<button class="pnav-subsection pnav-child" type="button" data-subtoggle="techgroup"><span class="pnav-caret">⌄</span><span class="ptext">Tech</span></button>'+
           '<div class="pnav-children" data-subchildren="techgroup">'+
             link('techOverview','Overview','pnav-child2')+
-            link('tech','Tech details','pnav-child2','▣')+
           '</div>'+
         '</div>'+
       '</div>'+
@@ -138,7 +184,7 @@
     n.querySelector('[data-create]')?.addEventListener('click',()=>{
       document.querySelector('.nav-create-menu')?.remove();
       const m=document.createElement('div');m.className='panel-menu nav-create-menu';m.style.cssText='left:12px;top:106px';
-      [['Reports snapshot',routes.reports],['Realtime overview',routes.realtime],['Demographic details',routes.demographics],['Tech details',routes.tech]].forEach(([label,url])=>{
+      [['Reports snapshot',routes.reports],['Realtime overview',routes.realtime],['Realtime pages',routes.realtimePages],['Tech details',routes.tech],['Demographic details',routes.demographics],['Audiences',routes.audiences],['Library',routes.library]].forEach(([label,url])=>{
         const b=document.createElement('button');b.textContent=label;b.onclick=()=>{progress.start();location.href=url};m.appendChild(b);
       });
       document.body.appendChild(m);progress.pulse(260);
