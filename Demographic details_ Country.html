@@ -70,67 +70,94 @@ body{overflow-x:hidden;font-family:'Google Sans',Roboto,Arial,sans-serif;color:#
 .ui-search-glyph{position:absolute;z-index:912;color:#5f6368;pointer-events:none}
 
 
-/* GA-style shared portal navigation — report content remains untouched */
-.portal-nav-mask,.portal-nav{translate:0 0!important}
+
+/* Fixed GA portal shell: only report content scrolls */
+.portal-fixed-header{
+  position:fixed;left:0;right:0;top:0;height:60px;z-index:9000;
+  background:#fff;border-bottom:1px solid #e3e5e8;box-sizing:border-box;
+  display:flex;align-items:center;font-family:'Google Sans',Roboto,Arial,sans-serif;color:#202124
+}
+.pfh-brand{display:flex;align-items:center;width:348px;height:100%;padding:0 17px;box-sizing:border-box;gap:12px;flex:0 0 auto}
+.pfh-logo{display:flex;align-items:flex-end;gap:3px;width:27px;height:30px}
+.pfh-logo i{display:block;width:7px;border-radius:2px 2px 0 0}
+.pfh-logo i:nth-child(1){height:14px;background:#e37400}
+.pfh-logo i:nth-child(2){height:21px;background:#f9ab00}
+.pfh-logo i:nth-child(3){height:29px;background:#f9ab00}
+.pfh-word{font-size:20px;color:#5f6368;font-weight:500}
+.pfh-property{margin-left:12px;padding-left:14px;border-left:1px solid #dadce0;min-width:0}
+.pfh-crumb{font-size:10.5px;color:#5f6368;white-space:nowrap}
+.pfh-name{font-size:17px;font-weight:500;white-space:nowrap;margin-top:2px}
+.pfh-search-wrap{flex:1;display:flex;justify-content:center;min-width:260px}
+.pfh-search{
+  width:min(620px,72%);height:40px;border:0;border-radius:6px;background:#eef1f5;
+  padding:0 15px 0 42px;font:400 14px Roboto,Arial,sans-serif;color:#202124;outline:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24'%3E%3Cpath fill='%235f6368' d='M15.5 14h-.79l-.28-.27A6.47 6.47 0 1 0 14 15.5l.27.28h.79l5 4.99L20.49 19l-4.99-5zM9.5 14A4.5 4.5 0 1 1 9.5 5a4.5 4.5 0 0 1 0 9z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:14px center
+}
+.pfh-search:focus{box-shadow:0 0 0 2px rgba(26,115,232,.18)}
+.pfh-actions{display:flex;align-items:center;gap:7px;padding:0 14px;flex:0 0 auto}
+.pfh-icon{
+  width:34px;height:34px;border:0;border-radius:50%;background:transparent;color:#3c4043;
+  display:grid;place-items:center;font-size:17px;font-weight:700;cursor:pointer
+}
+.pfh-icon:hover{background:#f1f3f4}
+.pfh-avatar{width:36px;height:36px;border-radius:50%;background:#1a73e8;color:#fff;display:grid;place-items:center;font-size:18px;font-weight:700}
 .portal-nav-mask{
-  position:absolute;left:0;z-index:4998;background:#f8fafd;pointer-events:none
+  position:fixed!important;left:0!important;top:60px!important;bottom:0!important;width:232px!important;height:auto!important;
+  z-index:4998;background:#f8fafd;pointer-events:none;translate:none!important
 }
 .portal-nav{
-  position:absolute;left:0;z-index:5000;
-  background:#f8fafd;border-right:1px solid #e3e5e8;
+  position:fixed!important;left:0!important;top:60px!important;bottom:20px!important;width:230px!important;height:auto!important;
+  z-index:5000;background:#f8fafd;border-right:1px solid #e3e5e8;
   font-family:'Google Sans',Roboto,Arial,sans-serif;color:#202124;
-  box-sizing:border-box;padding:7px 7px 12px;overflow-y:auto;overflow-x:hidden;
-  scrollbar-width:thin;scrollbar-color:#c7c9cc transparent
+  box-sizing:border-box;padding:8px 7px 10px;overflow-y:auto;overflow-x:hidden;translate:none!important;
+  scrollbar-width:thin;scrollbar-color:#aeb4bb transparent
 }
 .portal-nav::-webkit-scrollbar{width:5px}
-.portal-nav::-webkit-scrollbar-thumb{background:#c7c9cc;border-radius:6px}
+.portal-nav::-webkit-scrollbar-track{background:transparent;margin:7px 0 12px}
+.portal-nav::-webkit-scrollbar-thumb{background:#aeb4bb;border-radius:8px}
 .portal-nav *{box-sizing:border-box}
 .portal-nav a,.portal-nav button{font-family:inherit}
 .pcreate{
-  display:flex;align-items:center;gap:8px;margin:1px 3px 8px;padding:7px 12px;
-  min-height:36px;border:1px solid #dadce0;border-radius:18px;background:#fff;
-  color:#202124;font-size:12px;font-weight:500;cursor:pointer;
+  display:flex;align-items:center;gap:8px;margin:1px 3px 9px;padding:7px 12px;min-height:36px;
+  border:1px solid #dadce0;border-radius:18px;background:#fff;color:#202124;font-size:12.5px;font-weight:600;cursor:pointer;
   box-shadow:0 1px 3px rgba(60,64,67,.18)
 }
 .pcreate:hover{background:#f8fafd}
-.pcreate-plus{font-size:20px;line-height:14px;color:#1a73e8;font-weight:400}
-.pcreate-caret{font-size:9px;color:#5f6368;margin-left:auto}
+.pcreate-plus{font-size:20px;line-height:14px;color:#1a73e8;font-weight:700}
+.pcreate-caret{font-size:10px;color:#4f555b;margin-left:auto;font-weight:700}
 .pnav-link,.pnav-btn,.pnav-section,.pnav-subsection{
   width:100%;border:0;background:transparent;color:#202124;text-decoration:none;
   display:flex;align-items:center;text-align:left;cursor:pointer;min-width:0
 }
 .pnav-link,.pnav-btn{
-  min-height:30px;padding:5px 8px;border-radius:15px;font-size:12px;font-weight:500;gap:8px
+  min-height:31px;padding:5px 8px;border-radius:16px;font-size:12.5px;font-weight:600;gap:8px
 }
 .pnav-link:hover,.pnav-btn:hover{background:#eef3fb}
-.pnav-link.active{background:#d3e3fd;color:#0b57d0}
+.pnav-link.active{background:#d3e3fd;color:#0b57d0;font-weight:700}
 .pnav-link.active .picon{color:#0b57d0}
-.picon{width:18px;min-width:18px;text-align:center;color:#5f6368;font-size:12px}
+.picon{width:18px;min-width:18px;text-align:center;color:#4f555b;font-size:12.5px;font-weight:700}
 .ptext{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pnav-divider{height:1px;background:#dadce0;margin:5px 1px}
 .pnav-selector{
-  display:flex;align-items:center;width:100%;height:31px;margin:3px 0 7px;
-  padding:0 10px;border:1px solid #9aa0a6;border-radius:3px;background:#fff;
-  font-size:11px;color:#3c4043;cursor:pointer
+  display:flex;align-items:center;width:100%;height:31px;margin:3px 0 7px;padding:0 10px;
+  border:1px solid #8b9197;border-radius:3px;background:#fff;font-size:11.5px;font-weight:600;color:#303438;cursor:pointer
 }
-.pnav-selector span:last-child{margin-left:auto;font-size:9px;color:#5f6368}
+.pnav-selector span:last-child{margin-left:auto;font-size:10px;color:#4f555b;font-weight:700}
 .pnav-section{
-  min-height:29px;padding:5px 4px 5px 8px;font-size:11px;color:#5f6368;font-weight:500
+  min-height:29px;padding:5px 4px 5px 8px;font-size:11.5px;color:#4f555b;font-weight:700
 }
 .pnav-subsection{
-  min-height:28px;padding:5px 7px;font-size:11.5px;color:#3c4043;font-weight:500;border-radius:14px
+  min-height:29px;padding:5px 7px;font-size:11.8px;color:#303438;font-weight:650;border-radius:14px
 }
 .pnav-section:hover,.pnav-subsection:hover{background:#f1f3f4}
-.pnav-caret{width:13px;min-width:13px;font-size:9px;color:#5f6368;transition:transform .15s ease}
+.pnav-caret{width:13px;min-width:13px;font-size:10px;color:#444b52;font-weight:800;transition:transform .15s ease}
 .pnav-caret.right{transform:rotate(-90deg)}
 .pnav-children{display:block}
 .pnav-group.collapsed>.pnav-children{display:none}
 .pnav-child{padding-left:20px}
 .pnav-child2{padding-left:31px}
 .pnav-bottom{margin-top:5px;padding-top:4px;border-top:1px solid #dadce0}
-.pnav-status{
-  display:inline-block;margin-left:auto;width:5px;height:5px;border-radius:50%;background:#1a73e8;opacity:.75
-}
 .ga-progress{
   position:fixed;left:0;top:0;height:3px;width:0;z-index:100000;
   background:#1a73e8;box-shadow:0 0 7px rgba(26,115,232,.45);
@@ -297,6 +324,43 @@ document.addEventListener('click',()=>UI.closePop());
 
 
 /* GA-style shared navigation + portal loading line */
+
+const PortalHeader={
+  routes:[
+    {label:'Reports snapshot',url:'Analytics _ Reports snapshot.html',keys:'report snapshot overview'},
+    {label:'Campaigns & cohorts',url:'Reports snapshot with campaigns and cohorts.html',keys:'campaign cohort retention'},
+    {label:'Traffic acquisition',url:'Traffic acquisition.html',keys:'traffic acquisition channel session'},
+    {label:'Demographic details',url:'Demographic details_ Country.html',keys:'demographic country user'},
+    {label:'Tech details',url:'Tech details_ Device category.html',keys:'tech device mobile desktop tablet'}
+  ],
+  mount(){
+    document.querySelector('.portal-fixed-header')?.remove();
+    const h=document.createElement('header');
+    h.className='portal-fixed-header';
+    h.innerHTML=
+      '<div class="pfh-brand">'+
+        '<div class="pfh-logo" aria-hidden="true"><i></i><i></i><i></i></div>'+
+        '<div class="pfh-word">Analytics</div>'+
+        '<div class="pfh-property"><div class="pfh-crumb">All accounts › rieng254.com</div><div class="pfh-name">rieng254.com⌄</div></div>'+
+      '</div>'+
+      '<div class="pfh-search-wrap"><input class="pfh-search" aria-label="Search reports" placeholder="Try searching reports"></div>'+
+      '<div class="pfh-actions"><button class="pfh-icon" data-apps aria-label="Apps">▦</button><button class="pfh-icon" data-help aria-label="Help">?</button><div class="pfh-avatar">R</div></div>';
+    document.body.appendChild(h);
+
+    const input=h.querySelector('.pfh-search');
+    input.addEventListener('keydown',e=>{
+      if(e.key!=='Enter')return;
+      const q=input.value.trim().toLowerCase();
+      if(!q)return;
+      const match=this.routes.find(r=>(r.label+' '+r.keys).toLowerCase().includes(q));
+      if(match){PortalProgress.start();location.href=match.url}
+      else if(typeof UI!=='undefined')UI.toast('No matching report in this portal');
+    });
+    h.querySelector('[data-apps]').onclick=()=>PortalProgress.pulse(360);
+    h.querySelector('[data-help]').onclick=()=>{PortalProgress.pulse(320);if(typeof UI!=='undefined')UI.help?.(1180,70)};
+  }
+};
+
 const PortalProgress={
   el:null,timer:null,value:0,
   mount(){
@@ -348,8 +412,8 @@ const PortalNav={
   },
   setState(key,open){localStorage.setItem('gaNav:'+key,open?'1':'0')},
   mount(opts){
-    S.querySelector('.portal-nav')?.remove();
-    S.querySelector('.portal-nav-mask')?.remove();
+    document.querySelector('.portal-nav')?.remove();
+    document.querySelector('.portal-nav-mask')?.remove();
 
     [...S.children].forEach(el=>{
       if(el.classList.contains('portal-nav')||el.classList.contains('portal-nav-mask'))return;
@@ -362,13 +426,13 @@ const PortalNav={
 
     const mask=document.createElement('div');
     mask.className='portal-nav-mask';
-    mask.style.cssText='top:'+opts.top+'px;width:'+opts.maskWidth+'px;height:'+opts.height+'px';
-    S.appendChild(mask);
+    mask.style.cssText='';
+    document.body.appendChild(mask);
 
     const nav=document.createElement('nav');
     nav.className='portal-nav';
     nav.setAttribute('aria-label','Analytics portal navigation');
-    nav.style.cssText='top:'+opts.top+'px;width:'+opts.width+'px;height:'+opts.height+'px';
+    nav.style.cssText='';
 
     const real=(key,label,cls='')=>
       '<a class="pnav-link '+cls+' '+(opts.active===key?'active':'')+'" href="'+this.routes[key]+'" data-real="'+key+'"'+(opts.active===key?' aria-current="page"':'')+'>'+
@@ -423,7 +487,7 @@ const PortalNav={
         '</div>'+
       '</div>'+
       '<div class="pnav-bottom">'+virt('Library')+'</div>';
-    S.appendChild(nav);
+    document.body.appendChild(nav);
 
     const applyGroup=(key,open)=>{
       const g=nav.querySelector('[data-group="'+key+'"]');
@@ -538,6 +602,7 @@ const PortalLayout={
   }
 };
 
+PortalHeader.mount();
 PortalNav.mount({"active":"demographics","top":77,"width":260,"maskWidth":262,"height":787,"legacyWidth":263});
 
 
