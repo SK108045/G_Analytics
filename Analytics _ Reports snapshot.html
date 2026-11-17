@@ -585,12 +585,16 @@ const PortalNav={
       btn?.querySelector('.pnav-caret')?.classList.toggle('right',!open);
     });
 
-    nav.querySelectorAll('[data-toggle]').forEach(btn=>btn.addEventListener('click',()=>{
-      const k=btn.dataset.toggle,g=nav.querySelector('[data-group="'+k+'"]'),open=g.classList.contains('collapsed');
+    nav.querySelectorAll('[data-toggle]').forEach(btn=>btn.addEventListener('click',e=>{
+      const k=btn.dataset.toggle;
+      if(e.target.closest('.ptext')&&k==='import'){PortalProgress.start();location.href='Campaign data import validation.html';return}
+      const g=nav.querySelector('[data-group="'+k+'"]'),open=g.classList.contains('collapsed');
       applyGroup(k,open);this.setState(k,open);PortalProgress.pulse(300);
     }));
-    nav.querySelectorAll('[data-subtoggle]').forEach(btn=>btn.addEventListener('click',()=>{
-      const k=btn.dataset.subtoggle,ch=nav.querySelector('[data-subchildren="'+k+'"]');
+    nav.querySelectorAll('[data-subtoggle]').forEach(btn=>btn.addEventListener('click',e=>{
+      const k=btn.dataset.subtoggle,dest={userattrs:'User attributes overview.html',techgroup:'Tech overview.html'}[k];
+      if(e.target.closest('.ptext')&&dest){PortalProgress.start();location.href=dest;return}
+      const ch=nav.querySelector('[data-subchildren="'+k+'"]');
       const open=ch.style.display==='none';ch.style.display=open?'block':'none';
       btn.querySelector('.pnav-caret')?.classList.toggle('right',!open);this.setState('sub:'+k,open);PortalProgress.pulse(280);
     }));
