@@ -83,14 +83,14 @@ body{overflow-x:hidden;font-family:'Google Sans',Roboto,Arial,sans-serif;color:#
   content:"";position:absolute;left:230px;right:0;bottom:-2px;height:2px;
   background:#f8fafd;pointer-events:none
 }
-.pfh-brand{display:flex;align-items:center;width:348px;height:100%;padding:0 17px;box-sizing:border-box;gap:12px;flex:0 0 auto}
+.pfh-brand{display:flex;align-items:center;width:348px;height:100%;padding:0 17px;box-sizing:border-box;gap:12px;flex:0 0 auto;cursor:pointer}
 .pfh-logo{display:flex;align-items:flex-end;gap:3px;width:27px;height:30px}
 .pfh-logo i{display:block;width:7px;border-radius:2px 2px 0 0}
 .pfh-logo i:nth-child(1){height:14px;background:#e37400}
 .pfh-logo i:nth-child(2){height:21px;background:#f9ab00}
 .pfh-logo i:nth-child(3){height:29px;background:#f9ab00}
 .pfh-word{font-size:20px;color:#5f6368;font-weight:500}
-.pfh-property{margin-left:12px;padding-left:14px;border-left:1px solid #dadce0;min-width:175px;display:flex;flex-direction:column;justify-content:center}
+.pfh-property{margin-left:12px;padding-left:14px;border-left:1px solid #dadce0;min-width:175px;display:flex;flex-direction:column;justify-content:center;cursor:pointer}
 .pfh-crumb{font-size:10.5px;line-height:1.15;color:#5f6368;white-space:nowrap;margin-bottom:3px}
 .pfh-property-row{display:flex;align-items:center;gap:7px;min-height:21px}
 .pfh-name{font-size:17px;line-height:1.1;font-weight:500;white-space:nowrap}
@@ -109,7 +109,7 @@ body{overflow-x:hidden;font-family:'Google Sans',Roboto,Arial,sans-serif;color:#
   display:grid;place-items:center;font-size:17px;font-weight:700;cursor:pointer
 }
 .pfh-icon:hover{background:#f1f3f4}
-.pfh-avatar{width:36px;height:36px;border-radius:50%;background:#1a73e8;color:#fff;display:grid;place-items:center;font-size:18px;font-weight:700}
+.pfh-avatar{width:36px;height:36px;border-radius:50%;border:0;background:#1a73e8;color:#fff;display:grid;place-items:center;font-size:18px;font-weight:700;cursor:pointer;padding:0}
 .portal-nav-mask{
   position:fixed!important;left:0!important;top:60px!important;bottom:0!important;width:232px!important;height:auto!important;
   z-index:4998;background:#f8fafd;pointer-events:none;translate:none!important
@@ -425,13 +425,13 @@ const PortalHeader={
     const h=document.createElement('header');
     h.className='portal-fixed-header';
     h.innerHTML=
-      '<div class="pfh-brand">'+
+      '<div class="pfh-brand" data-home role="button" tabindex="0">'+
         '<div class="pfh-logo" aria-hidden="true"><i></i><i></i><i></i></div>'+
         '<div class="pfh-word">Analytics</div>'+
-        '<div class="pfh-property"><div class="pfh-crumb">All accounts › rieng254.com</div><div class="pfh-property-row"><div class="pfh-name">rieng254.com</div><span class="pfh-caret" aria-hidden="true"></span></div></div>'+
+        '<div class="pfh-property" data-property role="button" tabindex="0"><div class="pfh-crumb">All accounts › rieng254.com</div><div class="pfh-property-row"><div class="pfh-name">rieng254.com</div><span class="pfh-caret" aria-hidden="true"></span></div></div>'+
       '</div>'+
       '<div class="pfh-search-wrap"><input class="pfh-search" aria-label="Search reports" placeholder="Try searching reports"></div>'+
-      '<div class="pfh-actions"><button class="pfh-icon" data-apps aria-label="Apps">▦</button><button class="pfh-icon" data-help aria-label="Help">?</button><div class="pfh-avatar">R</div></div>';
+      '<div class="pfh-actions"><button class="pfh-icon" data-apps aria-label="Apps">▦</button><button class="pfh-icon" data-help aria-label="Help">?</button><button class="pfh-avatar" data-account aria-label="Account">R</button></div>';
     document.body.appendChild(h);
 
     const input=h.querySelector('.pfh-search');
@@ -443,8 +443,13 @@ const PortalHeader={
       if(match){PortalProgress.start();location.href=match.url}
       else if(typeof UI!=='undefined')UI.toast('No matching report in this portal');
     });
-    h.querySelector('[data-apps]').onclick=()=>PortalProgress.pulse(360);
-    h.querySelector('[data-help]').onclick=()=>{PortalProgress.pulse(320);if(typeof UI!=='undefined')UI.help?.(1180,70)};
+    const home=()=>{PortalProgress.start();location.href='Analytics _ Reports snapshot.html'};
+    h.querySelector('[data-home]').addEventListener('click',e=>{if(!e.target.closest('[data-property]'))home()});
+    h.querySelector('[data-home]').addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&!e.target.closest('[data-property]')){e.preventDefault();home()}});
+    h.querySelector('[data-property]').addEventListener('click',e=>{e.stopPropagation();PortalProgress.pulse(260);if(typeof UI!=='undefined')UI.property?.(205,151)});
+    h.querySelector('[data-apps]').onclick=()=>{PortalProgress.pulse(300);if(typeof UI!=='undefined')UI.apps?.(1260,142)};
+    h.querySelector('[data-help]').onclick=()=>{PortalProgress.pulse(300);if(typeof UI!=='undefined')UI.help?.(1180,142)};
+    h.querySelector('[data-account]').onclick=()=>{PortalProgress.pulse(300);if(typeof UI!=='undefined')UI.profile?.(1275,142)};
   }
 };
 
@@ -534,6 +539,7 @@ const PortalNav={
       real('reports','Reports snapshot')+
       virt('Realtime overview','','Realtime overview.html')+
       virt('Realtime pages','','Realtime pages.html')+
+      real('tech','Tech details')+
       '<div class="pnav-divider"></div>'+
       '<div class="pnav-group" data-group="import">'+
         '<button class="pnav-section" type="button" data-toggle="import"><span class="pnav-caret">⌄</span><span class="ptext">Data import</span></button>'+
@@ -552,7 +558,6 @@ const PortalNav={
           '<button class="pnav-subsection pnav-child" type="button" data-subtoggle="techgroup"><span class="pnav-caret">⌄</span><span class="ptext">Tech</span></button>'+
           '<div class="pnav-children" data-subchildren="techgroup">'+
             virt('Overview','pnav-child2','Tech overview.html')+
-            real('tech','Tech details','pnav-child2')+
           '</div>'+
         '</div>'+
       '</div>'+
@@ -602,10 +607,14 @@ const PortalNav={
       PortalProgress.pulse(420);
       if(typeof UI!=='undefined'&&UI.pop)UI.pop(opts.width+8,opts.top+8,[
         {label:'Reports snapshot',icon:'⌂',href:this.routes.reports},
+        {label:'Realtime overview',icon:'◴',href:'Realtime overview.html'},
+        {label:'Realtime pages',icon:'▤',href:'Realtime pages.html'},
+        {label:'Tech details',icon:'▣',href:this.routes.tech},
         {label:'Campaigns & cohorts',icon:'◫',href:this.routes.campaigns},
         {label:'Traffic acquisition',icon:'↗',href:this.routes.acquisition},
         {label:'Demographic details',icon:'◉',href:this.routes.demographics},
-        {label:'Tech details',icon:'▣',href:this.routes.tech}
+        {label:'Audiences',icon:'◎',href:'Audiences.html'},
+        {label:'Library',icon:'▭',href:'Library.html'}
       ],'Create / open report','Available report snapshots',250);
     });
   }
