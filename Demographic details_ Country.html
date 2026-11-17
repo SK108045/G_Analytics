@@ -75,8 +75,12 @@ body{overflow-x:hidden;font-family:'Google Sans',Roboto,Arial,sans-serif;color:#
 /* Fixed GA portal shell: only report content scrolls */
 .portal-fixed-header{
   position:fixed;left:0;right:0;top:0;height:60px;z-index:9000;
-  background:#fff;border-bottom:1px solid #e3e5e8;box-sizing:border-box;
+  background:#fff;border-bottom:0;box-sizing:border-box;
   display:flex;align-items:center;font-family:'Google Sans',Roboto,Arial,sans-serif;color:#202124
+}
+.portal-fixed-header:after{
+  content:"";position:absolute;left:230px;right:0;bottom:-2px;height:2px;
+  background:#f8fafd;pointer-events:none
 }
 .pfh-brand{display:flex;align-items:center;width:348px;height:100%;padding:0 17px;box-sizing:border-box;gap:12px;flex:0 0 auto}
 .pfh-logo{display:flex;align-items:flex-end;gap:3px;width:27px;height:30px}
@@ -226,7 +230,7 @@ B(758,100,71,31,'#f8fafd','border:1px solid #dadce0;border-radius:16px;box-sizin
 B(768,106,20,20,'transparent','border:2px solid #188038;border-radius:50%;box-sizing:border-box');T(778,116,'&#10003;','font-size:12px;color:#188038;font-weight:700','c');
 T(810,116,'&#9662;','font-size:11px;color:#5f6368','c');
 B(839,101,29,29,'transparent','border:1.6px solid #c4c7c5;border-radius:50%');T(853,115,'+','color:#3c4043;font-size:21px','c');
-B(1040,94,300,42,'#fff','border:1px solid #dadce0;border-radius:5px;box-sizing:border-box');
+B(1040,94,300,42,'#f8fafd','border:1px solid #dadce0;border-radius:5px;box-sizing:border-box');
 T(1052,115,'Last 90 days &nbsp;&nbsp;Aug 12 - Nov 9, 2026','font-size:14px;font-weight:600;color:#202124');
 T(1322,115,'&#9662;','font-size:10px;color:#5f6368','c');
 B(1352,98,34,34,'transparent','border-radius:50%');I(1369,115,19,'M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7a3.27 3.27 0 0 0 0-1.39l7.05-4.11A3 3 0 1 0 15 5c0 .23.03.45.08.66L8.03 9.77a3 3 0 1 0 0 4.46l7.12 4.16c-.05.19-.07.39-.07.61a3 3 0 1 0 2.92-2.92z','#5f6368');
