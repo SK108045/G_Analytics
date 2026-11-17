@@ -231,11 +231,12 @@ function audiences(){
     const body=document.querySelector('[data-aud-table-body]');if(!body)return;
     body.innerHTML=filtered.map((r,i)=>'<tr><td><span class="aud-rank">'+(i+1)+'.</span><span class="aud-dim-link">'+r[0]+'</span></td><td>'+fmt(r[1])+'</td><td><div class="aud-percent"><div class="aud-percent-bar" style="width:'+Math.max(2,r[2]*1.55)+'px"></div><span>'+r[2].toFixed(2)+'%</span></div></td></tr>').join('');
     const title=document.querySelector('[data-aud-table-title]');if(title)title.textContent=state.dim;
+    const firstHead=document.querySelector('.aud-table thead th:first-child');if(firstHead)firstHead.textContent=state.dim;
   };
   const renderChart=()=>{
     const host=document.querySelector('[data-aud-chart]');if(!host)return;
-    host.innerHTML=chartSvg()+'<div class="aud-chart-cursor"></div><div class="aud-chart-tooltip"></div><div class="aud-chart-hit"></div>';
-    document.querySelector('[data-aud-legend]').innerHTML='<i></i><span>'+state.metric+'</span>'+(state.compare?'<span class="aud-compare-chip">vs. '+state.compare+'</span>':'');
+    host.innerHTML='<div class="aud-legend" data-aud-legend></div>'+chartSvg()+'<div class="aud-chart-cursor"></div><div class="aud-chart-tooltip"></div><div class="aud-chart-hit"></div>';
+    host.querySelector('[data-aud-legend]').innerHTML='<i></i><span>'+state.metric+'</span>'+(state.compare?'<span class="aud-compare-chip">vs. '+state.compare+'</span>':'');
     const hit=host.querySelector('.aud-chart-hit'),tip=host.querySelector('.aud-chart-tooltip'),cur=host.querySelector('.aud-chart-cursor');
     const vals=scaled(state.metric,state.period),cmp=state.compare?scaled(state.compare,state.period):null,labels=periodBase[state.period].labels;
     hit.onmousemove=e=>{
