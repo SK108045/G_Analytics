@@ -519,8 +519,8 @@ const PortalNav={
         '<span class="picon">'+({reports:'⌂',campaigns:'◫',acquisition:'↗',demographics:'◉',tech:'▣'}[key]||'•')+'</span><span class="ptext">'+label+'</span>'+
       '</a>';
     const virt=(label,cls='',href='')=> href
-      ? '<a class="pnav-link '+cls+'" href="'+href+'" data-extra><span class="picon">›</span><span class="ptext">'+label+'</span></a>'
-      : '<button class="pnav-btn '+cls+'" type="button" data-virtual="'+label.replace(/"/g,'&quot;')+'"><span class="picon">›</span><span class="ptext">'+label+'</span></button>';
+      ? '<a class="pnav-link '+cls+'" href="'+href+'" data-extra><span class="picon"></span><span class="ptext">'+label+'</span></a>'
+      : '<button class="pnav-btn '+cls+'" type="button" data-virtual="'+label.replace(/"/g,'&quot;')+'"><span class="picon"></span><span class="ptext">'+label+'</span></button>';
 
     nav.innerHTML=
       '<button class="pcreate" type="button" data-create><span class="pcreate-plus">＋</span><span>Create</span><span class="pcreate-caret">▼</span></button>'+
