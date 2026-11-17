@@ -165,4 +165,137 @@ function importPage(){
 
   render();
 }
-function userOverview(){main.innerHTML=head('User attributes overview')+'<div class="content"><div class="grid"><div class="card" style="grid-column:span 6"><h3>Active users by Country</h3>'+bars(countries)+'</div><div class="card" style="grid-column:span 6"><h3>Active users in last 30 minutes</h3><div class="metric">96</div>'+minuteBars([4,5,7,6,8,10,9,11,13,12,15,14,12,11,10,9,8,10,12,14,13,12,11,9,8,7,9,11,10,8])+'</div><div class="card" style="grid-column:span 4"><h3>Active users by City</h3>'+bars([['Nairobi',82000],['Mombasa',21000],['Kampala',17000],['Dar es Salaam',15000],['Kigali',7000]])+'</div><div class="card" style="grid-column:span 4"><h3>Active users by Age</h3>'+bars([['18-24',87000],['25-34',72000],['35-44',38000],['45-54',18000],['55-64',6000]])+'</div><div class="card" style="grid-column:span 4"><h3>Active users by Language</h3>'+bars([['English',168000],['Swahili',69000],['French',12000],['Other',8000]])+'</div></div></div>';bind()}function audiences(){const vals=[72,75,79,77,82,84,87,85,90,92,89,94,91,96,98,97,102,104,101,106,109,107,112,110,114,116,113,118,120,119];main.innerHTML=head('Audiences: Audience name')+'<div class="content"><div class="card" style="margin-bottom:14px"><h3>Users by Audience name over time</h3>'+line(vals,'All Users')+'</div>'+table(['Users','New users','Sessions','Views per session','Average session duration'],[['All Users','445K','430K','1.12M','1.66','1m 38s'],['Returning users','15K','0','83K','2.41','3m 12s'],['Highly engaged users','28K','4.2K','102K','3.02','4m 08s']],'Audience name')+'</div>';bind()}function techOverview(){main.innerHTML=head('Tech overview')+'<div class="content"><div class="grid"><div class="card" style="grid-column:span 6"><h3>Active users by Browser</h3>'+bars([['Chrome',62800],['Safari',12100],['Edge',7400],['Firefox',4100],['Opera',2600],['Samsung Internet',1800]])+'</div><div class="card" style="grid-column:span 6"><h3>Active users by Device category</h3><div class="donut-wrap"><div class="donut"></div><div class="donut-legend"><span><i class="dot" style="background:#1a73e8"></i>mobile <b>83.6%</b></span><span><i class="dot" style="background:#4054d6"></i>tablet <b>11.2%</b></span><span><i class="dot" style="background:#7b2fd6"></i>desktop <b>5.3%</b></span></div></div><a class="section-link" href="Tech details_ Device category.html">View device categories →</a></div><div class="card" style="grid-column:span 6"><h3>Active users by Screen resolution</h3>'+bars([['1920×1080',20800],['1366×768',17400],['1536×864',13200],['1280×720',8900],['1440×900',6100]])+'</div><div class="card" style="grid-column:span 6"><h3>Active users by App version</h3><div class="no-data"><div><div class="circle">▣</div>No app-version data available</div></div></div></div></div>';bind()}function library(){main.innerHTML=head('Library')+'<div class="content"><div class="lib-toolbar"><h2>Collections</h2><button class="primary">Create new collection</button></div><div class="library-grid"><div class="library-card"><div class="collection-title"><h3>Business objectives</h3><span class="published">✓ Published</span></div><div class="collection-items">Generate leads<br>Drive sales<br>Understand web and/or app performance<br>View user engagement and retention</div></div><div class="library-card"><div class="collection-title"><h3>User</h3><span class="published">✓ Published</span></div><div class="collection-items">User attributes overview<br>Demographic details<br>Audiences<br>Tech overview<br>Tech details</div></div><div class="library-card"><div class="collection-title"><h3>App developer</h3><span class="published">✓ Published</span></div><div class="collection-items">Reports snapshot<br>Realtime overview<br>Realtime pages<br>Events<br>Pages and screens</div></div></div><div class="lib-toolbar" style="margin-top:24px"><h2>Reports</h2><button class="primary">Create new report</button></div><div class="library-grid"><div class="library-card"><h3>Detail reports</h3><div class="collection-items">Events<br>Pages and screens<br>Demographic details<br>Audiences<br>Tech details<br>Traffic acquisition</div></div><div class="library-card"><h3>Overview reports</h3><div class="collection-items">Reports snapshot<br>Realtime overview<br>Engagement overview<br>User attributes overview<br>Tech overview</div></div><div class="library-card"><h3>Custom reports</h3><div class="empty" style="min-height:110px"><div>No custom reports yet</div></div></div></div></div>';bind();document.querySelectorAll('.primary').forEach(b=>b.onclick=()=>GAToast(b.textContent))}switch(key){case'realtime':realtime();break;case'realtimePages':realtimePages();break;case'leads':objective('Generate leads','lead');break;case'sales':objective('Drive sales','sales');break;case'behavior':behavior();break;case'engagement':engagement();break;case'events':eventsPage();break;case'pages':pagesPage();break;case'import':importPage();break;case'userOverview':userOverview();break;case'audiences':audiences();break;case'techOverview':techOverview();break;case'library':library();break;default:main.innerHTML=head('Report')+'<div class="content"><div class="card">Unknown report</div></div>';bind()}})();
+function userOverview(){main.innerHTML=head('User attributes overview')+'<div class="content"><div class="grid"><div class="card" style="grid-column:span 6"><h3>Active users by Country</h3>'+bars(countries)+'</div><div class="card" style="grid-column:span 6"><h3>Active users in last 30 minutes</h3><div class="metric">96</div>'+minuteBars([4,5,7,6,8,10,9,11,13,12,15,14,12,11,10,9,8,10,12,14,13,12,11,9,8,7,9,11,10,8])+'</div><div class="card" style="grid-column:span 4"><h3>Active users by City</h3>'+bars([['Nairobi',82000],['Mombasa',21000],['Kampala',17000],['Dar es Salaam',15000],['Kigali',7000]])+'</div><div class="card" style="grid-column:span 4"><h3>Active users by Age</h3>'+bars([['18-24',87000],['25-34',72000],['35-44',38000],['45-54',18000],['55-64',6000]])+'</div><div class="card" style="grid-column:span 4"><h3>Active users by Language</h3>'+bars([['English',168000],['Swahili',69000],['French',12000],['Other',8000]])+'</div></div></div>';bind()}
+function audiences(){
+  const COLORS={primary:'#4292c6',compare:'#e37400',green:'#69b34c'};
+  const metricMeta={
+    'Users':{total:'445K',scale:1},
+    'New Users':{total:'430K',scale:.91},
+    'Sessions':{total:'700K',scale:1.34},
+    'Pageviews':{total:'742K',scale:1.52}
+  };
+  const periodBase={
+    'Hourly':{labels:['12a','3a','6a','9a','12p','3p','6p','9p'],vals:[12.2,9.4,11.1,18.5,23.4,21.6,25.8,19.7]},
+    'Day':{labels:['Nov 3','Nov 4','Nov 5','Nov 6','Nov 7','Nov 8','Nov 9'],vals:[20.8,15.2,15.8,22.4,23.7,26.4,25.7]},
+    'Week':{labels:['Sep 21','Sep 28','Oct 5','Oct 12','Oct 19','Oct 26','Nov 2','Nov 9'],vals:[18.4,19.7,21.1,20.5,22.8,24.0,25.2,26.1]},
+    'Month':{labels:['Dec','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov'],vals:[14.2,15.1,14.8,16.5,17.9,18.4,19.7,20.6,21.9,23.8,24.9,26.1]}
+  };
+  const dims={
+    Language:[['en-us',280000,62.92],['sw',104000,23.37],['en-gb',22000,4.94],['fr',12000,2.70],['en-ca',8400,1.89],['de',6100,1.37],['es',5200,1.17]],
+    Country:[['Kenya',153000,34.38],['Tanzania',41000,9.21],['Uganda',38000,8.54],['United Kingdom',33500,7.53],['South Africa',30000,6.74],['United States',28000,6.29],['Rwanda',14000,3.15]],
+    City:[['Nairobi',82000,18.43],['Mombasa',21000,4.72],['Kampala',17000,3.82],['Dar es Salaam',15000,3.37],['Kigali',7000,1.57],['Kisumu',6100,1.37],['Nakuru',5200,1.17]],
+    Browser:[['Chrome',276000,62.02],['Safari',71000,15.96],['Edge',32000,7.19],['Firefox',23000,5.17],['Opera',18000,4.04],['Samsung Internet',13000,2.92],['Other',12000,2.70]],
+    'Operating System':[['Android',246000,55.28],['Windows',76000,17.08],['iOS',71000,15.96],['macOS',26000,5.84],['Linux',15000,3.37],['Chrome OS',6400,1.44],['Other',4600,1.03]],
+    'Service Provider':[['Safaricom',172000,38.65],['Airtel Kenya',61000,13.71],['Telkom Kenya',21000,4.72],['MTN Uganda',18000,4.04],['Vodacom Tanzania',16000,3.60],['Other / unknown',157000,35.28]]
+  };
+  const kpis=[
+    ['Users','445K'],['New Users','430K'],['Sessions','700K'],['Sessions / User','1.57'],
+    ['Pageviews','742K'],['Pages / Session','1.66'],['Avg. Session Duration','00:01:38'],['Bounce Rate','41.20%']
+  ];
+  let state={
+    metric:localStorage.getItem('audMetric')||'Users',
+    compare:localStorage.getItem('audCompare')||'',
+    period:localStorage.getItem('audPeriod')||'Day',
+    dim:localStorage.getItem('audDim')||'Language',
+    sort:'users',dir:-1
+  };
+  const fmt=v=>v>=1000000?(v/1e6).toFixed(1)+'M':v>=1000?(v/1000).toFixed(v>=100000?0:1).replace('.0','')+'K':String(Math.round(v));
+  const scaled=(metric,period)=>{
+    const m=metricMeta[metric]||metricMeta.Users,b=periodBase[period];
+    return b.vals.map((v,i)=>Math.max(1,v*m.scale*(1+Math.sin(i*.91+metric.length)*.035)));
+  };
+  const spark=(seed=1)=>{
+    const vals=Array.from({length:12},(_,i)=>18+Math.sin(i*.75+seed)*4+i*.18);
+    const max=Math.max(...vals),min=Math.min(...vals);
+    const pts=vals.map((v,i)=>(i*10)+','+(24-(v-min)/(max-min||1)*18)).join(' ');
+    return '<svg class="aud-spark" viewBox="0 0 110 28" preserveAspectRatio="none"><polygon points="0,28 '+pts+' 110,28" fill="#e7f2f8"/><polyline points="'+pts+'" fill="none" stroke="#4292c6" stroke-width="1.4"/></svg>';
+  };
+  const chartSvg=()=>{
+    const vals=scaled(state.metric,state.period),cmp=state.compare?scaled(state.compare,state.period):null;
+    const all=cmp?vals.concat(cmp):vals,max=Math.max(...all)*1.12,min=0,w=1000,h=205,pl=42,pr=12,pt=10,pb=28;
+    const x=i=>pl+(w-pl-pr)*(i/Math.max(1,vals.length-1));
+    const y=v=>pt+(h-pt-pb)*(1-v/max);
+    const path=a=>a.map((v,i)=>(i?'L':'M')+x(i).toFixed(1)+' '+y(v).toFixed(1)).join(' ');
+    const area=path(vals)+' L'+x(vals.length-1).toFixed(1)+' '+(h-pb)+' L'+x(0).toFixed(1)+' '+(h-pb)+' Z';
+    const grid=Array.from({length:4},(_,i)=>{const yy=pt+(h-pt-pb)*(i/3);const val=max*(1-i/3);return '<path d="M'+pl+' '+yy+'H'+(w-pr)+'" stroke="#e6e6e6"/><text x="'+(pl+2)+'" y="'+(yy-4)+'" font-size="10" fill="#666">'+fmt(val*10000)+'</text>'}).join('');
+    const labels=periodBase[state.period].labels.map((l,i)=>'<text x="'+x(i)+'" y="'+(h-8)+'" text-anchor="middle" font-size="10" fill="#666">'+l+'</text>').join('');
+    const dots=vals.map((v,i)=>'<circle cx="'+x(i)+'" cy="'+y(v)+'" r="3.3" fill="'+COLORS.primary+'" data-aud-point="'+i+'"/>').join('');
+    const cmpPath=cmp?'<path d="'+path(cmp)+'" fill="none" stroke="'+COLORS.compare+'" stroke-width="2" vector-effect="non-scaling-stroke"/>':'';
+    return '<svg class="aud-main-chart" viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none">'+grid+'<path d="'+area+'" fill="#e7f2f8"/><path d="'+path(vals)+'" fill="none" stroke="'+COLORS.primary+'" stroke-width="2.6" vector-effect="non-scaling-stroke"/>'+cmpPath+dots+labels+'</svg>';
+  };
+  const renderTable=()=>{
+    const rows=(dims[state.dim]||[]).slice();
+    rows.sort((a,b)=>state.dir*((state.sort==='pct'?a[2]-b[2]:a[1]-b[1])));
+    const q=(document.querySelector('.aud-table-search')?.value||'').toLowerCase();
+    const filtered=rows.filter(r=>r[0].toLowerCase().includes(q));
+    const body=document.querySelector('[data-aud-table-body]');if(!body)return;
+    body.innerHTML=filtered.map((r,i)=>'<tr><td><span class="aud-rank">'+(i+1)+'.</span><span class="aud-dim-link">'+r[0]+'</span></td><td>'+fmt(r[1])+'</td><td><div class="aud-percent"><div class="aud-percent-bar" style="width:'+Math.max(2,r[2]*1.55)+'px"></div><span>'+r[2].toFixed(2)+'%</span></div></td></tr>').join('');
+    const title=document.querySelector('[data-aud-table-title]');if(title)title.textContent=state.dim;
+  };
+  const renderChart=()=>{
+    const host=document.querySelector('[data-aud-chart]');if(!host)return;
+    host.innerHTML=chartSvg()+'<div class="aud-chart-cursor"></div><div class="aud-chart-tooltip"></div><div class="aud-chart-hit"></div>';
+    document.querySelector('[data-aud-legend]').innerHTML='<i></i><span>'+state.metric+'</span>'+(state.compare?'<span class="aud-compare-chip">vs. '+state.compare+'</span>':'');
+    const hit=host.querySelector('.aud-chart-hit'),tip=host.querySelector('.aud-chart-tooltip'),cur=host.querySelector('.aud-chart-cursor');
+    const vals=scaled(state.metric,state.period),cmp=state.compare?scaled(state.compare,state.period):null,labels=periodBase[state.period].labels;
+    hit.onmousemove=e=>{
+      const r=hit.getBoundingClientRect(),p=Math.max(0,Math.min(.999,(e.clientX-r.left)/r.width)),i=Math.min(vals.length-1,Math.round(p*(vals.length-1)));
+      cur.style.left=(e.clientX-r.left)+'px';cur.style.display='block';
+      tip.style.left=Math.min(r.width-160,e.clientX-r.left+10)+'px';tip.style.top=Math.max(36,e.clientY-r.top)+'px';
+      tip.innerHTML='<b>'+labels[i]+'</b><br>'+state.metric+': '+fmt(vals[i]*10000)+(cmp?'<br>'+state.compare+': '+fmt(cmp[i]*10000):'');tip.style.display='block';
+    };
+    hit.onmouseleave=()=>{tip.style.display='none';cur.style.display='none'};
+  };
+  const applyMetric=metric=>{
+    state.metric=metric;localStorage.setItem('audMetric',metric);
+    document.querySelector('.aud-select[data-metric]').value=metric;
+    document.querySelectorAll('.aud-kpi').forEach(b=>b.classList.toggle('active',b.dataset.metric===metric));
+    renderChart();
+  };
+  main.innerHTML=
+    '<div class="aud-page">'+
+      '<div class="aud-toolbar">'+
+        '<select class="aud-select" data-metric><option>Users</option><option>New Users</option><option>Sessions</option><option>Pageviews</option></select>'+
+        '<span class="aud-vs">vs.</span>'+
+        '<select class="aud-select" data-compare style="border:0;color:#2b78b7;padding-left:4px"><option value="">Select a metric</option><option>Users</option><option>New Users</option><option>Sessions</option><option>Pageviews</option></select>'+
+        '<div class="aud-periods">'+['Hourly','Day','Week','Month'].map(p=>'<button data-period="'+p+'" class="'+(state.period===p?'active':'')+'">'+p+'</button>').join('')+'</div>'+
+      '</div>'+
+      '<div class="aud-chart-wrap" data-aud-chart><div class="aud-legend" data-aud-legend></div></div>'+
+      '<div class="aud-mid">'+
+        '<div class="aud-kpis">'+kpis.map((k,i)=>'<button class="aud-kpi '+(state.metric===k[0]?'active':'')+'" data-metric="'+k[0]+'"><div class="aud-kpi-label">'+k[0]+'</div><div class="aud-kpi-value">'+k[1]+'</div>'+spark(i+1)+'</button>').join('')+'</div>'+
+        '<div class="aud-pie-panel"><div class="aud-pie-legend"><button data-visitor="new"><i style="background:#4292c6"></i>New Visitor</button><button data-visitor="return"><i style="background:#69b34c"></i>Returning Visitor</button></div><div class="aud-pie"><span class="aud-pie-label new">77.4%</span><span class="aud-pie-label return">22.6%</span></div></div>'+
+      '</div>'+
+      '<div class="aud-bottom">'+
+        '<div>'+
+          '<div class="aud-dim-title">Demographics</div>'+
+          '<div class="aud-dim-grid">'+['Language','Country','City'].map(d=>'<button class="aud-dim-button '+(state.dim===d?'active':'')+'" data-dim="'+d+'">'+d+'</button>').join('')+'</div>'+
+          '<div class="aud-dim-title aud-system-title">System</div>'+
+          '<div class="aud-dim-grid">'+['Browser','Operating System','Service Provider'].map(d=>'<button class="aud-dim-button '+(state.dim===d?'active':'')+'" data-dim="'+d+'">'+d+'</button>').join('')+'</div>'+
+        '</div>'+
+        '<div>'+
+          '<div class="aud-table-head"><span data-aud-table-title>'+state.dim+'</span><div class="aud-table-controls"><input class="aud-table-search" placeholder="Search"><span>Users</span><span>% Users</span></div></div>'+
+          '<table class="aud-table"><thead><tr><th>'+state.dim+'</th><th data-sort="users" style="cursor:pointer">Users</th><th data-sort="pct" style="cursor:pointer">% Users</th></tr></thead><tbody data-aud-table-body></tbody></table>'+
+        '</div>'+
+      '</div>'+
+    '</div>';
+  document.querySelector('[data-metric]').value=state.metric;
+  document.querySelector('[data-compare]').value=state.compare;
+  renderChart();renderTable();
+  document.querySelector('[data-metric]').addEventListener('change',e=>applyMetric(e.target.value));
+  document.querySelector('[data-compare]').addEventListener('change',e=>{state.compare=e.target.value;localStorage.setItem('audCompare',state.compare);renderChart()});
+  document.querySelectorAll('[data-period]').forEach(b=>b.addEventListener('click',()=>{
+    state.period=b.dataset.period;localStorage.setItem('audPeriod',state.period);
+    document.querySelectorAll('[data-period]').forEach(x=>x.classList.toggle('active',x===b));renderChart();
+  }));
+  document.querySelectorAll('.aud-kpi[data-metric]').forEach(b=>b.addEventListener('click',()=>{if(metricMeta[b.dataset.metric])applyMetric(b.dataset.metric);else GAToast(b.dataset.metric+' is a derived metric')}));
+  document.querySelectorAll('[data-dim]').forEach(b=>b.addEventListener('click',()=>{
+    state.dim=b.dataset.dim;localStorage.setItem('audDim',state.dim);
+    document.querySelectorAll('[data-dim]').forEach(x=>x.classList.toggle('active',x===b));renderTable();
+  }));
+  document.querySelector('.aud-table-search').addEventListener('input',renderTable);
+  document.querySelectorAll('[data-sort]').forEach(th=>th.addEventListener('click',()=>{
+    const k=th.dataset.sort;if(state.sort===k)state.dir*=-1;else{state.sort=k;state.dir=-1}renderTable();
+  }));
+  document.querySelectorAll('[data-visitor]').forEach(b=>b.addEventListener('click',()=>GAToast(b.dataset.visitor==='new'?'New visitors: 77.4%':'Returning visitors: 22.6%')));
+}
+function techOverview(){main.innerHTML=head('Tech overview')+'<div class="content"><div class="grid"><div class="card" style="grid-column:span 6"><h3>Active users by Browser</h3>'+bars([['Chrome',62800],['Safari',12100],['Edge',7400],['Firefox',4100],['Opera',2600],['Samsung Internet',1800]])+'</div><div class="card" style="grid-column:span 6"><h3>Active users by Device category</h3><div class="donut-wrap"><div class="donut"></div><div class="donut-legend"><span><i class="dot" style="background:#1a73e8"></i>mobile <b>83.6%</b></span><span><i class="dot" style="background:#4054d6"></i>tablet <b>11.2%</b></span><span><i class="dot" style="background:#7b2fd6"></i>desktop <b>5.3%</b></span></div></div><a class="section-link" href="Tech details_ Device category.html">View device categories →</a></div><div class="card" style="grid-column:span 6"><h3>Active users by Screen resolution</h3>'+bars([['1920×1080',20800],['1366×768',17400],['1536×864',13200],['1280×720',8900],['1440×900',6100]])+'</div><div class="card" style="grid-column:span 6"><h3>Active users by App version</h3><div class="no-data"><div><div class="circle">▣</div>No app-version data available</div></div></div></div></div>';bind()}function library(){main.innerHTML=head('Library')+'<div class="content"><div class="lib-toolbar"><h2>Collections</h2><button class="primary">Create new collection</button></div><div class="library-grid"><div class="library-card"><div class="collection-title"><h3>Business objectives</h3><span class="published">✓ Published</span></div><div class="collection-items">Generate leads<br>Drive sales<br>Understand web and/or app performance<br>View user engagement and retention</div></div><div class="library-card"><div class="collection-title"><h3>User</h3><span class="published">✓ Published</span></div><div class="collection-items">User attributes overview<br>Demographic details<br>Audiences<br>Tech overview<br>Tech details</div></div><div class="library-card"><div class="collection-title"><h3>App developer</h3><span class="published">✓ Published</span></div><div class="collection-items">Reports snapshot<br>Realtime overview<br>Realtime pages<br>Events<br>Pages and screens</div></div></div><div class="lib-toolbar" style="margin-top:24px"><h2>Reports</h2><button class="primary">Create new report</button></div><div class="library-grid"><div class="library-card"><h3>Detail reports</h3><div class="collection-items">Events<br>Pages and screens<br>Demographic details<br>Audiences<br>Tech details<br>Traffic acquisition</div></div><div class="library-card"><h3>Overview reports</h3><div class="collection-items">Reports snapshot<br>Realtime overview<br>Engagement overview<br>User attributes overview<br>Tech overview</div></div><div class="library-card"><h3>Custom reports</h3><div class="empty" style="min-height:110px"><div>No custom reports yet</div></div></div></div></div>';bind();document.querySelectorAll('.primary').forEach(b=>b.onclick=()=>GAToast(b.textContent))}switch(key){case'realtime':realtime();break;case'realtimePages':realtimePages();break;case'leads':objective('Generate leads','lead');break;case'sales':objective('Drive sales','sales');break;case'behavior':behavior();break;case'engagement':engagement();break;case'events':eventsPage();break;case'pages':pagesPage();break;case'import':importPage();break;case'userOverview':userOverview();break;case'audiences':audiences();break;case'techOverview':techOverview();break;case'library':library();break;default:main.innerHTML=head('Report')+'<div class="content"><div class="card">Unknown report</div></div>';bind()}})();
