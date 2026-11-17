@@ -102,13 +102,14 @@
       {label:'Open Reports snapshot',icon:'⌂',href:routes.reports},
       {label:'Open Library',icon:'▭',href:routes.library}
     ]);
-    h.querySelector('[data-account]').onclick=e=>shellMenu(e.currentTarget,'Account',[
-      {label:'Rieng254 Analytics',icon:'R',action:()=>toast('Rieng254 Analytics')},
+    h.querySelector('[data-account]').onclick=e=>{const email=window.PortalSession?.email?.()||'Rieng254 Analytics';shellMenu(e.currentTarget,'Account',[
+      {label:email,icon:(window.PortalSession?.initial?.()||'R'),action:()=>toast(email)},
       {label:'Property: rieng254.com',icon:'◆',action:()=>toast('Property: rieng254.com')},
       '---',
+      {label:'Access management',icon:'◉',href:'Access management.html'},
       {label:'Copy current report link',icon:'⧉',action:()=>navigator.clipboard?.writeText(location.href).then(()=>toast('Report link copied')).catch(()=>toast(location.href))},
       {label:'Reports snapshot',icon:'⌂',href:routes.reports}
-    ]);
+    ])};
   }
 
   const state=(key,def=true)=>{const v=localStorage.getItem('gaNav:'+key);return v===null?def:v==='1'};
