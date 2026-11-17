@@ -45,7 +45,7 @@
     h.className='ga-top';
     h.innerHTML=
       '<div class="ga-brand"><div class="ga-logo"><i></i><i></i><i></i></div><div class="ga-word">Analytics</div>'+
-      '<div class="ga-prop"><div class="ga-crumb">All accounts › rieng254.com</div><div class="ga-prop-name">rieng254.com⌄</div></div></div>'+
+      '<div class="ga-prop"><div class="ga-crumb">All accounts › rieng254.com</div><div class="ga-prop-row"><div class="ga-prop-name">rieng254.com</div><span class="ga-prop-caret" aria-hidden="true"></span></div></div></div>'+
       '<div class="ga-search-wrap"><input class="ga-search" placeholder="Try searching reports"></div>'+
       '<div class="ga-top-actions"><button class="ga-icon">▦</button><button class="ga-icon">?</button><div class="ga-avatar">R</div></div>';
     document.body.appendChild(h);
