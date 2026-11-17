@@ -433,12 +433,10 @@ const PortalScroll={
     if(!this.raf)this.raf=requestAnimationFrame(()=>this.step());
   },
   mount(){
-    addEventListener('wheel',e=>{
-      if(e.ctrlKey||e.metaKey)return;
-      if(e.target.closest('.portal-nav,.portal-fixed-header,.ui-pop,.ui-modal,.ui-search-results'))return;
-      e.preventDefault();
-      this.nudge(e.deltaY);
-    },{passive:false});
+    // Use native browser scrolling. The old wheel interceptor started a
+    // requestAnimationFrame loop on every wheel gesture, which could make
+    // this DOM-heavy snapshot feel unresponsive in Chromium/Brave.
+    this.target=window.scrollY;
     addEventListener('scroll',()=>{
       if(!this.internal&&!this.raf)this.target=window.scrollY;
     },{passive:true});
