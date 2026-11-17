@@ -69,7 +69,8 @@ body{overflow-x:hidden;font-family:'Google Sans',Roboto,Arial,sans-serif;color:#
 @keyframes portalIn{from{opacity:.82}to{opacity:1}}
 .ui-search-glyph{position:absolute;z-index:912;color:#5f6368;pointer-events:none}
 
-/* sidebar now lives in the same scaled canvas as the report */
+
+/* GA-style shared portal navigation — report content remains untouched */
 .portal-nav-mask,.portal-nav{translate:0 0!important}
 .portal-nav-mask{
   position:absolute;left:0;z-index:4998;background:#f8fafd;pointer-events:none
@@ -78,26 +79,66 @@ body{overflow-x:hidden;font-family:'Google Sans',Roboto,Arial,sans-serif;color:#
   position:absolute;left:0;z-index:5000;
   background:#f8fafd;border-right:1px solid #e3e5e8;
   font-family:'Google Sans',Roboto,Arial,sans-serif;color:#202124;
-  box-sizing:border-box;padding:12px 10px 16px;overflow:auto;
+  box-sizing:border-box;padding:7px 7px 12px;overflow-y:auto;overflow-x:hidden;
+  scrollbar-width:thin;scrollbar-color:#c7c9cc transparent
 }
+.portal-nav::-webkit-scrollbar{width:5px}
+.portal-nav::-webkit-scrollbar-thumb{background:#c7c9cc;border-radius:6px}
 .portal-nav *{box-sizing:border-box}
-.portal-nav-title{
-  padding:4px 12px 10px;font-size:12px;color:#5f6368;
-  text-transform:uppercase;letter-spacing:.45px;font-weight:500
+.portal-nav a,.portal-nav button{font-family:inherit}
+.pcreate{
+  display:flex;align-items:center;gap:8px;margin:1px 3px 8px;padding:7px 12px;
+  min-height:36px;border:1px solid #dadce0;border-radius:18px;background:#fff;
+  color:#202124;font-size:12px;font-weight:500;cursor:pointer;
+  box-shadow:0 1px 3px rgba(60,64,67,.18)
 }
-.portal-nav a{
-  display:flex;align-items:center;gap:12px;width:100%;min-height:42px;
-  padding:9px 12px;margin:2px 0;border-radius:21px;text-decoration:none;
-  color:#202124;font-size:15px;font-weight:500;line-height:20px;
-  transition:background .12s ease,color .12s ease;
+.pcreate:hover{background:#f8fafd}
+.pcreate-plus{font-size:20px;line-height:14px;color:#1a73e8;font-weight:400}
+.pcreate-caret{font-size:9px;color:#5f6368;margin-left:auto}
+.pnav-link,.pnav-btn,.pnav-section,.pnav-subsection{
+  width:100%;border:0;background:transparent;color:#202124;text-decoration:none;
+  display:flex;align-items:center;text-align:left;cursor:pointer;min-width:0
 }
-.portal-nav a:hover{background:#eef3fb}
-.portal-nav a.active{background:#d3e3fd;color:#0b57d0}
-.portal-nav .picon{
-  width:22px;min-width:22px;text-align:center;color:#5f6368;font-size:15px
+.pnav-link,.pnav-btn{
+  min-height:30px;padding:5px 8px;border-radius:15px;font-size:12px;font-weight:500;gap:8px
 }
-.portal-nav a.active .picon{color:#0b57d0}
-.portal-nav .pdivider{height:1px;background:#dadce0;margin:9px 5px}
+.pnav-link:hover,.pnav-btn:hover{background:#eef3fb}
+.pnav-link.active{background:#d3e3fd;color:#0b57d0}
+.pnav-link.active .picon{color:#0b57d0}
+.picon{width:18px;min-width:18px;text-align:center;color:#5f6368;font-size:12px}
+.ptext{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pnav-divider{height:1px;background:#dadce0;margin:5px 1px}
+.pnav-selector{
+  display:flex;align-items:center;width:100%;height:31px;margin:3px 0 7px;
+  padding:0 10px;border:1px solid #9aa0a6;border-radius:3px;background:#fff;
+  font-size:11px;color:#3c4043;cursor:pointer
+}
+.pnav-selector span:last-child{margin-left:auto;font-size:9px;color:#5f6368}
+.pnav-section{
+  min-height:29px;padding:5px 4px 5px 8px;font-size:11px;color:#5f6368;font-weight:500
+}
+.pnav-subsection{
+  min-height:28px;padding:5px 7px;font-size:11.5px;color:#3c4043;font-weight:500;border-radius:14px
+}
+.pnav-section:hover,.pnav-subsection:hover{background:#f1f3f4}
+.pnav-caret{width:13px;min-width:13px;font-size:9px;color:#5f6368;transition:transform .15s ease}
+.pnav-caret.right{transform:rotate(-90deg)}
+.pnav-children{display:block}
+.pnav-group.collapsed>.pnav-children{display:none}
+.pnav-child{padding-left:20px}
+.pnav-child2{padding-left:31px}
+.pnav-bottom{margin-top:5px;padding-top:4px;border-top:1px solid #dadce0}
+.pnav-status{
+  display:inline-block;margin-left:auto;width:5px;height:5px;border-radius:50%;background:#1a73e8;opacity:.75
+}
+.ga-progress{
+  position:fixed;left:0;top:0;height:3px;width:0;z-index:100000;
+  background:#1a73e8;box-shadow:0 0 7px rgba(26,115,232,.45);
+  opacity:0;pointer-events:none;transform-origin:left center;
+  transition:width .22s cubic-bezier(.4,0,.2,1),opacity .2s ease
+}
+.ga-progress.visible{opacity:1}
+.ga-progress.done{width:100%!important;opacity:0;transition:width .16s ease-out,opacity .32s ease .10s}
 @view-transition{navigation:auto}
 .portal-nav{view-transition-name:portal-sidebar}
 ::view-transition-old(portal-sidebar),::view-transition-new(portal-sidebar){animation-duration:0s}
@@ -293,7 +334,35 @@ const UI={
 };
 document.addEventListener('click',()=>UI.closePop());
 
-/* one clean portal sidebar; old page nav is masked underneath */
+
+/* GA-style shared navigation + portal loading line */
+const PortalProgress={
+  el:null,timer:null,value:0,
+  mount(){
+    if(this.el?.isConnected)return;
+    this.el=document.createElement('div');
+    this.el.className='ga-progress';
+    document.body.appendChild(this.el);
+  },
+  start(){
+    this.mount();clearInterval(this.timer);
+    this.value=8;this.el.className='ga-progress visible';this.el.style.width=this.value+'%';
+    this.timer=setInterval(()=>{
+      if(this.value>=82){clearInterval(this.timer);return}
+      const jump=Math.max(1.2,(84-this.value)*.08);
+      this.value=Math.min(82,this.value+jump);
+      this.el.style.width=this.value+'%';
+    },110);
+  },
+  done(){
+    this.mount();clearInterval(this.timer);
+    this.el.classList.add('done');
+    this.el.style.width='100%';
+    setTimeout(()=>{if(!this.el)return;this.el.className='ga-progress';this.el.style.width='0%'},430);
+  },
+  pulse(ms=650){this.start();setTimeout(()=>this.done(),ms)}
+};
+
 const PortalNav={
   routes:{
     reports:'Analytics _ Reports snapshot.html',
@@ -302,14 +371,21 @@ const PortalNav={
     demographics:'Demographic details_ Country.html',
     tech:'Tech details_ Device category.html'
   },
-  labels:{
-    reports:'Reports snapshot',
-    campaigns:'Campaigns & cohorts',
-    acquisition:'Traffic acquisition',
-    demographics:'Demographics',
-    tech:'Tech details'
+  virtual(label){
+    PortalProgress.pulse(520);
+    if(typeof UI!=='undefined'&&UI.modal){
+      UI.modal(label,
+        '<div style="color:#5f6368;margin-bottom:10px">This navigation item is included to mirror the Analytics report hierarchy.</div>'+
+        '<div style="background:#f8fafd;border:1px solid #e8eaed;border-radius:8px;padding:11px">There is no separate snapshot HTML file for <b>'+label+'</b> in the current portal yet. Your existing five report pages remain unchanged.</div>',
+        [{label:'Close',primary:true,action:c=>c()}]
+      );
+    }
   },
-  icons:{reports:'⌂',campaigns:'◫',acquisition:'↗',demographics:'◉',tech:'▣'},
+  state(key,def=true){
+    const v=localStorage.getItem('gaNav:'+key);
+    return v===null?def:v==='1';
+  },
+  setState(key,open){localStorage.setItem('gaNav:'+key,open?'1':'0')},
   mount(opts){
     S.querySelector('.portal-nav')?.remove();
     S.querySelector('.portal-nav-mask')?.remove();
@@ -332,22 +408,123 @@ const PortalNav={
     nav.className='portal-nav';
     nav.setAttribute('aria-label','Analytics portal navigation');
     nav.style.cssText='top:'+opts.top+'px;width:'+opts.width+'px;height:'+opts.height+'px';
+
+    const real=(key,label,cls='')=>
+      '<a class="pnav-link '+cls+' '+(opts.active===key?'active':'')+'" href="'+this.routes[key]+'" data-real="'+key+'"'+(opts.active===key?' aria-current="page"':'')+'>'+
+        '<span class="picon">'+({reports:'⌂',campaigns:'◫',acquisition:'↗',demographics:'◉',tech:'▣'}[key]||'•')+'</span><span class="ptext">'+label+'</span>'+
+      '</a>';
+    const virt=(label,cls='')=>
+      '<button class="pnav-btn '+cls+'" type="button" data-virtual="'+label.replace(/"/g,'&quot;')+'"><span class="picon">›</span><span class="ptext">'+label+'</span></button>';
+
     nav.innerHTML=
-      '<div class="portal-nav-title">Reports</div>'+
-      Object.keys(this.routes).map(key=>
-        '<a href="'+this.routes[key]+'" class="'+(opts.active===key?'active':'')+'" data-key="'+key+'"'+(opts.active===key?' aria-current="page"':'')+'>'+
-          '<span class="picon">'+this.icons[key]+'</span>'+
-          '<span>'+this.labels[key]+'</span>'+
-        '</a>'
-      ).join('');
+      '<button class="pcreate" type="button" data-create><span class="pcreate-plus">＋</span><span>Create</span><span class="pcreate-caret">▼</span></button>'+
+      real('reports','Reports snapshot')+
+      virt('Realtime overview')+
+      virt('Realtime pages')+
+      '<div class="pnav-divider"></div>'+
+      '<button class="pnav-selector" type="button" data-selector><span>App developer</span><span>⌄</span></button>'+
+      '<div class="pnav-group" data-group="business">'+
+        '<button class="pnav-section" type="button" data-toggle="business"><span class="pnav-caret">⌄</span><span class="ptext">Business objectives</span></button>'+
+        '<div class="pnav-children">'+
+          virt('Generate leads','pnav-child')+
+          virt('Drive sales','pnav-child')+
+          virt('Understand web and/or app performance','pnav-child')+
+          '<button class="pnav-subsection pnav-child" type="button" data-subtoggle="engagement"><span class="pnav-caret">⌄</span><span class="ptext">View user engagement and retention</span></button>'+
+          '<div class="pnav-children" data-subchildren="engagement">'+
+            virt('Overview','pnav-child2')+
+            virt('Events','pnav-child2')+
+            virt('Pages and screens','pnav-child2')+
+            real('campaigns','Campaigns & cohorts','pnav-child2')+
+            real('acquisition','Traffic acquisition','pnav-child2')+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+      '<div class="pnav-divider"></div>'+
+      '<div class="pnav-group" data-group="import">'+
+        '<button class="pnav-section" type="button" data-toggle="import"><span class="pnav-caret">⌄</span><span class="ptext">Data import</span></button>'+
+        '<div class="pnav-children">'+virt('Campaign data import validation','pnav-child')+'</div>'+
+      '</div>'+
+      '<div class="pnav-divider"></div>'+
+      '<div class="pnav-group" data-group="user">'+
+        '<button class="pnav-section" type="button" data-toggle="user"><span class="pnav-caret">⌄</span><span class="ptext">User</span></button>'+
+        '<div class="pnav-children">'+
+          '<button class="pnav-subsection pnav-child" type="button" data-subtoggle="userattrs"><span class="pnav-caret">⌄</span><span class="ptext">User attributes</span></button>'+
+          '<div class="pnav-children" data-subchildren="userattrs">'+
+            virt('Overview','pnav-child2')+
+            real('demographics','Demographic details','pnav-child2')+
+            virt('Audiences','pnav-child2')+
+          '</div>'+
+          '<button class="pnav-subsection pnav-child" type="button" data-subtoggle="techgroup"><span class="pnav-caret">⌄</span><span class="ptext">Tech</span></button>'+
+          '<div class="pnav-children" data-subchildren="techgroup">'+
+            virt('Overview','pnav-child2')+
+            real('tech','Tech details','pnav-child2')+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+      '<div class="pnav-bottom">'+virt('Library')+'</div>';
     S.appendChild(nav);
 
-    nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',e=>{
-      const current=decodeURIComponent(location.pathname.split('/').pop()||'');
-      if(current===a.getAttribute('href'))e.preventDefault();
+    const applyGroup=(key,open)=>{
+      const g=nav.querySelector('[data-group="'+key+'"]');
+      if(!g)return;g.classList.toggle('collapsed',!open);
+      const caret=g.querySelector(':scope > [data-toggle] .pnav-caret');
+      if(caret)caret.classList.toggle('right',!open);
+    };
+    ['business','import','user'].forEach(k=>applyGroup(k,this.state(k,true)));
+
+    const subDefaults={engagement:true,userattrs:true,techgroup:true};
+    Object.keys(subDefaults).forEach(k=>{
+      const open=this.state('sub:'+k,subDefaults[k]);
+      const ch=nav.querySelector('[data-subchildren="'+k+'"]');
+      const btn=nav.querySelector('[data-subtoggle="'+k+'"]');
+      if(ch)ch.style.display=open?'block':'none';
+      btn?.querySelector('.pnav-caret')?.classList.toggle('right',!open);
+    });
+
+    nav.querySelectorAll('[data-toggle]').forEach(btn=>btn.addEventListener('click',()=>{
+      const k=btn.dataset.toggle,g=nav.querySelector('[data-group="'+k+'"]'),open=g.classList.contains('collapsed');
+      applyGroup(k,open);this.setState(k,open);PortalProgress.pulse(300);
     }));
+    nav.querySelectorAll('[data-subtoggle]').forEach(btn=>btn.addEventListener('click',()=>{
+      const k=btn.dataset.subtoggle,ch=nav.querySelector('[data-subchildren="'+k+'"]');
+      const open=ch.style.display==='none';ch.style.display=open?'block':'none';
+      btn.querySelector('.pnav-caret')?.classList.toggle('right',!open);this.setState('sub:'+k,open);PortalProgress.pulse(280);
+    }));
+
+    nav.querySelectorAll('[data-real]').forEach(a=>a.addEventListener('click',e=>{
+      const current=decodeURIComponent(location.pathname.split('/').pop()||'');
+      if(current===a.getAttribute('href')){e.preventDefault();PortalProgress.pulse(330)}
+      else PortalProgress.start();
+    }));
+    nav.querySelectorAll('[data-virtual]').forEach(b=>b.addEventListener('click',()=>this.virtual(b.dataset.virtual)));
+
+    nav.querySelector('[data-create]')?.addEventListener('click',()=>{
+      PortalProgress.pulse(420);
+      if(typeof UI!=='undefined'&&UI.pop)UI.pop(opts.width+8,opts.top+8,[
+        {label:'Reports snapshot',icon:'⌂',href:this.routes.reports},
+        {label:'Campaigns & cohorts',icon:'◫',href:this.routes.campaigns},
+        {label:'Traffic acquisition',icon:'↗',href:this.routes.acquisition},
+        {label:'Demographic details',icon:'◉',href:this.routes.demographics},
+        {label:'Tech details',icon:'▣',href:this.routes.tech}
+      ],'Create / open report','Available report snapshots',250);
+    });
+    nav.querySelector('[data-selector]')?.addEventListener('click',()=>{
+      PortalProgress.pulse(330);
+      if(typeof UI!=='undefined'&&UI.pop)UI.pop(opts.width+8,opts.top+50,[
+        {label:'App developer',icon:'✓',selected:true,disabled:true},
+        {label:'Business objectives',icon:'◎',disabled:true},
+        {label:'User',icon:'◉',disabled:true}
+      ],'Report collection','Current navigation collection',250);
+    });
   }
 };
+
+PortalProgress.start();
+addEventListener('pageshow',()=>setTimeout(()=>PortalProgress.done(),360),{once:true});
+document.addEventListener('click',e=>{
+  if(e.target.closest('.hotspot'))PortalProgress.pulse(560);
+},true);
+
 
 const PortalLayout={
   cfg:null,
