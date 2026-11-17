@@ -495,27 +495,28 @@ const PortalNav={
       '<a class="pnav-link '+cls+' '+(opts.active===key?'active':'')+'" href="'+this.routes[key]+'" data-real="'+key+'"'+(opts.active===key?' aria-current="page"':'')+'>'+
         '<span class="picon">'+({reports:'⌂',campaigns:'◫',acquisition:'↗',demographics:'◉',tech:'▣'}[key]||'•')+'</span><span class="ptext">'+label+'</span>'+
       '</a>';
-    const virt=(label,cls='')=>
-      '<button class="pnav-btn '+cls+'" type="button" data-virtual="'+label.replace(/"/g,'&quot;')+'"><span class="picon">›</span><span class="ptext">'+label+'</span></button>';
+    const virt=(label,cls='',href='')=> href
+      ? '<a class="pnav-link '+cls+'" href="'+href+'" data-extra><span class="picon">›</span><span class="ptext">'+label+'</span></a>'
+      : '<button class="pnav-btn '+cls+'" type="button" data-virtual="'+label.replace(/"/g,'&quot;')+'"><span class="picon">›</span><span class="ptext">'+label+'</span></button>';
 
     nav.innerHTML=
       '<button class="pcreate" type="button" data-create><span class="pcreate-plus">＋</span><span>Create</span><span class="pcreate-caret">▼</span></button>'+
       real('reports','Reports snapshot')+
-      virt('Realtime overview')+
-      virt('Realtime pages')+
+      virt('Realtime overview','','Realtime overview.html')+
+      virt('Realtime pages','','Realtime pages.html')+
       '<div class="pnav-divider"></div>'+
       '<button class="pnav-selector" type="button" data-selector><span>App developer</span><span>⌄</span></button>'+
       '<div class="pnav-group" data-group="business">'+
         '<button class="pnav-section" type="button" data-toggle="business"><span class="pnav-caret">⌄</span><span class="ptext">Business objectives</span></button>'+
         '<div class="pnav-children">'+
-          virt('Generate leads','pnav-child')+
-          virt('Drive sales','pnav-child')+
-          virt('Understand web and/or app performance','pnav-child')+
+          virt('Generate leads','pnav-child','Generate leads.html')+
+          virt('Drive sales','pnav-child','Drive sales.html')+
+          virt('Understand web and/or app performance','pnav-child','Understand web and app performance.html')+
           '<button class="pnav-subsection pnav-child" type="button" data-subtoggle="engagement"><span class="pnav-caret">⌄</span><span class="ptext">View user engagement and retention</span></button>'+
           '<div class="pnav-children" data-subchildren="engagement">'+
-            virt('Overview','pnav-child2')+
-            virt('Events','pnav-child2')+
-            virt('Pages and screens','pnav-child2')+
+            virt('Overview','pnav-child2','Engagement overview.html')+
+            virt('Events','pnav-child2','Events.html')+
+            virt('Pages and screens','pnav-child2','Pages and screens.html')+
             real('campaigns','Campaigns & cohorts','pnav-child2')+
             real('acquisition','Traffic acquisition','pnav-child2')+
           '</div>'+
@@ -524,7 +525,7 @@ const PortalNav={
       '<div class="pnav-divider"></div>'+
       '<div class="pnav-group" data-group="import">'+
         '<button class="pnav-section" type="button" data-toggle="import"><span class="pnav-caret">⌄</span><span class="ptext">Data import</span></button>'+
-        '<div class="pnav-children">'+virt('Campaign data import validation','pnav-child')+'</div>'+
+        '<div class="pnav-children">'+virt('Campaign data import validation','pnav-child','Campaign data import validation.html')+'</div>'+
       '</div>'+
       '<div class="pnav-divider"></div>'+
       '<div class="pnav-group" data-group="user">'+
@@ -532,18 +533,18 @@ const PortalNav={
         '<div class="pnav-children">'+
           '<button class="pnav-subsection pnav-child" type="button" data-subtoggle="userattrs"><span class="pnav-caret">⌄</span><span class="ptext">User attributes</span></button>'+
           '<div class="pnav-children" data-subchildren="userattrs">'+
-            virt('Overview','pnav-child2')+
+            virt('Overview','pnav-child2','User attributes overview.html')+
             real('demographics','Demographic details','pnav-child2')+
-            virt('Audiences','pnav-child2')+
+            virt('Audiences','pnav-child2','Audiences.html')+
           '</div>'+
           '<button class="pnav-subsection pnav-child" type="button" data-subtoggle="techgroup"><span class="pnav-caret">⌄</span><span class="ptext">Tech</span></button>'+
           '<div class="pnav-children" data-subchildren="techgroup">'+
-            virt('Overview','pnav-child2')+
+            virt('Overview','pnav-child2','Tech overview.html')+
             real('tech','Tech details','pnav-child2')+
           '</div>'+
         '</div>'+
       '</div>'+
-      '<div class="pnav-bottom">'+virt('Library')+'</div>';
+      '<div class="pnav-bottom">'+virt('Library','','Library.html')+'</div>';
     document.body.appendChild(nav);
 
     const applyGroup=(key,open)=>{
@@ -573,6 +574,7 @@ const PortalNav={
       btn.querySelector('.pnav-caret')?.classList.toggle('right',!open);this.setState('sub:'+k,open);PortalProgress.pulse(280);
     }));
 
+    nav.querySelectorAll('[data-extra]').forEach(a=>a.addEventListener('click',()=>PortalProgress.start()));
     nav.querySelectorAll('[data-real]').forEach(a=>a.addEventListener('click',e=>{
       const current=decodeURIComponent(location.pathname.split('/').pop()||'');
       if(current===a.getAttribute('href')){e.preventDefault();PortalProgress.pulse(330)}
