@@ -169,7 +169,6 @@
 
     n.querySelectorAll('[data-toggle]').forEach(btn=>btn.addEventListener('click',e=>{
       const k=btn.dataset.toggle;
-      if(e.target.closest('.ptext')&&k==='import'){progress.start();location.href=routes.import;return}
       const g=n.querySelector('[data-group="'+k+'"]'),open=g.classList.contains('collapsed');
       applyGroup(k,open);setState(k,open);progress.pulse(280);
     }));
