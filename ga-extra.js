@@ -121,12 +121,16 @@
       btn?.querySelector('.pnav-caret')?.classList.toggle('right',!open);
     });
 
-    n.querySelectorAll('[data-toggle]').forEach(btn=>btn.addEventListener('click',()=>{
-      const k=btn.dataset.toggle,g=n.querySelector('[data-group="'+k+'"]'),open=g.classList.contains('collapsed');
+    n.querySelectorAll('[data-toggle]').forEach(btn=>btn.addEventListener('click',e=>{
+      const k=btn.dataset.toggle;
+      if(e.target.closest('.ptext')&&k==='import'){progress.start();location.href=routes.import;return}
+      const g=n.querySelector('[data-group="'+k+'"]'),open=g.classList.contains('collapsed');
       applyGroup(k,open);setState(k,open);progress.pulse(280);
     }));
-    n.querySelectorAll('[data-subtoggle]').forEach(btn=>btn.addEventListener('click',()=>{
-      const k=btn.dataset.subtoggle,ch=n.querySelector('[data-subchildren="'+k+'"]'),open=ch.style.display==='none';
+    n.querySelectorAll('[data-subtoggle]').forEach(btn=>btn.addEventListener('click',e=>{
+      const k=btn.dataset.subtoggle,dest={userattrs:routes.userOverview,techgroup:routes.techOverview}[k];
+      if(e.target.closest('.ptext')&&dest){progress.start();location.href=dest;return}
+      const ch=n.querySelector('[data-subchildren="'+k+'"]'),open=ch.style.display==='none';
       ch.style.display=open?'block':'none';btn.querySelector('.pnav-caret')?.classList.toggle('right',!open);setState('sub:'+k,open);progress.pulse(260);
     }));
     n.querySelectorAll('[data-real]').forEach(a=>a.addEventListener('click',()=>progress.start()));
