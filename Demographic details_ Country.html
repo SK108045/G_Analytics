@@ -489,24 +489,6 @@ const PortalNav={
       virt('Realtime overview','','Realtime overview.html')+
       virt('Realtime pages','','Realtime pages.html')+
       '<div class="pnav-divider"></div>'+
-      '<button class="pnav-selector" type="button" data-selector><span>App developer</span><span>⌄</span></button>'+
-      '<div class="pnav-group" data-group="business">'+
-        '<button class="pnav-section" type="button" data-toggle="business"><span class="pnav-caret">⌄</span><span class="ptext">Business objectives</span></button>'+
-        '<div class="pnav-children">'+
-          virt('Generate leads','pnav-child','Generate leads.html')+
-          virt('Drive sales','pnav-child','Drive sales.html')+
-          virt('Understand web and/or app performance','pnav-child','Understand web and app performance.html')+
-          '<button class="pnav-subsection pnav-child" type="button" data-subtoggle="engagement"><span class="pnav-caret">⌄</span><span class="ptext">View user engagement and retention</span></button>'+
-          '<div class="pnav-children" data-subchildren="engagement">'+
-            virt('Overview','pnav-child2','Engagement overview.html')+
-            virt('Events','pnav-child2','Events.html')+
-            virt('Pages and screens','pnav-child2','Pages and screens.html')+
-            real('campaigns','Campaigns & cohorts','pnav-child2')+
-            real('acquisition','Traffic acquisition','pnav-child2')+
-          '</div>'+
-        '</div>'+
-      '</div>'+
-      '<div class="pnav-divider"></div>'+
       '<div class="pnav-group" data-group="import">'+
         '<button class="pnav-section" type="button" data-toggle="import"><span class="pnav-caret">⌄</span><span class="ptext">Data import</span></button>'+
         '<div class="pnav-children">'+virt('Campaign data import validation','pnav-child','Campaign data import validation.html')+'</div>'+
@@ -537,7 +519,7 @@ const PortalNav={
       const caret=g.querySelector(':scope > [data-toggle] .pnav-caret');
       if(caret)caret.classList.toggle('right',!open);
     };
-    ['business','import','user'].forEach(k=>applyGroup(k,this.state(k,true)));
+    ['import','user'].forEach(k=>applyGroup(k,this.state(k,true)));
 
     const subDefaults={engagement:true,userattrs:true,techgroup:true};
     Object.keys(subDefaults).forEach(k=>{
@@ -575,14 +557,6 @@ const PortalNav={
         {label:'Demographic details',icon:'◉',href:this.routes.demographics},
         {label:'Tech details',icon:'▣',href:this.routes.tech}
       ],'Create / open report','Available report snapshots',250);
-    });
-    nav.querySelector('[data-selector]')?.addEventListener('click',()=>{
-      PortalProgress.pulse(330);
-      if(typeof UI!=='undefined'&&UI.pop)UI.pop(opts.width+8,opts.top+50,[
-        {label:'App developer',icon:'✓',selected:true,disabled:true},
-        {label:'Business objectives',icon:'◎',disabled:true},
-        {label:'User',icon:'◉',disabled:true}
-      ],'Report collection','Current navigation collection',250);
     });
   }
 };
