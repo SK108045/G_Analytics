@@ -186,6 +186,7 @@ html,body{background:#f8fafd!important}
 const S=document.getElementById('s');
 const T=(x,y,h,css='',m='')=>{const e=document.createElement('div');e.className='t'+(m=='c'?' ce':'');e.innerHTML=h;e.style.top=y+'px';if(m=='r')e.style.right=(1536-x)+'px';else e.style.left=x+'px';e.style.cssText+=css;S.appendChild(e);return e};
 const B=(x,y,w,h,bg,css='')=>{const e=document.createElement('div');e.className='b';e.style.cssText=`left:${x}px;top:${y}px;width:${w}px;height:${h}px;background:${bg};${css}`;S.appendChild(e);return e};
+const IMG=(x,y,w,h,src)=>{const e=document.createElement('img');e.className='b ga-map-img';e.src=src;e.alt='';e.style.cssText=`left:${x}px;top:${y}px;width:${w}px;height:${h}px;object-fit:contain;background:#fff;`;S.appendChild(e);return e};
 const I=(x,y,s,d,f='#5f6368')=>{const e=document.createElement('div');e.className='b';e.style.cssText=`left:${x-s/2}px;top:${y-s/2}px;width:${s}px;height:${s}px`;e.innerHTML=`<svg viewBox="0 0 24 24" width="${s}" height="${s}"><path d="${d}" fill="${f}"/></svg>`;S.appendChild(e)};
 const SR='M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z';
 const BLUE='#1a73e8',NV=(x,y,t,c='#202124',w=500)=>T(x,y,t,`font-size:15px;font-weight:${w};color:${c}`);
@@ -209,6 +210,7 @@ sv+='<g fill="#dadce0"><path d="M778 322L830 300 880 298 910 312 900 345 880 365
 sv+='<g fill="#aecbfa"><path d="M830 372L870 385 890 405 870 420 850 400Z"/><path d="M900 430L935 435 930 455 905 450Z"/><path d="M1085 345L1135 335 1150 360 1120 385 1090 375Z"/><path d="M1060 380L1085 380 1075 410Z"/><path d="M985 470L1010 468 1000 485Z"/><ellipse cx="1105" cy="425" rx="12" ry="4"/><ellipse cx="1137" cy="431" rx="9" ry="4"/><ellipse cx="1152" cy="441" rx="6" ry="3"/></g>';
 sv+='<path d="M1098 355L1128 348 1135 368 1112 378Z" fill="#8ab4f8"/><path d="M995 405L1010 400 1012 440 995 470 985 450Z" fill="#8ab4f8"/><path d="M1008 410L1028 405 1030 425 1012 440Z" fill="#0b57d0"/>';
 sv+='</svg>';S.insertAdjacentHTML('beforeend',sv);
+IMG(790,278,410,250,'ga-africa-map.webp');
 
 /* header */
 B(16,36,9,12,'#e37400','border-radius:3px');B(28,28,9,20,'#f9ab00','border-radius:3px');B(40,18,9,30,'#f9ab00','border-radius:3px');
