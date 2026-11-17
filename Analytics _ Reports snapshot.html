@@ -381,7 +381,7 @@ const UI={
  range(x,y){const saved=localStorage.getItem('riengGaRange');const cmp=localStorage.getItem('riengGaCompare')!=='off';const items=Object.keys(this.dateMeta).map(k=>({label:k,icon:saved===k?'✓':'',selected:saved===k,action:()=>this.setDate(k,this.dateMeta[k].dates,true)}));items.push('---',{label:(cmp?'✓ ':'')+'Compare to previous period',icon:'≋',action:()=>{localStorage.setItem('riengGaCompare',cmp?'off':'on');const key=localStorage.getItem('riengGaRange')||this.currentDateKey();this.setDate(key,this.dateMeta[key]?.dates||'',true)}},{label:'Custom range…',icon:'▦',action:()=>this.customRange()});this.pop(x,y,items,'Date range','Changing the range persists across reports',292)},
  currentDateKey(){const d=[...S.querySelectorAll('.t')].find(e=>/Last (90|30|7) days/.test(e.textContent));const m=d?.textContent.match(/Last (?:90|30|7) days/);return m?.[0]||'Last 90 days'},
  customRange(){this.modal('Custom date range','<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><label>Start<br><input id="gaStart" type="date" value="2026-08-12" style="margin-top:5px;width:100%;padding:8px;border:1px solid #dadce0;border-radius:6px"></label><label>End<br><input id="gaEnd" type="date" value="2026-11-09" style="margin-top:5px;width:100%;padding:8px;border:1px solid #dadce0;border-radius:6px"></label></div>',[{label:'Cancel',action:c=>c()},{label:'Apply',primary:true,action:(c,bg)=>{const a=bg.querySelector('#gaStart').value,z=bg.querySelector('#gaEnd').value;if(!a||!z){this.toast('Choose both dates');return}localStorage.setItem('riengGaRange','Custom');localStorage.setItem('riengGaCustom',JSON.stringify([a,z]));const fmt=s=>new Date(s+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});this.setDate('Custom',fmt(a)+' - '+fmt(z),false);c()}}])},
- setDate(label,dates,persist=true){const d=[...S.querySelectorAll('.t')].find(e=>/Last (90|30|7) days|Custom/.test(e.textContent));if(d)d.innerHTML=label+' &nbsp;&nbsp;'+dates;const cmp=localStorage.getItem('riengGaCompare')!=='off';const ce=[...S.querySelectorAll('.t')].filter(e=>/^Compare:/.test(e.textContent.trim()));ce.forEach(e=>{e.style.display=cmp?'':'none';if(cmp&&this.dateMeta[label])e.textContent=this.dateMeta[label].compare});if(persist){localStorage.setItem('riengGaRange',label);this.toast('Date range applied across reports')}this.animate()},
+ setDate(label,dates,persist=true){const d=[...S.querySelectorAll('.t')].find(e=>/Last (90|30|7) days|Custom/.test(e.textContent));if(d)d.innerHTML=label+' &nbsp;&nbsp;'+dates;const cmp=localStorage.getItem('riengGaCompare')!=='off';const ce=[...S.querySelectorAll('.t')].filter(e=>/^Compare:/.test(e.textContent.trim()));ce.forEach(e=>{e.style.display=cmp?'':'none';if(cmp&&this.dateMeta[label])e.textContent=this.dateMeta[label].compare});if(persist){localStorage.setItem('riengGaRange',label);this.toast('Date range applied across reports')}window.ReportRange?.apply(label);this.animate()},
  restoreDate(){const k=localStorage.getItem('riengGaRange');if(!k)return;if(k==='Custom'){try{const [a,z]=JSON.parse(localStorage.getItem('riengGaCustom')||'[]');if(a&&z){const fmt=s=>new Date(s+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});this.setDate('Custom',fmt(a)+' - '+fmt(z),false)}}catch{}}else if(this.dateMeta[k])this.setDate(k,this.dateMeta[k].dates,false)},
  searchInput(x,y,w,h,placeholder,bg='#eceff1',fs='15px'){const input=this.input(x,y,w,h,placeholder,()=>{},bg,fs);input.autocomplete='off';let active=-1;const draw=()=>{S.querySelector('.ui-search-results')?.remove();const q=input.value.trim().toLowerCase();const matches=this.routes.filter(r=>!q||(r.label+' '+r.keys).toLowerCase().includes(q)).slice(0,5);if(!matches.length)return;const p=document.createElement('div');p.className='ui-search-results';p.style.cssText=`left:${x}px;top:${y+h}px;width:${w}px`;matches.forEach((r,i)=>{const a=document.createElement('a');a.href=r.url;a.dataset.i=i;a.innerHTML='<span class="sicon">'+r.icon+'</span><span>'+r.label+'</span>';p.appendChild(a)});S.appendChild(p);active=-1};input.addEventListener('focus',draw);input.addEventListener('input',draw);input.addEventListener('keydown',e=>{const p=S.querySelector('.ui-search-results');if(!p)return;const links=[...p.querySelectorAll('a')];if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();active=(active+(e.key==='ArrowDown'?1:-1)+links.length)%links.length;links.forEach((a,i)=>a.classList.toggle('active',i===active))}else if(e.key==='Enter'){e.preventDefault();(links[active>=0?active:0])?.click()}else if(e.key==='Escape')p.remove()});input.addEventListener('click',e=>e.stopPropagation());return input},
  comparison(x,y,chipX,chipY){const current=localStorage.getItem('riengGaComparison')||'';const options=['All users','Mobile users','Desktop users','Organic Search','Direct'];this.pop(x,y,options.map(v=>({label:v,icon:v===current?'✓':'',selected:v===current,action:()=>this.applyComparison(v,chipX,chipY)})),'Add comparison','Compare a subset of the report',278)},
@@ -651,6 +651,139 @@ document.addEventListener('click',e=>{
 },true);
 
 
+
+const ReportRange={
+  data:{
+    'Last 7 days':{
+      metrics:[['41.8K','8.6%'],['40.2K','9.1%'],['103K','11.8%'],['1m 42s','4.2%']],
+      countries:[15800,4200,4000,2600,3100,1400,2500],
+      newUsers:[16500,8200,4100,4700,2900,2100,800],
+      sessions:[25400,20300,8800,6900,5800,4300,1500],
+      changes:['12.8%','10.4%','15.1%','9.6%','18.3%','7.5%','6.2%'],
+      pages:[24100,15400,12800,7200,5700,4300,2900],
+      ticks:['Nov 3','Nov 4','Nov 5','Nov 6','Nov 7','Nov 8','Nov 9','','',''],
+      points:14,base:5100,amp:900,trend:700,compareBase:4600
+    },
+    'Last 30 days':{
+      metrics:[['151K','15.8%'],['146K','16.9%'],['382K','19.4%'],['1m 40s','9.8%']],
+      countries:[52000,13200,14100,9400,11200,4900,8200],
+      newUsers:[58000,32000,15000,16000,11000,9000,4000],
+      sessions:[82000,66000,28000,21000,22000,13000,4400],
+      changes:['18.7%','16.3%','21.5%','14.2%','23.6%','12.1%','8.9%'],
+      pages:[84000,55000,44000,24000,19000,14000,9800],
+      ticks:['Oct 11','Oct 14','Oct 17','Oct 20','Oct 23','Oct 26','Oct 29','Nov 1','Nov 5','Nov 9'],
+      points:30,base:7600,amp:1800,trend:1700,compareBase:6500
+    },
+    'Last 90 days':{
+      metrics:[['445K','24.3%'],['430K','26.1%'],['1.12M','27.8%'],['1m 38s','17.9%']],
+      countries:[153000,38000,41000,28000,33500,14000,23000],
+      newUsers:[190000,99000,51000,55000,38000,28000,13000],
+      sessions:[242000,195000,84000,61000,66000,39000,13000],
+      changes:['27.2%','24.6%','31.5%','22.1%','34.8%','18.9%','12.6%'],
+      pages:[249000,161000,131000,73000,57000,42000,29000],
+      ticks:['Jul 24','Aug 3','Aug 13','Aug 23','Sep 2','Sep 12','Sep 22','Oct 2','Oct 12','Oct 21'],
+      points:70,base:14500,amp:4700,trend:5300,compareBase:11000
+    }
+  },
+  refs:null,
+  fmt(v){
+    if(v>=1000000)return (v/1000000).toFixed(2).replace(/0+$/,'').replace(/\.$/,'')+'M';
+    if(v>=1000){const n=v/1000;return (n>=100?n.toFixed(0):n>=10?n.toFixed(n%1?1:0):n.toFixed(1)).replace('.0','')+'K'}
+    return String(Math.round(v));
+  },
+  tAt(x,y,right=false,tol=3){
+    return [...S.querySelectorAll('.t')].find(e=>{
+      const yy=parseFloat(e.style.top);if(!Number.isFinite(yy)||Math.abs(yy-y)>tol)return false;
+      const xx=parseFloat(right?e.style.right:e.style.left);
+      const want=right?1600-x:x;
+      return Number.isFinite(xx)&&Math.abs(xx-want)<=tol;
+    });
+  },
+  bAt(x,y,h=null,tol=3){
+    return [...S.querySelectorAll('.b')].find(e=>{
+      const xx=parseFloat(e.style.left),yy=parseFloat(e.style.top),hh=parseFloat(e.style.height);
+      return Number.isFinite(xx)&&Number.isFinite(yy)&&Math.abs(xx-x)<=tol&&Math.abs(yy-y)<=tol&&(h===null||Math.abs(hh-h)<=tol);
+    });
+  },
+  init(){
+    if(this.refs)return;
+    const countryYs=Array.from({length:7},(_,i)=>320+i*27.9);
+    const newRows=[[672,679],[698,707],[724,733],[750,760],[776,786],[802,813],[829,841]];
+    const sessionYs=Array.from({length:7},(_,i)=>678+i*26.6);
+    const pageYs=Array.from({length:7},(_,i)=>678+i*26.7);
+    this.refs={
+      metricVals:[[298,284],[465,284],[615,284],[795,284]].map(([x,y])=>this.tAt(x,y)),
+      metricChanges:[[298,315],[465,315],[615,315],[795,315]].map(([x,y])=>this.tAt(x,y)),
+      countryVals:countryYs.map((y,i)=>this.tAt(1557,y+(i===4?3:0),true,5)),
+      countryBars:countryYs.map(y=>this.bAt(1355,y+11,2)),
+      newVals:newRows.map(([y,vy])=>this.tAt(694,vy,true,5)),
+      newBars:newRows.map(([y])=>this.bAt(398,y-10,20)),
+      sessionVals:sessionYs.map(y=>this.tAt(1058,y+2,true,5)),
+      sessionChanges:sessionYs.map(y=>this.tAt(1091,y,false,5)),
+      pageVals:pageYs.map(y=>this.tAt(1535,y+2,true,5)),
+      pageBars:pageYs.map(y=>this.bAt(1367,y+9,2)),
+      ticks:[...S.querySelectorAll('.t')].filter(e=>Math.abs(parseFloat(e.style.top)-512)<3&&parseFloat(e.style.left)>250&&parseFloat(e.style.left)<1020).sort((a,b)=>parseFloat(a.style.left)-parseFloat(b.style.left)),
+      legend:this.tAt(315,545),
+      paths:[...S.querySelectorAll('svg path[data-chart-series]')]
+    };
+  },
+  makeSeries(d,comparison=false){
+    const n=d.points,vals=[];
+    for(let i=0;i<n;i++){
+      const p=i/Math.max(1,n-1);
+      const wave=Math.sin(i*.62+0.5)*d.amp*.42+Math.sin(i*.19+1.4)*d.amp*.27;
+      const bump=Math.exp(-Math.pow((p-.55)/.16,2))*d.amp*.72;
+      const base=(comparison?d.compareBase:d.base)+(comparison?d.trend*.45:d.trend)*p;
+      vals.push(Math.max(700,base+wave+(comparison?bump*.35:bump)));
+    }
+    return vals;
+  },
+  path(vals){
+    const x0=298,x1=988,y0=360,y1=492,max=30000;
+    return vals.map((v,i)=>{
+      const x=x0+(x1-x0)*(i/Math.max(1,vals.length-1));
+      const y=y1-(Math.min(max,v)/max)*(y1-y0);
+      return (i?'L':'M')+x.toFixed(1)+' '+y.toFixed(1);
+    }).join('');
+  },
+  apply(label){
+    this.init();
+    const d=this.data[label];if(!d)return;
+    const r=this.refs;
+    d.metrics.forEach((m,i)=>{
+      if(r.metricVals[i])r.metricVals[i].textContent=m[0];
+      if(r.metricChanges[i])r.metricChanges[i].innerHTML='&#129093; '+m[1];
+    });
+    const cmax=Math.max(...d.countries),nmax=Math.max(...d.newUsers),pmax=Math.max(...d.pages);
+    d.countries.forEach((v,i)=>{
+      if(r.countryVals[i])r.countryVals[i].textContent=this.fmt(v);
+      if(r.countryBars[i])r.countryBars[i].style.width=Math.max(6,122*v/cmax)+'px';
+    });
+    d.newUsers.forEach((v,i)=>{
+      if(r.newVals[i])r.newVals[i].textContent=this.fmt(v);
+      if(r.newBars[i])r.newBars[i].style.width=Math.max(7,219*v/nmax)+'px';
+    });
+    d.sessions.forEach((v,i)=>{
+      if(r.sessionVals[i])r.sessionVals[i].textContent=this.fmt(v);
+      if(r.sessionChanges[i])r.sessionChanges[i].innerHTML='&#129093; '+d.changes[i];
+    });
+    d.pages.forEach((v,i)=>{
+      if(r.pageVals[i])r.pageVals[i].textContent=this.fmt(v);
+      if(r.pageBars[i])r.pageBars[i].style.width=Math.max(5,122*v/pmax)+'px';
+    });
+    r.ticks.forEach((e,i)=>{e.textContent=d.ticks[i]||'';e.style.display=d.ticks[i]?'':'none'});
+    if(r.legend)r.legend.textContent=label;
+    if(r.paths[0])r.paths[0].setAttribute('d',this.path(this.makeSeries(d,true)));
+    if(r.paths[1])r.paths[1].setAttribute('d',this.path(this.makeSeries(d,false)));
+    UI.setExport(['Metric','Value','Change'],[
+      ['Total users',d.metrics[0][0],d.metrics[0][1]],
+      ['New users',d.metrics[1][0],d.metrics[1][1]],
+      ['Engaged sessions',d.metrics[2][0],d.metrics[2][1]],
+      ['Average engagement time',d.metrics[3][0],d.metrics[3][1]]
+    ],'reports-snapshot-'+label.toLowerCase().replace(/\s+/g,'-'));
+  }
+};
+
 const PortalLayout={
   cfg:null,
   point(x,y){
@@ -726,7 +859,9 @@ UI.hit(688,595,37,38,()=>location.href='Traffic acquisition.html','Open acquisit
 UI.hit(1130,595,37,38,()=>location.href='Traffic acquisition.html','Open traffic acquisition');
 UI.link(948,836,215,45,'Traffic acquisition.html','Open traffic acquisition footer');
 UI.hit(1540,595,40,40,()=>UI.pagesModal(),'Open pages and screens');
-UI.chartHover(297,360,696,132,30000,['Last 90 days','Preceding period']);
+UI.chartHover(297,360,696,132,30000,['Selected range','Preceding period']);
+ReportRange.init();
+ReportRange.apply(localStorage.getItem('riengGaRange')||'Last 90 days');
 UI.restoreDate();UI.restoreComparison(350,210);
 
 PortalLayout.remap(273,273,145,1600);
