@@ -616,7 +616,6 @@ const PortalNav={
 
     nav.querySelectorAll('[data-toggle]').forEach(btn=>btn.addEventListener('click',e=>{
       const k=btn.dataset.toggle;
-      if(e.target.closest('.ptext')&&k==='import'){PortalProgress.start();location.href='Campaign data import validation.html';return}
       const g=nav.querySelector('[data-group="'+k+'"]'),open=g.classList.contains('collapsed');
       applyGroup(k,open);this.setState(k,open);PortalProgress.pulse(300);
     }));
