@@ -726,6 +726,7 @@ const ReportRange={
       legend:this.tAt(315,545),
       paths:[...S.querySelectorAll('svg path[data-chart-series]')]
     };
+    this.refs.original90Paths=this.refs.paths.map(p=>p.getAttribute('d'));
   },
   makeSeries(d,comparison=false){
     const n=d.points,vals=[];
@@ -773,8 +774,13 @@ const ReportRange={
     });
     r.ticks.forEach((e,i)=>{e.textContent=d.ticks[i]||'';e.style.display=d.ticks[i]?'':'none'});
     if(r.legend)r.legend.textContent=label;
-    if(r.paths[0])r.paths[0].setAttribute('d',this.path(this.makeSeries(d,true)));
-    if(r.paths[1])r.paths[1].setAttribute('d',this.path(this.makeSeries(d,false)));
+    if(label==='Last 90 days'){
+      if(r.paths[0]&&r.original90Paths[0])r.paths[0].setAttribute('d',r.original90Paths[0]);
+      if(r.paths[1]&&r.original90Paths[1])r.paths[1].setAttribute('d',r.original90Paths[1]);
+    }else{
+      if(r.paths[0])r.paths[0].setAttribute('d',this.path(this.makeSeries(d,true)));
+      if(r.paths[1])r.paths[1].setAttribute('d',this.path(this.makeSeries(d,false)));
+    }
     UI.setExport(['Metric','Value','Change'],[
       ['Total users',d.metrics[0][0],d.metrics[0][1]],
       ['New users',d.metrics[1][0],d.metrics[1][1]],
