@@ -49,15 +49,15 @@ function importPage(){
       '<div class="card"><h3>Validation status</h3>'+status+'</div></div>'+
       '<div class="ga-table-wrap" style="margin-top:14px"><div class="table-tools"><b>Import history</b><span class="right">Last 90 days · '+history.length+' runs</span></div>'+historyHtml(history)+'</div></div>';
     bind();
-    document.querySelector('[data-create]')?.addEventListener('click',()=>openWizard());
-    document.querySelectorAll('[data-source]').forEach(b=>b.addEventListener('click',()=>openWizard(b.dataset.source)));
-    document.querySelectorAll('[data-edit]').forEach(b=>b.addEventListener('click',()=>openWizard('',b.dataset.edit)));
-    document.querySelectorAll('[data-delete]').forEach(b=>b.addEventListener('click',()=>{
+    main.querySelector('[data-create]')?.addEventListener('click',()=>openWizard());
+    main.querySelectorAll('[data-source]').forEach(b=>b.addEventListener('click',()=>openWizard(b.dataset.source)));
+    main.querySelectorAll('[data-edit]').forEach(b=>b.addEventListener('click',()=>openWizard('',b.dataset.edit)));
+    main.querySelectorAll('[data-delete]').forEach(b=>b.addEventListener('click',()=>{
       const list=read(sourceKey),s=list.find(x=>x.id===b.dataset.delete);
       if(!s)return;
       if(confirm('Delete '+s.name+'?')){write(sourceKey,list.filter(x=>x.id!==s.id));GAToast('Data source deleted');render()}
     }));
-    document.querySelectorAll('[data-run]').forEach(b=>b.addEventListener('click',()=>runValidation(b.dataset.run)));
+    main.querySelectorAll('[data-run]').forEach(b=>b.addEventListener('click',()=>runValidation(b.dataset.run)));
   }
 
   function fieldsFor(type,values={}){
@@ -155,11 +155,11 @@ function importPage(){
 
   function runValidation(id){
     const list=read(sourceKey),s=list.find(x=>x.id===id);if(!s)return;
-    GAProgress?.start();GAToast('Validating '+s.name+'…');
+    window.GAProgress?.start();GAToast('Validating '+s.name+'…');
     setTimeout(()=>{
       s.lastValidated=when();write(sourceKey,[s,...list.filter(x=>x.id!==id)]);
       const hist=read(historyKey);hist.unshift({id:uid(),sourceId:s.id,sourceName:s.name,type:s.type,time:s.lastValidated,status:'Success',rows:s.rows||24,errors:0});write(historyKey,hist.slice(0,50));
-      GAProgress?.done();GAToast('Validation successful');render();
+      window.GAProgress?.done();GAToast('Validation successful');render();
     },900);
   }
 
