@@ -89,9 +89,11 @@ body{overflow-x:hidden;font-family:'Google Sans',Roboto,Arial,sans-serif;color:#
 .pfh-logo i:nth-child(2){height:21px;background:#f9ab00}
 .pfh-logo i:nth-child(3){height:29px;background:#f9ab00}
 .pfh-word{font-size:20px;color:#5f6368;font-weight:500}
-.pfh-property{margin-left:12px;padding-left:14px;border-left:1px solid #dadce0;min-width:0}
-.pfh-crumb{font-size:10.5px;color:#5f6368;white-space:nowrap}
-.pfh-name{font-size:17px;font-weight:500;white-space:nowrap;margin-top:2px}
+.pfh-property{margin-left:12px;padding-left:14px;border-left:1px solid #dadce0;min-width:175px;display:flex;flex-direction:column;justify-content:center}
+.pfh-crumb{font-size:10.5px;line-height:1.15;color:#5f6368;white-space:nowrap;margin-bottom:3px}
+.pfh-property-row{display:flex;align-items:center;gap:7px;min-height:21px}
+.pfh-name{font-size:17px;line-height:1.1;font-weight:500;white-space:nowrap}
+.pfh-caret{width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-top:5px solid #5f6368;margin-top:2px;flex:0 0 auto}
 .pfh-search-wrap{flex:1;display:flex;justify-content:center;min-width:260px}
 .pfh-search{
   width:min(620px,72%);height:40px;border:0;border-radius:6px;background:#eef1f5;
@@ -156,7 +158,7 @@ body{overflow-x:hidden;font-family:'Google Sans',Roboto,Arial,sans-serif;color:#
   min-height:29px;padding:5px 7px;font-size:11.8px;color:#303438;font-weight:650;border-radius:14px
 }
 .pnav-section:hover,.pnav-subsection:hover{background:#f1f3f4}
-.pnav-caret{width:13px;min-width:13px;font-size:10px;color:#444b52;font-weight:800;transition:transform .15s ease}
+.pnav-caret{width:16px;min-width:16px;font-size:13px;line-height:1;color:#444b52;font-weight:800;display:inline-grid;place-items:center;transition:transform .15s ease}
 .pnav-caret.right{transform:rotate(-90deg)}
 .pnav-children{display:block}
 .pnav-group.collapsed>.pnav-children{display:none}
@@ -404,7 +406,7 @@ const PortalHeader={
       '<div class="pfh-brand">'+
         '<div class="pfh-logo" aria-hidden="true"><i></i><i></i><i></i></div>'+
         '<div class="pfh-word">Analytics</div>'+
-        '<div class="pfh-property"><div class="pfh-crumb">All accounts › rieng254.com</div><div class="pfh-name">rieng254.com⌄</div></div>'+
+        '<div class="pfh-property"><div class="pfh-crumb">All accounts › rieng254.com</div><div class="pfh-property-row"><div class="pfh-name">rieng254.com</div><span class="pfh-caret" aria-hidden="true"></span></div></div>'+
       '</div>'+
       '<div class="pfh-search-wrap"><input class="pfh-search" aria-label="Search reports" placeholder="Try searching reports"></div>'+
       '<div class="pfh-actions"><button class="pfh-icon" data-apps aria-label="Apps">▦</button><button class="pfh-icon" data-help aria-label="Help">?</button><div class="pfh-avatar">R</div></div>';
