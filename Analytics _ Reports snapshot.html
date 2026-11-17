@@ -2,6 +2,7 @@
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Analytics | Reports snapshot</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='18' width='7' height='11' rx='2' fill='%23e37400'/%3E%3Crect x='12.5' y='11' width='7' height='18' rx='2' fill='%23f9ab00'/%3E%3Crect x='22' y='4' width='7' height='25' rx='2' fill='%23f9ab00'/%3E%3C/svg%3E">
 <meta name="color-scheme" content="light">
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
@@ -377,6 +378,42 @@ document.addEventListener('click',()=>UI.closePop());
 
 
 /* GA-style shared navigation + portal loading line */
+
+
+const PortalScroll={
+  target:window.scrollY,
+  raf:0,
+  internal:false,
+  clamp(v){
+    const max=Math.max(0,document.documentElement.scrollHeight-innerHeight);
+    return Math.max(0,Math.min(max,v));
+  },
+  step(){
+    const now=window.scrollY;
+    const diff=this.target-now;
+    if(Math.abs(diff)<0.5){
+      this.internal=true;window.scrollTo(0,this.target);this.internal=false;this.raf=0;return;
+    }
+    this.internal=true;window.scrollTo(0,now+diff*.22);this.internal=false;
+    this.raf=requestAnimationFrame(()=>this.step());
+  },
+  nudge(delta){
+    this.target=this.clamp((this.raf?this.target:window.scrollY)+delta*.55);
+    if(!this.raf)this.raf=requestAnimationFrame(()=>this.step());
+  },
+  mount(){
+    addEventListener('wheel',e=>{
+      if(e.ctrlKey||e.metaKey)return;
+      if(e.target.closest('.portal-nav,.portal-fixed-header,.ui-pop,.ui-modal,.ui-search-results'))return;
+      e.preventDefault();
+      this.nudge(e.deltaY);
+    },{passive:false});
+    addEventListener('scroll',()=>{
+      if(!this.internal&&!this.raf)this.target=window.scrollY;
+    },{passive:true});
+  }
+};
+PortalScroll.mount();
 
 const PortalHeader={
   routes:[
