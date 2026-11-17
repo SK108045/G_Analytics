@@ -68,7 +68,7 @@
   const state=(key,def=true)=>{const v=localStorage.getItem('gaNav:'+key);return v===null?def:v==='1'};
   const setState=(key,open)=>localStorage.setItem('gaNav:'+key,open?'1':'0');
 
-  function link(key,label,cls='',icon='›'){
+  function link(key,label,cls='',icon=''){
     const active=page===key;
     return '<a class="pnav-link '+cls+' '+(active?'active':'')+'" href="'+routes[key]+'" data-real="'+key+'"'+(active?' aria-current="page"':'')+'>'+
       '<span class="picon">'+icon+'</span><span class="ptext">'+label+'</span></a>';
