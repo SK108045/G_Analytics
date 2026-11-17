@@ -688,10 +688,27 @@ const ReportRange={
   refs:null,
   activeMetric:localStorage.getItem('riengGaMetric')||'Engaged sessions',
   metricProfiles:{
-    'Total users':{phase:.2,max:16000,axis:['16K','11K','5K','0'],underline:[292,116]},
-    'New users':{phase:1.05,max:15500,axis:['15K','10K','5K','0'],underline:[458,116]},
-    'Engaged sessions':{phase:1.75,max:30000,axis:['30K','20K','10K','0'],underline:[610,132]},
-    'Average engagement time':{phase:2.55,max:150,axis:['2m 30s','1m 40s','50s','0'],underline:[790,190]}
+    'Total users':{max:16000,axis:['16K','11K','5K','0'],underline:[292,116]},
+    'New users':{max:15500,axis:['15K','10K','5K','0'],underline:[458,116]},
+    'Engaged sessions':{max:30000,axis:['30K','20K','10K','0'],underline:[610,132]},
+    'Average engagement time':{max:150,axis:['2m 30s','1m 40s','50s','0'],underline:[790,190]}
+  },
+  shapeProfiles:{
+    'Last 7 days':{
+      'Total users':[.48,.58,.52,.67,.61,.76,.69],
+      'New users':[.57,.43,.71,.49,.63,.45,.68],
+      'Average engagement time':[.61,.68,.52,.64,.58,.72,.62]
+    },
+    'Last 30 days':{
+      'Total users':[.42,.49,.46,.55,.51,.63,.59,.66,.61,.69,.64,.58,.62,.57,.65],
+      'New users':[.52,.44,.39,.62,.47,.54,.51,.43,.66,.49,.58,.55,.41,.57,.61],
+      'Average engagement time':[.60,.64,.58,.66,.62,.41,.56,.61,.59,.72,.60,.63,.68,.55,.67]
+    },
+    'Last 90 days':{
+      'Total users':[.38,.44,.49,.46,.54,.51,.58,.56,.64,.60,.69,.74,.67,.71,.66,.73,.68,.76,.70,.65,.69,.63,.67,.61,.64,.59],
+      'New users':[.49,.43,.38,.36,.51,.72,.53,.55,.47,.36,.39,.57,.58,.54,.53,.48,.36,.43,.59,.61,.55,.46,.39,.52,.60,.62],
+      'Average engagement time':[.59,.63,.70,.58,.62,.62,.39,.55,.61,.58,.60,.73,.61,.64,.66,.76,.64,.57,.50,.58,.66,.74,.62,.59,.67,.63]
+    }
   },
   fmt(v){
     if(v>=1000000)return (v/1000000).toFixed(2).replace(/0+$/,'').replace(/\.$/,'')+'M';
@@ -738,28 +755,49 @@ const ReportRange={
     };
     this.refs.original90Paths=this.refs.paths.map(p=>p.getAttribute('d'));
   },
+  resampleShape(anchors,n){
+    if(n<=1)return [anchors[0]||.5];
+    const out=[];
+    for(let i=0;i<n;i++){
+      const pos=(anchors.length-1)*(i/(n-1));
+      const a=Math.floor(pos),b=Math.min(anchors.length-1,a+1),t=pos-a;
+      let v=anchors[a]*(1-t)+anchors[b]*t;
+      if(i>0&&i<n-1){
+        const micro=((i%4===0)?-.018:(i%3===0)?.014:(i%5===0)?.022:-.006);
+        v+=micro;
+      }
+      out.push(Math.max(.08,Math.min(.92,v)));
+    }
+    return out;
+  },
   makeSeries(d,metric=this.activeMetric,comparison=false){
     const p=this.metricProfiles[metric]||this.metricProfiles['Engaged sessions'];
+    const range=Object.keys(this.data).find(k=>this.data[k]===d)||'Last 90 days';
+
+    if(metric!=='Engaged sessions'){
+      const anchors=this.shapeProfiles[range]?.[metric]||this.shapeProfiles['Last 90 days'][metric];
+      const shape=this.resampleShape(anchors,d.points);
+      return shape.map((v,i)=>{
+        if(metric==='Average engagement time'){
+          const seconds=42+v*92;
+          return comparison?Math.max(30,seconds*.88+(i%5===0?-3:0)):seconds;
+        }
+        const value=p.max*(.18+v*.70);
+        if(!comparison)return value;
+        const prevShift=(i%6===0?-.035:i%4===0?.02:0);
+        return p.max*Math.max(.08,(.18+(v*.82+prevShift)*.62));
+      });
+    }
+
     const n=d.points,vals=[];
     const rangeScale=d===this.data['Last 7 days']?.75:d===this.data['Last 30 days']?.9:1;
     for(let i=0;i<n;i++){
       const t=i/Math.max(1,n-1);
-      if(metric==='Average engagement time'){
-        const base=(comparison?78:88)+(comparison?7:11)*t;
-        const wave=Math.sin(i*.71+p.phase)*11+Math.sin(i*.23+p.phase*.7)*5;
-        const bump=Math.exp(-Math.pow((t-.58)/.18,2))*13;
-        vals.push(Math.max(35,(base+wave+(comparison?bump*.35:bump))*rangeScale));
-      }else{
-        const max=p.max;
-        const baseFrac=metric==='Engaged sessions'?.45:metric==='New users'?.39:.43;
-        const trendFrac=metric==='Engaged sessions'?.20:metric==='New users'?.14:.17;
-        const ampFrac=metric==='Engaged sessions'?.16:metric==='New users'?.13:.14;
-        const base=max*baseFrac*rangeScale*(comparison?.78:1);
-        const trend=max*trendFrac*t*rangeScale*(comparison?.45:1);
-        const wave=Math.sin(i*.63+p.phase)*max*ampFrac*.43+Math.sin(i*.21+p.phase*1.3)*max*ampFrac*.24;
-        const bump=Math.exp(-Math.pow((t-(metric==='Total users'?.48:metric==='New users'?.62:.55))/.16,2))*max*ampFrac*.72;
-        vals.push(Math.max(max*.08,base+trend+wave+(comparison?bump*.3:bump)));
-      }
+      const base=p.max*.45*rangeScale*(comparison?.78:1);
+      const trend=p.max*.20*t*rangeScale*(comparison?.45:1);
+      const wave=Math.sin(i*.63+1.75)*p.max*.16*.43+Math.sin(i*.21+2.27)*p.max*.16*.24;
+      const bump=Math.exp(-Math.pow((t-.55)/.16,2))*p.max*.16*.72;
+      vals.push(Math.max(p.max*.08,base+trend+wave+(comparison?bump*.3:bump)));
     }
     return vals;
   },
