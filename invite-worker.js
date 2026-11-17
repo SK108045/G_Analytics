@@ -30,6 +30,20 @@ export default{
     if(request.method==='OPTIONS')return new Response(null,{status:204,headers:cors()});
     const u=new URL(request.url);
 
+    if(u.pathname==='/email-preview'&&request.method==='GET'){
+      const previewRole=['Viewer','Analyst'].includes(u.searchParams.get('role'))?u.searchParams.get('role'):'Viewer';
+      const previewHtml=emailHtml('preview@example.com',previewRole,'#');
+      return new Response(previewHtml,{
+        status:200,
+        headers:{
+          'content-type':'text/html;charset=utf-8',
+          'cache-control':'no-store, max-age=0',
+          'x-robots-tag':'noindex, nofollow, noarchive',
+          'content-security-policy':"default-src 'none'; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+        }
+      });
+    }
+
     if(u.pathname==='/health')return json({ok:true,resendConfigured:!!env.RESEND_API_KEY,signingConfigured:!!env.INVITE_SIGNING_SECRET,adminConfigured:!!env.ADMIN_INVITE_KEY});
 
     if(u.pathname==='/verify'&&request.method==='POST'){
