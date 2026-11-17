@@ -28,8 +28,16 @@ function shareCurrent(){
   else GAToast('Copy the URL from the address bar');
 }
 function exportCurrentTable(){
-  const table=document.querySelector('.ga-table');if(!table){GAToast('No table is available on this report');return}
-  const rows=[...table.querySelectorAll('tr')].filter(r=>r.style.display!=='none').map(r=>[...r.children].map(c=>'"'+c.textContent.trim().replace(/"/g,'""')+'"').join(','));
+  const table=document.querySelector('.ga-table');let rows=[];
+  if(table){
+    rows=[...table.querySelectorAll('tr')].filter(r=>r.style.display!=='none').map(r=>[...r.children].map(c=>'"'+c.textContent.trim().replace(/"/g,'""')+'"').join(','));
+  }else{
+    rows.push('"Metric","Value"');
+    document.querySelectorAll('.kpi').forEach(k=>{const label=k.querySelector('small')?.textContent.trim(),value=k.querySelector('strong')?.textContent.trim();if(label&&value)rows.push('"'+label.replace(/"/g,'""')+'","'+value.replace(/"/g,'""')+'"')});
+    document.querySelectorAll('.bar-row').forEach(r=>{const parts=[...r.children];const label=parts[0]?.textContent.trim(),value=parts[2]?.textContent.trim();if(label&&value)rows.push('"'+label.replace(/"/g,'""')+'","'+value.replace(/"/g,'""')+'"')});
+    const metric=document.querySelector('.metric,.metric-sm');if(rows.length===1&&metric)rows.push('"Report value","'+metric.textContent.trim().replace(/"/g,'""')+'"');
+  }
+  if(rows.length<=1){GAToast('No exportable report data found');return}
   const blob=new Blob([rows.join('\n')],{type:'text/csv;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=(document.title.replace(/[^a-z0-9]+/gi,'-').replace(/^-|-$/g,'').toLowerCase()||'analytics-report')+'.csv';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500);GAToast('CSV download started');
 }
 function bind(){
