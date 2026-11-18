@@ -899,7 +899,19 @@ const ReportRange={
       if(r.pageVals[i])r.pageVals[i].textContent=this.fmt(v);
       if(r.pageBars[i])r.pageBars[i].style.width=Math.max(5,122*v/pmax)+'px';
     });
-    r.ticks.forEach((e,i)=>{e.textContent=d.ticks[i]||'';e.style.display=d.ticks[i]?'':'none'});
+    const visibleTicks=d.ticks.filter(Boolean);
+    r.ticks.forEach((e,i)=>{
+      const label=visibleTicks[i]||'';
+      e.textContent=label;
+      e.style.display=label?'':'none';
+      if(label){
+        const rawX=300+(987-300)*(i/Math.max(1,visibleTicks.length-1));
+        const mapped=(typeof PortalLayout!=='undefined'&&PortalLayout.cfg)?PortalLayout.point(rawX,512).x:rawX;
+        e.style.left=mapped+'px';
+        e.style.right='';
+        e.style.transform='translate(-50%,-50%)';
+      }
+    });
     if(r.legend)r.legend.textContent=label;
     this.applyMetricChart(label,this.activeMetric);
     UI.setExport(['Metric','Value','Change'],[
