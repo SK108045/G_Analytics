@@ -61,11 +61,26 @@
     const h=document.createElement('header');
     h.className='ga-top';
     h.innerHTML=
-      '<div class="ga-brand" data-home role="button" tabindex="0"><div class="ga-logo"><i></i><i></i><i></i></div><div class="ga-word">Analytics</div>'+
+      '<button class="ga-nav-toggle" type="button" aria-label="Toggle report navigation" aria-controls="portal-navigation" aria-expanded="false">☰</button><div class="ga-brand" data-home role="button" tabindex="0"><span class="nicoo-brand-icon" aria-hidden="true">N</span><div class="ga-word">Nicoo Analytics</div>'+
       '<div class="ga-prop" data-property role="button" tabindex="0" aria-label="Analytics property"><div class="ga-crumb">All accounts › nicoofurniture.co.ke</div><div class="ga-prop-row"><div class="ga-prop-name">nicoofurniture.co.ke</div><span class="ga-prop-caret" aria-hidden="true"></span></div></div></div>'+
       '<div class="ga-search-wrap"><input class="ga-search" placeholder="Try searching reports" aria-label="Search reports"></div>'+
       '<div class="ga-top-actions"><button class="ga-icon" data-apps aria-label="Analytics sections">▦</button><button class="ga-icon" data-help aria-label="Help">?</button><button class="ga-avatar" data-account aria-label="Account">R</button></div>';
     document.body.appendChild(h);
+    const navToggle = h.querySelector('.ga-nav-toggle');
+    const setNavOpen = open => {
+      document.body.classList.toggle('ga-nav-open', open);
+      navToggle.setAttribute('aria-expanded', String(open));
+    };
+    navToggle.onclick = () => setNavOpen(!document.body.classList.contains('ga-nav-open'));
+    document.addEventListener('pointerdown', event => {
+      if (!event.target.closest('.portal-nav,.ga-nav-toggle,.nav-create-menu')) setNavOpen(false);
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && document.body.classList.contains('ga-nav-open')) {
+        setNavOpen(false);
+        navToggle.focus();
+      }
+    });
     h.querySelector('.ga-search').addEventListener('keydown',e=>{
       if(e.key!=='Enter')return;
       const q=e.target.value.trim().toLowerCase();
@@ -124,6 +139,7 @@
   function nav(){
     const n=document.createElement('nav');
     n.className='portal-nav';
+    n.id='portal-navigation';
     n.setAttribute('aria-label','Analytics portal navigation');
     n.innerHTML=
       '<button class="pcreate" type="button" data-create><span class="pcreate-plus">＋</span><span>Create</span><span class="pcreate-caret">▼</span></button>'+
@@ -191,22 +207,7 @@
     });
   }
 
-  function slower(){
-    let target=scrollY,raf=0,internal=false;
-    const clamp=v=>Math.max(0,Math.min(document.documentElement.scrollHeight-innerHeight,v));
-    function step(){
-      const d=target-scrollY;
-      if(Math.abs(d)<.5){internal=true;scrollTo(0,target);internal=false;raf=0;return}
-      internal=true;scrollTo(0,scrollY+d*.22);internal=false;raf=requestAnimationFrame(step);
-    }
-    addEventListener('wheel',e=>{
-      if(e.ctrlKey||e.metaKey||e.target.closest('.portal-nav,.ga-top,.panel-menu'))return;
-      e.preventDefault();target=clamp((raf?target:scrollY)+e.deltaY*.55);if(!raf)raf=requestAnimationFrame(step);
-    },{passive:false});
-    addEventListener('scroll',()=>{if(!internal&&!raf)target=scrollY},{passive:true});
-  }
-
-  top();nav();slower();progress.start();
+  top();nav();progress.start();
   addEventListener('pageshow',()=>setTimeout(()=>progress.done(),330),{once:true});
   addEventListener('click',e=>{if(!e.target.closest('[data-create],.nav-create-menu'))document.querySelector('.nav-create-menu')?.remove()});
 })();
