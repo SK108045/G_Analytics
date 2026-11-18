@@ -62,8 +62,14 @@ function bind(){
       ['Last 90 days','Aug 21 - Nov 18, 2026']
     ];
     reportMenu(b,'Date range',ranges.map(([label,dates])=>({label,icon:b.querySelector('b')?.textContent.includes(label)?'✓':'',action:()=>{
-      b.querySelector('b').textContent=realtime?label:label+'   '+dates;
-      const muted=b.querySelector('.muted');if(muted)muted.textContent=realtime?'Live activity window':'Compare: preceding period';
+      if(realtime&&window.RealtimeSim){
+        const mins=parseInt(label.match(/\d+/)?.[0]||'30',10);
+        window.RealtimeSim.setWindow(mins);
+        GAProgress?.pulse?.(420);GAToast(label+' applied');
+        return;
+      }
+      b.querySelector('b').textContent=label+'   '+dates;
+      const muted=b.querySelector('.muted');if(muted)muted.textContent='Compare: preceding period';
       localStorage.setItem('gaSharedRange:'+location.pathname,label);GAProgress?.pulse?.(500);GAToast(label+' applied');
     }})));
   });
@@ -74,7 +80,107 @@ function bind(){
     simpleModal('Event: '+name,'<div class="kpi-grid" style="grid-template-columns:repeat(3,1fr)"><div class="kpi"><small>Event count</small><strong>'+fmt(row[1])+'</strong></div><div class="kpi"><small>Total users</small><strong>'+fmt(row[2])+'</strong></div><div class="kpi"><small>Events / user</small><strong>'+(row[1]/row[2]).toFixed(2)+'</strong></div></div><div class="sub" style="margin-top:14px">This is the saved event snapshot for '+name+'.</div>',[{label:'Close',primary:true,action:c=>c()}]);
   }));
 }
-function realtime(){const mins=[4,5,7,6,8,10,9,11,13,12,15,14,12,11,10,9,8,10,12,14,13,12,11,9,8,7,9,11,10,8];main.innerHTML=head('Realtime overview','Last 30 minutes')+'<div class="content"><div class="hero-grid"><div class="card realtime-card"><h3>Active users in last 30 minutes</h3><div class="metric">96</div><div class="sub">Users per minute</div>'+minuteBars(mins)+'</div><div class="card realtime-card"><h3>Active users by Country</h3>'+world()+'</div></div><div class="grid" style="margin-top:14px"><div class="card" style="grid-column:span 4"><h3>Active users by First user source</h3>'+bars([['google',39],['(direct)',24],['facebook.com',13],['instagram.com',9],['bing',6]])+'</div><div class="card" style="grid-column:span 4"><h3>Views by Page title</h3>'+bars(pages.slice(0,5).map((r,i)=>[r[0],Math.round(r[1]/1000)]))+'</div><div class="card" style="grid-column:span 4"><h3>Event count by Event name</h3>'+bars(events.slice(0,5).map(r=>[r[0],Math.round(r[1]/1000)]))+'</div></div></div>';bind()}function realtimePages(){const rows=pages.map((r,i)=>[r[0],fmt(Math.round(r[1]/210)),fmt(Math.max(3,Math.round(r[1]/4300)))]);main.innerHTML=head('Realtime pages','Last 30 minutes')+'<div class="content"><div class="kpi-grid"><div class="kpi"><small>Views</small><strong>3.5K</strong></div><div class="kpi"><small>Active users</small><strong>96</strong></div><div class="kpi" style="grid-column:span 2"><small>Active users per minute</small>'+minuteBars([4,5,7,6,8,10,9,11,13,12,15,14,12,11,10,9,8,10,12,14,13,12,11,9,8,7,9,11,10,8])+'</div></div><div style="margin-top:14px">'+table(['Views','Active users'],rows,'Page path and screen class')+'</div></div>';bind()}function objective(title,type){const isLead=type==='lead';main.innerHTML=head(title)+'<div class="content"><div class="objective-head">WHAT ARE YOUR TOP RESULTS?</div><div class="grid"><div class="card" style="grid-column:span 6"><h3>Sessions by Session primary channel group</h3>'+bars(channels)+'</div><div class="card" style="grid-column:span 6"><h3>'+(isLead?'Lead events':'Purchase activity')+'</h3>'+(isLead?'<div class="no-data"><div><div class="circle">◇</div><b>No lead key events configured</b><div class="sub">Configure a key event to populate lead performance.</div></div></div>':'<div class="no-data"><div><div class="circle">▣</div><b>No ecommerce purchase data</b><div class="sub">Purchase metrics will appear after ecommerce events are collected.</div></div></div>')+'</div><div class="card" style="grid-column:span 6"><h3>New users by First user primary channel group</h3>'+bars([['Organic Search',190000],['Direct',99000],['Organic Social',55000],['Referral',51000],['Paid Search',38000]])+'</div><div class="card" style="grid-column:span 6"><h3>'+(isLead?'Landing pages':'Purchase journey')+'</h3>'+(isLead?bars(pages.slice(0,5).map(r=>[r[0],Math.round(r[1]*.42)])):'<div class="funnel"><div class="funnel-step" style="height:100%">Session start</div><div class="funnel-step" style="height:64%">View item</div><div class="funnel-step" style="height:22%">Add to cart</div><div class="funnel-step" style="height:8%">Purchase</div></div>')+'</div></div></div>';bind()}function behavior(){main.innerHTML=head('Understand web and/or app performance')+'<div class="content"><div class="grid"><div class="card" style="grid-column:span 7"><h3>Views over time</h3>'+line([62,67,70,68,74,79,81,78,85,89,92,88,94,101,96,92,99,105,101,108,103,111,106,114,109,112,118,116,121,119])+'</div><div class="card" style="grid-column:span 5"><h3>Views by Page title and screen class</h3>'+bars(pages)+'</div><div class="card" style="grid-column:span 6"><h3>Event count by Event name</h3>'+bars(events.slice(0,6).map(r=>[r[0],r[1]]))+'</div><div class="card" style="grid-column:span 6"><h3>User activity over time</h3>'+line([18,19,20,19,22,23,24,25,27,28,29,28,31,33,34,33,35,37,38,37,39,40,41,39,42,43,42,44,45,46],'30 days')+'</div></div></div>';bind()}function engagement(){main.innerHTML=head('Engagement overview')+'<div class="content"><div class="grid"><div class="card" style="grid-column:span 7"><h3>Average engagement time per active user</h3><div class="metric-sm">1m 38s</div>'+line([61,64,63,66,68,67,71,72,74,73,77,76,80,82,81,85,84,86,88,87,90,91,89,93,94,95,96,95,98,99],'Engagement time')+'</div><div class="card" style="grid-column:span 5"><h3>Views by Page title</h3>'+bars(pages.slice(0,6))+'</div><div class="card" style="grid-column:span 6"><h3>Event count by Event name</h3>'+bars(events.slice(0,6).map(r=>[r[0],r[1]]))+'</div><div class="card" style="grid-column:span 6"><h3>Active users by Country</h3>'+bars(countries.slice(0,6))+'</div></div></div>';bind()}function eventsPage(){const rows=events.map(r=>['<a class="event-link" href="#event-'+encodeURIComponent(r[0])+'" data-event-name="'+r[0]+'">'+r[0]+'</a>',fmt(r[1]),fmt(r[2]),(r[1]/r[2]).toFixed(2),'KES 0.00']);main.innerHTML=head('Events: Event name')+'<div class="content"><div class="card" style="margin-bottom:14px"><h3>Event count by Event name over time</h3>'+line([42,45,44,51,49,53,59,57,62,68,66,73,70,75,79,77,83,86,84,91,88,94,96,93,98,102,99,105,107,104],'Event count')+'</div>'+table(['Event count','Total users','Event count per user','Total revenue'],rows,'Event name')+'</div>';bind()}function pagesPage(){const rows=pages.map((r,i)=>['<span class="page-cell"><span class="rank">'+(i+1)+'</span><span>'+r[0]+'</span></span>',fmt(r[1]),fmt(Math.round(r[1]*.58)),(1.2+i*.06).toFixed(2),(78-i*5)+'s']);main.innerHTML=head('Pages and screens: Page title and screen class')+'<div class="content"><div class="grid" style="margin-bottom:14px"><div class="card" style="grid-column:span 8"><h3>Views by Page title and screen class over time</h3>'+line([33,36,35,42,41,39,43,45,44,52,49,47,61,48,45,46,50,52,51,58,54,53,57,60,58,62,64,61,66,65],'Views')+'</div><div class="card" style="grid-column:span 4"><h3>Views by Page title</h3>'+bars(pages)+'</div></div>'+table(['Views','Active users','Views per active user','Average engagement time'],rows,'Page title and screen class')+'</div>';bind()}
+const RealtimeSim={
+  minutes:30,
+  phase:0,
+  timer:null,
+  configs:{
+    5:{
+      active:27,
+      source:[['google',11],['(direct)',7],['facebook.com',4],['instagram.com',3],['bing',2]],
+      page:[['Rieng254 – Home',46],['Rieng254 – Trending',31],['Rieng254 – Videos',23],['Rieng254 – Shows',13],['Rieng254 – Albums & Songs',9]],
+      event:[['page_view',126],['user_engagement',101],['first_visit',72],['session_start',64],['scroll',49]]
+    },
+    30:{
+      active:96,
+      source:[['google',39],['(direct)',24],['facebook.com',13],['instagram.com',9],['bing',6]],
+      page:[['Rieng254 – Home',249],['Rieng254 – Trending',161],['Rieng254 – Videos',131],['Rieng254 – Shows',73],['Rieng254 – Albums & Songs',57]],
+      event:[['page_view',742],['user_engagement',598],['first_visit',430],['session_start',386],['scroll',302]]
+    },
+    60:{
+      active:174,
+      source:[['google',72],['(direct)',44],['facebook.com',25],['instagram.com',17],['bing',11]],
+      page:[['Rieng254 – Home',471],['Rieng254 – Trending',305],['Rieng254 – Videos',246],['Rieng254 – Shows',138],['Rieng254 – Albums & Songs',108]],
+      event:[['page_view',1398],['user_engagement',1124],['first_visit',811],['session_start',728],['scroll',568]]
+    }
+  },
+  initWindow(){
+    const saved=parseInt(localStorage.getItem('gaRealtimeWindow')||'30',10);
+    this.minutes=[5,30,60].includes(saved)?saved:30;
+  },
+  wobble(v,i,amp=.08){
+    const wave=Math.sin((this.phase+i*1.73)*.57)+Math.sin((this.phase*.31+i*.81)+1.2)*.45;
+    return Math.max(1,Math.round(v*(1+wave*amp)));
+  },
+  minuteSeries(){
+    const n=this.minutes;
+    const baseline=n===5?7:n===30?9:8;
+    return Array.from({length:n},(_,i)=>{
+      const trend=Math.sin((i+this.phase*.55)*.52)*2.2+Math.sin((i+this.phase)*.19+1.4)*1.7;
+      const pulse=Math.exp(-Math.pow(((i+this.phase)%Math.max(7,n))-Math.max(3,n*.58))/Math.max(2,n*.17),2))*2.8;
+      return Math.max(2,Math.round(baseline+trend+pulse));
+    });
+  },
+  snapshot(){
+    const cfg=this.configs[this.minutes];
+    const active=this.wobble(cfg.active,0,this.minutes===5?.10:.045);
+    const mapRows=rows=>rows.map((r,i)=>[r[0],this.wobble(r[1],i+2,.055)]);
+    return {active,minutes:this.minuteSeries(),source:mapRows(cfg.source),page:mapRows(cfg.page),event:mapRows(cfg.event)};
+  },
+  paint(){
+    const d=this.snapshot(),m=this.minutes;
+    const pill=document.querySelector('.date-pill');
+    if(pill){
+      const b=pill.querySelector('b');if(b)b.textContent='Last '+m+' minutes';
+      const muted=pill.querySelector('.muted');if(muted)muted.textContent='Simulated activity window';
+    }
+    const title=document.querySelector('[data-rt-title]');if(title)title.textContent='Active users in last '+m+' minutes';
+    const metric=document.querySelector('[data-rt-active]');if(metric)metric.textContent=d.active.toLocaleString();
+    const barsHost=document.querySelector('[data-rt-minute-bars]');if(barsHost)barsHost.innerHTML=minuteBars(d.minutes);
+    const source=document.querySelector('[data-rt-source]');if(source)source.innerHTML=bars(d.source);
+    const pageHost=document.querySelector('[data-rt-pages]');if(pageHost)pageHost.innerHTML=bars(d.page);
+    const eventHost=document.querySelector('[data-rt-events]');if(eventHost)eventHost.innerHTML=bars(d.event);
+  },
+  setWindow(minutes){
+    if(![5,30,60].includes(minutes))minutes=30;
+    this.minutes=minutes;this.phase++;
+    localStorage.setItem('gaRealtimeWindow',String(minutes));
+    localStorage.setItem('gaSharedRange:'+location.pathname,'Last '+minutes+' minutes');
+    this.paint();
+  },
+  start(){
+    clearInterval(this.timer);
+    this.timer=setInterval(()=>{this.phase++;this.paint()},4500);
+  },
+  mount(){
+    this.initWindow();
+    const m=this.minutes;
+    main.innerHTML=head('Realtime overview','Last '+m+' minutes')+
+      '<div class="content">'+
+        '<div class="hero-grid">'+
+          '<div class="card realtime-card">'+
+            '<h3 data-rt-title>Active users in last '+m+' minutes</h3>'+
+            '<div class="metric" data-rt-active>—</div>'+
+            '<div class="sub">Users per minute · Simulated</div>'+
+            '<div data-rt-minute-bars></div>'+
+          '</div>'+
+          '<div class="card realtime-card"><h3>Active users by Country</h3>'+world()+'<div class="sub" style="margin-top:5px">Map shown for simulated realtime activity</div></div>'+
+        '</div>'+
+        '<div class="grid" style="margin-top:14px">'+
+          '<div class="card" style="grid-column:span 4"><h3>Active users by First user source</h3><div data-rt-source></div></div>'+
+          '<div class="card" style="grid-column:span 4"><h3>Views by Page title</h3><div data-rt-pages></div></div>'+
+          '<div class="card" style="grid-column:span 4"><h3>Event count by Event name</h3><div data-rt-events></div></div>'+
+        '</div>'+
+      '</div>';
+    bind();
+    this.paint();
+    this.start();
+  }
+};
+window.RealtimeSim=RealtimeSim;
+addEventListener('pagehide',()=>clearInterval(RealtimeSim.timer),{once:true});
+function realtime(){RealtimeSim.mount()}
+function realtimePages(){const rows=pages.map((r,i)=>[r[0],fmt(Math.round(r[1]/210)),fmt(Math.max(3,Math.round(r[1]/4300)))]);main.innerHTML=head('Realtime pages','Last 30 minutes')+'<div class="content"><div class="kpi-grid"><div class="kpi"><small>Views</small><strong>3.5K</strong></div><div class="kpi"><small>Active users</small><strong>96</strong></div><div class="kpi" style="grid-column:span 2"><small>Active users per minute</small>'+minuteBars([4,5,7,6,8,10,9,11,13,12,15,14,12,11,10,9,8,10,12,14,13,12,11,9,8,7,9,11,10,8])+'</div></div><div style="margin-top:14px">'+table(['Views','Active users'],rows,'Page path and screen class')+'</div></div>';bind()}function objective(title,type){const isLead=type==='lead';main.innerHTML=head(title)+'<div class="content"><div class="objective-head">WHAT ARE YOUR TOP RESULTS?</div><div class="grid"><div class="card" style="grid-column:span 6"><h3>Sessions by Session primary channel group</h3>'+bars(channels)+'</div><div class="card" style="grid-column:span 6"><h3>'+(isLead?'Lead events':'Purchase activity')+'</h3>'+(isLead?'<div class="no-data"><div><div class="circle">◇</div><b>No lead key events configured</b><div class="sub">Configure a key event to populate lead performance.</div></div></div>':'<div class="no-data"><div><div class="circle">▣</div><b>No ecommerce purchase data</b><div class="sub">Purchase metrics will appear after ecommerce events are collected.</div></div></div>')+'</div><div class="card" style="grid-column:span 6"><h3>New users by First user primary channel group</h3>'+bars([['Organic Search',190000],['Direct',99000],['Organic Social',55000],['Referral',51000],['Paid Search',38000]])+'</div><div class="card" style="grid-column:span 6"><h3>'+(isLead?'Landing pages':'Purchase journey')+'</h3>'+(isLead?bars(pages.slice(0,5).map(r=>[r[0],Math.round(r[1]*.42)])):'<div class="funnel"><div class="funnel-step" style="height:100%">Session start</div><div class="funnel-step" style="height:64%">View item</div><div class="funnel-step" style="height:22%">Add to cart</div><div class="funnel-step" style="height:8%">Purchase</div></div>')+'</div></div></div>';bind()}function behavior(){main.innerHTML=head('Understand web and/or app performance')+'<div class="content"><div class="grid"><div class="card" style="grid-column:span 7"><h3>Views over time</h3>'+line([62,67,70,68,74,79,81,78,85,89,92,88,94,101,96,92,99,105,101,108,103,111,106,114,109,112,118,116,121,119])+'</div><div class="card" style="grid-column:span 5"><h3>Views by Page title and screen class</h3>'+bars(pages)+'</div><div class="card" style="grid-column:span 6"><h3>Event count by Event name</h3>'+bars(events.slice(0,6).map(r=>[r[0],r[1]]))+'</div><div class="card" style="grid-column:span 6"><h3>User activity over time</h3>'+line([18,19,20,19,22,23,24,25,27,28,29,28,31,33,34,33,35,37,38,37,39,40,41,39,42,43,42,44,45,46],'30 days')+'</div></div></div>';bind()}function engagement(){main.innerHTML=head('Engagement overview')+'<div class="content"><div class="grid"><div class="card" style="grid-column:span 7"><h3>Average engagement time per active user</h3><div class="metric-sm">1m 38s</div>'+line([61,64,63,66,68,67,71,72,74,73,77,76,80,82,81,85,84,86,88,87,90,91,89,93,94,95,96,95,98,99],'Engagement time')+'</div><div class="card" style="grid-column:span 5"><h3>Views by Page title</h3>'+bars(pages.slice(0,6))+'</div><div class="card" style="grid-column:span 6"><h3>Event count by Event name</h3>'+bars(events.slice(0,6).map(r=>[r[0],r[1]]))+'</div><div class="card" style="grid-column:span 6"><h3>Active users by Country</h3>'+bars(countries.slice(0,6))+'</div></div></div>';bind()}function eventsPage(){const rows=events.map(r=>['<a class="event-link" href="#event-'+encodeURIComponent(r[0])+'" data-event-name="'+r[0]+'">'+r[0]+'</a>',fmt(r[1]),fmt(r[2]),(r[1]/r[2]).toFixed(2),'KES 0.00']);main.innerHTML=head('Events: Event name')+'<div class="content"><div class="card" style="margin-bottom:14px"><h3>Event count by Event name over time</h3>'+line([42,45,44,51,49,53,59,57,62,68,66,73,70,75,79,77,83,86,84,91,88,94,96,93,98,102,99,105,107,104],'Event count')+'</div>'+table(['Event count','Total users','Event count per user','Total revenue'],rows,'Event name')+'</div>';bind()}function pagesPage(){const rows=pages.map((r,i)=>['<span class="page-cell"><span class="rank">'+(i+1)+'</span><span>'+r[0]+'</span></span>',fmt(r[1]),fmt(Math.round(r[1]*.58)),(1.2+i*.06).toFixed(2),(78-i*5)+'s']);main.innerHTML=head('Pages and screens: Page title and screen class')+'<div class="content"><div class="grid" style="margin-bottom:14px"><div class="card" style="grid-column:span 8"><h3>Views by Page title and screen class over time</h3>'+line([33,36,35,42,41,39,43,45,44,52,49,47,61,48,45,46,50,52,51,58,54,53,57,60,58,62,64,61,66,65],'Views')+'</div><div class="card" style="grid-column:span 4"><h3>Views by Page title</h3>'+bars(pages)+'</div></div>'+table(['Views','Active users','Views per active user','Average engagement time'],rows,'Page title and screen class')+'</div>';bind()}
 function importPage(){
   const TYPES={
     'CSV':{desc:'Upload a .csv or .tsv file',fields:[['name','Data source name','Rieng campaign costs'],['file','Campaign file','file'],['schedule','Import schedule','select:Manual|Daily|Weekly']]},
