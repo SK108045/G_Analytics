@@ -62,7 +62,7 @@
     h.className='ga-top';
     h.innerHTML=
       '<div class="ga-brand" data-home role="button" tabindex="0"><div class="ga-logo"><i></i><i></i><i></i></div><div class="ga-word">Analytics</div>'+
-      '<div class="ga-prop" data-property role="button" tabindex="0" aria-label="Analytics property"><div class="ga-crumb">All accounts › rieng254.com</div><div class="ga-prop-row"><div class="ga-prop-name">rieng254.com</div><span class="ga-prop-caret" aria-hidden="true"></span></div></div></div>'+
+      '<div class="ga-prop" data-property role="button" tabindex="0" aria-label="Analytics property"><div class="ga-crumb">All accounts › nicoofurniture.co.ke</div><div class="ga-prop-row"><div class="ga-prop-name">nicoofurniture.co.ke</div><span class="ga-prop-caret" aria-hidden="true"></span></div></div></div>'+
       '<div class="ga-search-wrap"><input class="ga-search" placeholder="Try searching reports" aria-label="Search reports"></div>'+
       '<div class="ga-top-actions"><button class="ga-icon" data-apps aria-label="Analytics sections">▦</button><button class="ga-icon" data-help aria-label="Help">?</button><button class="ga-avatar" data-account aria-label="Account">R</button></div>';
     document.body.appendChild(h);
@@ -84,9 +84,9 @@
     h.querySelector('[data-home]').addEventListener('click',e=>{if(!e.target.closest('[data-property]'))goHome()});
     h.querySelector('[data-home]').addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&!e.target.closest('[data-property]')){e.preventDefault();goHome()}});
     h.querySelector('[data-property]').addEventListener('click',e=>{e.stopPropagation();shellMenu(e.currentTarget,'Analytics property',[
-      {label:'rieng254.com',icon:'✓',action:()=>toast('Current property: rieng254.com')},
+      {label:'nicoofurniture.co.ke',icon:'✓',action:()=>toast('Current property: nicoofurniture.co.ke')},
       '---',
-      {label:'Copy property name',icon:'⧉',action:()=>navigator.clipboard?.writeText('rieng254.com').then(()=>toast('Property name copied')).catch(()=>toast('Property: rieng254.com'))}
+      {label:'Copy property name',icon:'⧉',action:()=>navigator.clipboard?.writeText('nicoofurniture.co.ke').then(()=>toast('Property name copied')).catch(()=>toast('Property: nicoofurniture.co.ke'))}
     ])});
     h.querySelector('[data-apps]').onclick=e=>shellMenu(e.currentTarget,'Analytics sections',[
       {label:'Reports snapshot',icon:'⌂',href:routes.reports},
@@ -102,9 +102,9 @@
       {label:'Open Reports snapshot',icon:'⌂',href:routes.reports},
       {label:'Open Library',icon:'▭',href:routes.library}
     ]);
-    h.querySelector('[data-account]').onclick=e=>{const email=window.PortalSession?.email?.()||'Rieng254 Analytics';shellMenu(e.currentTarget,'Account',[
+    h.querySelector('[data-account]').onclick=e=>{const email=window.PortalSession?.email?.()||'Nicoo Furniture Analytics';shellMenu(e.currentTarget,'Account',[
       {label:email,icon:(window.PortalSession?.initial?.()||'R'),action:()=>toast(email)},
-      {label:'Property: rieng254.com',icon:'◆',action:()=>toast('Property: rieng254.com')},
+      {label:'Property: nicoofurniture.co.ke',icon:'◆',action:()=>toast('Property: nicoofurniture.co.ke')},
       '---',
       {label:'Access management',icon:'◉',href:'Access management.html'},
       {label:'Copy current report link',icon:'⧉',action:()=>navigator.clipboard?.writeText(location.href).then(()=>toast('Report link copied')).catch(()=>toast(location.href))},
