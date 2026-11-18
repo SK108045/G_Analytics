@@ -13,6 +13,9 @@ body{overflow-x:hidden;font-family:'Google Sans',Roboto,Arial,sans-serif;color:#
 #s>*{translate:0 -82px}
 .t{position:absolute;transform:translateY(-50%);white-space:nowrap}
 .b{position:absolute}
+.ga-plus-circle{box-sizing:border-box;border:1.6px solid #c4c7c5;border-radius:50%;background:
+linear-gradient(#3c4043,#3c4043) center/11px 1.8px no-repeat,
+linear-gradient(#3c4043,#3c4043) center/1.8px 11px no-repeat}
 .c{position:absolute;background:#fff;border-radius:8px;box-shadow:0 1px 2px rgba(60,64,67,.18)}
 
 
@@ -280,7 +283,7 @@ T(21,848,'&#9881;','font-size:27px;color:#5f6368;transform:translateY(-52%)');T(
 
 /* title row */
 B(274,172,28,28,BLUE,'border-radius:50%');const SNAPSHOT_INITIAL=(()=>{try{const s=JSON.parse(localStorage.getItem('gaPortalSession')||'null');const m=String(s?.email||'').split('@')[0].match(/[A-Za-z0-9]/);return (m?.[0]||'R').toUpperCase()}catch{return 'R'}})();const snapshotInitialEl=T(288,186,SNAPSHOT_INITIAL,'color:#fff;font-size:16px;transform:translate(-50%,-50%)');snapshotInitialEl.classList.add('snapshot-session-initial');
-B(312,176,21,21,'transparent','border:1.6px solid #c4c7c5;border-radius:50%');T(322,186,'+','color:#3c4043;font-size:20px;transform:translate(-50%,-52%)');
+const snapshotAdd=B(312,176,21,21,'transparent');snapshotAdd.classList.add('ga-plus-circle');
 T(353,187,'Reports snapshot','font-size:22px;color:#202124');
 B(1134,157,300,48,'#f8fafd','border:1px solid #dadce0;border-radius:5px;box-sizing:border-box');
 T(1146,171,'Last 90 days &nbsp;&nbsp;Aug 21 - Nov 18, 2026','font-size:14px;font-weight:600;color:#202124');
