@@ -21,7 +21,7 @@
     apply(){
       const s=this.get();
       const nextInitial=s?.email?this.initial():'R';
-      document.querySelectorAll('.pfh-avatar,.ga-avatar').forEach(el=>{
+      document.querySelectorAll('.pfh-avatar,.ga-avatar,.report-badge').forEach(el=>{
         if(el.textContent!==nextInitial)el.textContent=nextInitial;
         if(s?.email){
           if(el.title!==s.email)el.title=s.email;
@@ -49,7 +49,7 @@
     for(const record of records){
       for(const node of record.addedNodes){
         if(node.nodeType!==1)continue;
-        if(node.matches?.('.pfh-avatar,.ga-avatar')||node.querySelector?.('.pfh-avatar,.ga-avatar')){
+        if(node.matches?.('.pfh-avatar,.ga-avatar,.report-badge')||node.querySelector?.('.pfh-avatar,.ga-avatar,.report-badge')){
           api.apply();
           return;
         }
