@@ -6,6 +6,8 @@
   const numbers = new Intl.NumberFormat('en-KE');
   const rangeKey = 'nicooReportRangeV2';
   const presets = [7, 30, 90];
+  // Each sampled visitor represents eight demo visitors with the same activity.
+  const trafficMultiplier = 8;
 
   const locations = [
     ['Kenya', 62, ['Nairobi', 'Mombasa', 'Nakuru', 'Kisumu', 'Eldoret']],
@@ -157,7 +159,19 @@
     if (!group.has(label)) group.set(label, counter());
     return group.get(label);
   }
-  function toRow([label, value]) { return { ...value, label, users: value.users.size }; }
+  function toRow([label, value]) {
+    return {
+      label,
+      users: value.users.size * trafficMultiplier,
+      newUsers: value.newUsers * trafficMultiplier,
+      sessions: value.sessions * trafficMultiplier,
+      engaged: value.engaged * trafficMultiplier,
+      seconds: value.seconds * trafficMultiplier,
+      views: value.views * trafficMultiplier,
+      count: value.count * trafficMultiplier,
+      landing: value.landing * trafficMultiplier,
+    };
+  }
   function sumSession(target, session) {
     target.sessions++;
     target.engaged += Number(session.engaged);
@@ -263,7 +277,7 @@
       for (let sourceDay = Math.max(range.start, day - windowDays + 1); sourceDay <= day; sourceDay++) {
         for (const visit of daily(sourceDay)) unique.add(visit.user.id);
       }
-      results.push({ label: dateLabel(day), value: unique.size });
+      results.push({ label: dateLabel(day), value: unique.size * trafficMultiplier });
     }
     return results;
   }
@@ -293,7 +307,7 @@
     for (let minute = end - minutes + 1; minute <= end; minute++) {
       const rng = random(minute * 71);
       const count = Number(rng() < 0.45) + Number(rng() < 0.12);
-      minuteUsers.push(count);
+      minuteUsers.push(count * trafficMultiplier);
       for (let i = 0; i < count; i++) activities.push(activity(visitor(minute * 4 + i), rng() < 0.67, rng, true));
     }
     return { ...summarize(activities), minuteUsers };
