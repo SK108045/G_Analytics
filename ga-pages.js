@@ -57,9 +57,9 @@ function bind(){
       ['Last 30 minutes','Realtime window changed to 30 minutes'],
       ['Last 60 minutes','Realtime window changed to 60 minutes']
     ]:[
-      ['Last 7 days','Nov 3 - Nov 9, 2026'],
-      ['Last 30 days','Oct 11 - Nov 9, 2026'],
-      ['Last 90 days','Aug 12 - Nov 9, 2026']
+      ['Last 7 days','Nov 12 - Nov 18, 2026'],
+      ['Last 30 days','Oct 20 - Nov 18, 2026'],
+      ['Last 90 days','Aug 21 - Nov 18, 2026']
     ];
     reportMenu(b,'Date range',ranges.map(([label,dates])=>({label,icon:b.querySelector('b')?.textContent.includes(label)?'✓':'',action:()=>{
       b.querySelector('b').textContent=realtime?label:label+'   '+dates;
