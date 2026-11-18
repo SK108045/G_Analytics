@@ -123,7 +123,7 @@ const RealtimeSim={
   },
   snapshot(){
     const cfg=this.configs[this.minutes];
-    const active=this.wobble(cfg.active,0,this.minutes===5?.10:.045);
+    const active=this.wobble(cfg.active,0,this.minutes===5 ? 0.10 : 0.045);
     const mapRows=rows=>rows.map((r,i)=>[r[0],this.wobble(r[1],i+2,.055)]);
     return {active,minutes:this.minuteSeries(),source:mapRows(cfg.source),page:mapRows(cfg.page),event:mapRows(cfg.event)};
   },
