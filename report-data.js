@@ -196,8 +196,11 @@
       if (record.isNew) event('first_visit', user.id);
       if (record.formStart) event('form_start', user.id);
       if (record.formSubmit) event('form_submit', user.id);
+      const firstChannel = getCounter(groups.channel, sessions[0].channel);
+      firstChannel.count += Number(record.isNew) + Number(record.formStart) + Number(record.formSubmit);
       for (const session of sessions) {
         const channel = getCounter(groups.channel, session.channel);
+        channel.count += 1 + session.views.length + Number(session.engaged) + Number(session.scroll) + Number(session.click);
         channel.users.add(user.id);
         aggregates.forEach(row => sumSession(row, session));
         sumSession(channel, session);
@@ -229,7 +232,12 @@
     return metric === 'avgEngagement' ? ratio(row.seconds, row.users) : row[metric];
   }
 
-  function series(range, metric, grain = 'day', previousRange = null) {
+  function series(range, metric, grain = 'day', previousRange = null, dimension = '', label = '') {
+    function valueFor(target) {
+      const summary = summarize(records(target));
+      const row = dimension ? summary.groups[dimension].find(row => row.label === label) : summary;
+      return row ? metricValue(row, metric) : 0;
+    }
     if (grain === 'hour') {
       return Array.from({ length: 24 }, (_, hour) => {
         const atHour = target => metricValue(summarize(Array.from(records(target)).filter(r => r.hour === hour)), metric);
@@ -240,12 +248,24 @@
     const points = [];
     for (let from = range.start; from <= range.end; from += step) {
       const end = Math.min(from + step - 1, range.end);
-      const value = metricValue(summarize(records(makeRange(from, end))), metric);
+      const value = valueFor(makeRange(from, end));
       const offset = previousRange ? previousRange.start - range.start : 0;
-      const compare = previousRange && metricValue(summarize(records(makeRange(from + offset, end + offset))), metric);
+      const compare = previousRange && valueFor(makeRange(from + offset, end + offset));
       points.push({ label: dateLabel(end), value, previous: compare });
     }
     return points;
+  }
+
+  function activitySeries(range, windowDays) {
+    const results = [];
+    for (let day = range.start; day <= range.end; day++) {
+      const unique = new Set();
+      for (let sourceDay = Math.max(range.start, day - windowDays + 1); sourceDay <= day; sourceDay++) {
+        for (const visit of daily(sourceDay)) unique.add(visit.user.id);
+      }
+      results.push({ label: dateLabel(day), value: unique.size });
+    }
+    return results;
   }
 
   function cohorts(range) {
@@ -286,7 +306,7 @@
 
   window.NicooReportData = {
     presets, last, previous, selectedRange, saveRange, custom, today, isoDay, dateLabel, rangeLabel, pageNames,
-    summarize: range => summarize(records(range)), series, cohorts, realtime, ratio, ranked,
+    summarize: range => summarize(records(range)), series, activitySeries, cohorts, realtime, ratio, ranked,
     number: value => numbers.format(Math.round(value)),
     percent: value => (value * 100).toFixed(1) + '%',
     time(value) {
