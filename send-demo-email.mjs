@@ -22,7 +22,7 @@ const portalUrl =
 
 html = html
   .replaceAll('{{ROLE}}', 'Viewer')
-  .replaceAll('{{PROPERTY_NAME}}', 'rieng254.com')
+  .replaceAll('{{PROPERTY_NAME}}', 'nicoofurniture.co.ke')
   .replaceAll('{{RECIPIENT_EMAIL}}', recipient)
   .replaceAll('{{ACCESS_URL}}', portalUrl);
 
@@ -33,15 +33,15 @@ const response = await fetch('https://api.resend.com/emails', {
     'Content-Type': 'application/json',
   },
   body: JSON.stringify({
-    from: 'Rieng254 Analytics <analytics@nicoofurniture.co.ke>',
+    from: 'Nicoo Furniture Analytics <analytics@nicoofurniture.co.ke>',
     to: [recipient],
-    subject: 'You have been granted analytics access for rieng254.com',
+    subject: 'You have been granted analytics access for nicoofurniture.co.ke',
     html,
     text:
       'Hello,\n\n' +
-      'We want to alert you that you have been granted Viewer access to the analytics account for rieng254.com.\n\n' +
+      'We want to alert you that you have been granted Viewer access to the analytics account for nicoofurniture.co.ke.\n\n' +
       'Open the analytics portal: ' + portalUrl + '\n\n' +
-      'Sincerely,\nThe Rieng254 Analytics Team',
+      'Sincerely,\nThe Nicoo Furniture Analytics Team',
   }),
 });
 
