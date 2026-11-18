@@ -323,36 +323,19 @@
       }},
     ]);
   }
-  function fitDesktopChrome(mobile) {
-    const header = document.querySelector('.portal-fixed-header');
+
+  function fitSidebar() {
     const nav = document.querySelector('.portal-nav');
     const mask = document.querySelector('.portal-nav-mask');
-    const picker = canvas.querySelector('[aria-label="Change date range"]');
-    const wrapper = canvas.parentElement;
-    if (!header || !nav || !mask || !picker || !layout.cfg) return;
+    if (!nav || !mask || !layout.cfg) return;
 
     function align() {
-      if (mobile.matches) return;
-      const bounds = canvas.getBoundingClientRect();
-      if (!bounds.width) return;
-
+      const canvasBounds = canvas.getBoundingClientRect();
       const { targetX, baseWidth } = layout.cfg;
-      const scale = bounds.width / baseWidth;
-      const reportLeft = Math.floor(bounds.left + targetX * scale);
-      mask.style.maxWidth = reportLeft + 'px';
+      const reportLeft = Math.floor(canvasBounds.left + targetX * canvasBounds.width / baseWidth);
+      // The fixed sidebar is outside the scaled report canvas.
+      mask.style.maxWidth = Math.max(0, reportLeft) + 'px';
       nav.style.maxWidth = Math.max(0, reportLeft - 2) + 'px';
-
-      const toolbarTop = picker.getBoundingClientRect().top - bounds.top;
-      const headerCover = parseFloat(getComputedStyle(header, '::after').height) || 0;
-      const headerBottom = header.getBoundingClientRect().bottom + headerCover;
-      const wrapperTop = wrapper.getBoundingClientRect().top + window.scrollY;
-      const topPadding = Math.max(0, Math.ceil(headerBottom + 4 - wrapperTop - toolbarTop));
-      const bottomPadding = parseFloat(getComputedStyle(wrapper).paddingBottom) || 0;
-
-      // Hide the original header drawn above the report controls.
-      canvas.style.clipPath = `inset(${Math.floor(toolbarTop / scale)}px 0 0)`;
-      wrapper.style.paddingTop = topPadding + 'px';
-      wrapper.style.height = Math.ceil(bounds.height + topPadding + bottomPadding) + 'px';
     }
 
     align();
@@ -361,8 +344,7 @@
 
   function mount(kind,root,controls,reportLayout,makeText,box) {
     page=kind;canvas=root;ui=controls;layout=reportLayout;makeBox=box;
-    const mobile = matchMedia('(max-width: 767px)');
-    fitDesktopChrome(mobile);
+    fitSidebar();
     root.querySelectorAll('[data-report-x]').forEach(el=>{
       const cls=el.classList.contains('t')?'t':'b';
       nodes.set([cls,el.dataset.reportX,el.dataset.reportY].join(':'),el);
@@ -399,6 +381,7 @@
     addEventListener('pageshow',sync);
     addEventListener('storage',sync);
 
+    const mobile = matchMedia('(max-width: 767px)');
     function enableMobileReport() {
       if (!mobile.matches) return;
       mobile.removeEventListener('change', enableMobileReport);
