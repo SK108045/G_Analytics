@@ -64,9 +64,12 @@ export default{
       if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))return json({error:'Invalid email address'},400);
 
       const token=await tokenFor(email,role,env.INVITE_SIGNING_SECRET);
-      const accessUrl=PORTAL_ORIGIN+'/access.html?email='+encodeURIComponent(email)+'&token='+encodeURIComponent(token);
+      const accessUrl=new URL('https://www.nicoofurniture.co.ke/Analytics/web/access.html');
+    accessUrl.searchParams.set('email',email);
+    accessUrl.searchParams.set('token',token);
+    const inviteLink=accessUrl.href;
 
-      if(body.send===false)return json({ok:true,sent:false,accessUrl});
+      if(body.send===false)return json({ok:true,sent:false,accessUrl:inviteLink});
       if(!env.RESEND_API_KEY)return json({error:'Resend is not configured yet. Add RESEND_API_KEY as a Worker secret after the domain is verified.',accessUrl},503);
 
       const rr=await fetch('https://api.resend.com/emails',{
@@ -76,14 +79,14 @@ export default{
           from:FROM,
           to:[email],
           subject:'You’re invited to view analytics for '+PROPERTY,
-          html:emailHtml(email,role,accessUrl),
-          text:emailText(email,role,accessUrl)
+          html:emailHtml(email,role,inviteLink),
+          text:emailText(email,role,inviteLink)
         })
       });
 
       const data=await rr.json().catch(()=>({}));
       if(!rr.ok)return json({error:data.message||'Resend rejected the email',details:data,accessUrl},502);
-      return json({ok:true,sent:true,id:data.id,accessUrl});
+      return json({ok:true,sent:true,id:data.id,accessUrl:inviteLink});
     }
 
     return json({error:'Not found'},404);

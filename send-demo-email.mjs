@@ -18,7 +18,7 @@ const templatePath = new URL('./invite-email-template.html', import.meta.url);
 let html = await readFile(templatePath, 'utf8');
 
 const portalUrl =
-  'https://g-analytics.johnwakaba146.workers.dev/Analytics%20_%20Reports%20snapshot.html';
+  'https://www.nicoofurniture.co.ke/Analytics/web';
 
 html = html
   .replaceAll('{{ROLE}}', 'Viewer')
